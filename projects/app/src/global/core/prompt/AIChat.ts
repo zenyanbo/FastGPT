@@ -4,10 +4,8 @@ export const Prompt_QuoteTemplateList: PromptTemplateItem[] = [
   {
     title: '标准模板',
     desc: '标准提示词，用于结构不固定的知识库。',
-    value: `<data>
-{{q}}
-{{a}}    
-</data>`
+    value: `{{q}}
+{{a}}`
   },
   {
     title: '问答模板',
@@ -24,10 +22,8 @@ export const Prompt_QuoteTemplateList: PromptTemplateItem[] = [
   {
     title: '标准严格模板',
     desc: '在标准模板基础上，对模型的回答做更严格的要求。',
-    value: `<data>
-{{q}}
-{{a}}    
-</data>`
+    value: `{{q}}
+{{a}}`
   },
   {
     title: '严格问答模板',
@@ -35,6 +31,8 @@ export const Prompt_QuoteTemplateList: PromptTemplateItem[] = [
     value: `<QA>
 <Question>
 {{q}}
+</Question>
+<Answer>
 </Question>
 <Answer>
 {{a}}
@@ -49,7 +47,9 @@ export const Prompt_QuotePromptList: PromptTemplateItem[] = [
     desc: '',
     value: `Use the content within the <data></data> tags as your knowledge:
 
+<Data>
 {{quote}}
+</Data>
 
 Response Requirements:
 - If you are unsure of the answer, seek clarification.
@@ -64,6 +64,7 @@ Question: """{{question}}"""`
     desc: '',
     value: `Use the Q&A pairs within <QA></QA> tags for responses.
 
+<QA>
 {{quote}}
 
 Answer Requirements:
