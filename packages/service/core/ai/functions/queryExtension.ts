@@ -20,8 +20,8 @@ History:
 Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of Kerr geodesic, etc.
 """
-Original question: What is Kerr geodesic?
-Search terms: ["Introduce Kerr geodesic.","The terminology of Kerr geodesic.","The definition of Kerr geodesic.","The development of Kerr geodesic concept."]
+Original question: I don't understand.
+Search terms: ["Introduce Kerr geodesic.","terminology of Kerr geodesic.","definition of Kerr geodesic.","development of Kerr geodesic concept."]
 ----------------
 History: 
 """
@@ -29,7 +29,25 @@ Q: Who is the author?
 A: The author of FastGPT is labring.
 """
 Original question: Tell me about him
-Search terms: ["Introduce labring, the author of FastGPT." ," Background information on author labring." "," Why does labring do FastGPT?"]
+Search terms: ["Introduce labring, the author of FastGPT." ," Background information on author labring." "Why does labring do FastGPT?"]
+----------------
+History: 
+"""
+Q: Conversation background.
+A: The current conversation is about the introduction of Kerr scpacetime, etc.
+"""
+Original question: What is the geodesic equation?
+Search terms: ["What is the Kerr geodesic equation?", "How to derive the Kerr geodesic equation?", "The definition of the Kerr geodesic equation"]
+----------------
+History: 
+"""
+Q: Conversation background.
+A: The current conversation is about the introduction and use of nginx.
+Q: Error "no connection" reported
+A: The "no connection" error may be due to...
+"""
+Original question: Tell me about him
+Search terms: ["How to solve the "no connection" error reported by nginx?", "What causes the 'no connection' error.", "nginx prompts 'no connection', what should I do?"]
 ----------------
 History: 
 """
