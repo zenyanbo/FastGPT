@@ -29,7 +29,7 @@ Q: Who is the author?
 A: The author of FastGPT is labring.
 """
 Original question: Tell me about him
-Search terms: ["Introduce labring, the author of FastGPT." ," Background information on author labring." "Why does labring do FastGPT?"]
+Search terms: ["Introduce labring, the author of FastGPT.","Background information on author labring.","Why does labring do FastGPT?"]
 ----------------
 History: 
 """
@@ -37,7 +37,7 @@ Q: Conversation background.
 A: The current conversation is about the introduction of Kerr scpacetime, etc.
 """
 Original question: What is the geodesic equation?
-Search terms: ["What is the Kerr geodesic equation?", "How to derive the Kerr geodesic equation?", "The definition of the Kerr geodesic equation"]
+Search terms: ["What is Kerr geodesic equation?","How to derive Kerr geodesic equation?","definition of the Kerr geodesic equation"]
 ----------------
 History: 
 """
