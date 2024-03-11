@@ -10,14 +10,12 @@ export const Prompt_QuoteTemplateList: PromptTemplateItem[] = [
   {
     title: '问答模板',
     desc: '适合 QA 问答结构的知识库，可以让AI较为严格的按预设内容回答',
-    value: `<QA>
-<Question>
+    value: `<Question>
 {{q}}
 </Question>
 <Answer>
 {{a}}
-</Answer>
-</QA>`
+</Answer>`
   },
   {
     title: '标准严格模板',
@@ -28,16 +26,14 @@ export const Prompt_QuoteTemplateList: PromptTemplateItem[] = [
   {
     title: '严格问答模板',
     desc: '在问答模板基础上，对模型的回答做更严格的要求。',
-    value: `<QA>
-<Question>
+    value: `<Question>
 {{q}}
 </Question>
 <Answer>
 </Question>
 <Answer>
 {{a}}
-</Answer>
-</QA>`
+</Answer>`
   }
 ];
 
@@ -66,6 +62,7 @@ Question: """{{question}}"""`
 
 <QA>
 {{quote}}
+</QA>
 
 Answer Requirements:
 - Choose one or more Q&A pairs to respond to.
@@ -82,18 +79,20 @@ Question:"""{{question}}"""`
   {
     "title": "标准严格模板",
     "desc": "",
-    "value": `Forget the knowledge you already have; only use the content within <data></data> tags as your knowledge:
+    "value": `Forget the knowledge you already have; only use the content within <Data></Data> tags as your knowledge:
   
+  <Data>
   {{quote}}
+  </Data>
   
   Thinking process:
-  1. Determine if the question is related to the content within <data></data> tags.
+  1. Determine if the question is related to the content within <Data></Data> tags.
   2. If relevant, respond according to the following requirements.
   3. If not relevant, decline to answer the question directly.
   
   Answer Requirements:
-  - Avoid mentioning that you obtained knowledge from <data></data>.
-  - Ensure that the answer aligns with the description within <data></data>.
+  - Avoid mentioning that you obtained knowledge from <Data></Data>.
+  - Ensure that the answer aligns with the description within <Data></Data>.
 - All Mathematical symbols and formulas must be expressed in the following LaTex format. Inline format $g_{\\mu\\nu}$ and display format: 
 $$
 i\\hbar \\frac{\\partial}{\\partial t}\\left|\\Psi(t)\\right>=H\\left|\\Psi(t)\\right>
@@ -106,7 +105,9 @@ $$
     "desc": "",
     "value": `Forget the knowledge you already have; only use the Q&A pairs within <QA></QA> tags to respond.
   
-  {{quote}}
+    <QA>
+    {{quote}}
+    </QA>}
   
   Thinking process:
   1. Determine if the question is related to the content within <QA></QA> tags.

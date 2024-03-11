@@ -8,89 +8,53 @@ import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `作为一个向量检索助手，你的任务是结合历史记录，从不同角度，为“原问题”生成个不同版本的“检索词”，从而提高向量检索的语义丰富度，提高向量检索的精度。生成的问题要求指向对象清晰明确，并与原问题语言相同。例如：
-历史记录: 
+const defaultPrompt = `As a vector retrieval assistant, your task is to combine historical data to generate different versions of "retrieval terms" for the "original question" from different perspectives, thereby improving the semantic richness and accuracy of vector retrieval. The generated questions should have clear and unambiguous target objects and use the same language as the original question. For example:
+History: 
 """
 """
-原问题: 介绍下剧情。
-检索词: ["介绍下故事的背景和主要人物。","故事的主题是什么？","剧情是是如何发展的？"]
+Original question: Introduce the plot.
+Search terms: ["Introduce the background and main characters of the story.","What is the theme of the story?","How does the plot develop?"]
 ----------------
-历史记录: 
+History: 
 """
-Q: 对话背景。
-A: 当前对话是关于 FatGPT 的介绍和使用等。
+Q: Conversation history.
+A: The current conversation is about the introduction and mathematical derivation of Kerr geodesic, etc.
 """
-原问题: 怎么下载
-检索词: ["FastGPT 如何下载？","下载 FastGPT 需要什么条件？","有哪些渠道可以下载 FastGPT？"]
+Original question: What is Kerr geodesic?
+Search terms: ["Introduce Kerr geodesic.","The terminology of Kerr geodesic.","The definition of Kerr geodesic.","The development of Kerr geodesic concept."]
 ----------------
-历史记录: 
+History: 
 """
-Q: 对话背景。
-A: 当前对话是关于 FatGPT 的介绍和使用等。
-Q: 报错 "no connection"
-A: 报错"no connection"可能是因为……
+Q: Who is the author?
+A: The author of FastGPT is labring.
 """
-原问题: 怎么解决
-检索词: ["FastGPT 报错"no connection"如何解决？", "造成 'no connection' 报错的原因。", "FastGPT提示'no connection'，要怎么办？"]
+Original question: Tell me about him
+Search terms: ["Introduce labring, the author of FastGPT." ," Background information on author labring." "," Why does labring do FastGPT?"]
 ----------------
-历史记录: 
+History: 
 """
-Q: 作者是谁？
-A: FastGPT 的作者是 labring。
+Q: What is FastGPT?
+A: FastGPT is a RAG platform.
+Q: What is Laf?
+A: Laf is a cloud function development platform.
 """
-原问题: Tell me about him
-检索词: ["Introduce labring, the author of FastGPT." ," Background information on author labring." "," Why does labring do FastGPT?"]
+Original question: How are they related?
+Search terms: ["What is the relationship between FastGPT and Laf?", "Is FastGPT's RAG implemented using Laf?"]
 ----------------
-历史记录: 
+History: 
 """
-Q: 对话背景。
-A: 当前对话是关于 FatGPT 的介绍和使用等。
+Q: What is quantum gravity, and why is it important in theoretical physics?
+A: Quantum gravity is a theoretical framework that aims to unify the principles of quantum mechanics and general relativity, which are currently considered as two separate theories.
 """
-原问题: 高级编排怎么用
-检索词: ["FastGPT的高级编排是什么？","FastGPT高级编排的使用教程。","FastGPT高级编排有什么用？"]
+Original question: Do you know AdS/CFT?
+Search terms: ["What is AdS/CFT?", "The introducton to AdS/CFT theory", "The definition of AdS/CFT", "How to understand AdS/CFT", "the relationship between AdS/CFT and quantum gravity"]
 ----------------
-历史记录:
-"""
-Q: 对话背景。
-A: 关于 FatGPT 的介绍和使用等问题。
-"""
-原问题: 你好。
-检索词: ["你好"]
-----------------
-历史记录:
-"""
-Q: FastGPT 如何收费？
-A: FastGPT 收费可以参考……
-"""
-原问题: 你知道 laf 么？
-检索词: ["laf是什么？","如何使用laf？","laf的介绍。"]
-----------------
-历史记录:
-"""
-Q: FastGPT 的优势
-A: 1. 开源
-   2. 简便
-   3. 扩展性强
-"""
-原问题: 介绍下第2点。
-检索词: ["介绍下 FastGPT 简便的优势", "FastGPT 为什么使用起来简便？","FastGPT的有哪些简便的功能？"]。
-----------------
-历史记录:
-"""
-Q: 什么是 FastGPT？
-A: FastGPT 是一个 RAG 平台。
-Q: 什么是 Laf？
-A: Laf 是一个云函数开发平台。
-"""
-原问题: 它们有什么关系？
-检索词: ["FastGPT和Laf有什么关系？","FastGPT的RAG是用Laf实现的么？"]
-----------------
-历史记录:
+History:
 """
 {{histories}}
 """
-原问题: {{query}}
-检索词: `;
+Original question: {{query}}
+Search terms: `;
 
 export const queryExtension = async ({
   chatBg,
@@ -109,7 +73,7 @@ export const queryExtension = async ({
   tokens: number;
 }> => {
   const systemFewShot = chatBg
-    ? `Q: 对话背景。
+    ? `Q: Conversation history.
 A: ${chatBg}
 `
     : '';

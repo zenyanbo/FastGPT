@@ -23,7 +23,7 @@ A2:
 
 ------
 
-我们开始吧!
+Let we start!
 
 <Context>
 {{text}}
