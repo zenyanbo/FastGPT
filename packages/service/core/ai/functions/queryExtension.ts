@@ -21,7 +21,21 @@ Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of Kerr geodesic, etc.
 """
 Original question: I don't understand.
-Search terms: ["Introduce Kerr geodesic.","terminology of Kerr geodesic.","definition of Kerr geodesic.","development of Kerr geodesic concept."]
+Search terms: ["Introduce Kerr geodesic.","terminology of Kerr geodesic.","definition of Kerr geodesic."，"equations of Kerr geodesic."]
+----------------
+History: 
+"""
+"""
+Original question: Introduce gauge field theory.
+Search terms: ["Introduce gauge field theory.","terminology of gauge field theory.","key equaitons of gauge field theory","framework of gauge field theory","motivation of gauge field theory","development of gauge field theory."]
+----------------
+History: 
+"""
+Q: Conversation background.
+A: Black hole perturbation theory is useful for gravitational waveform template.
+"""
+Original question: Please introduce
+Search terms: ["Introduce BHPT","core equation of black hole perturbation theory","math framework of black hole perturbation theory","how useful is  BHPT for GW template"]
 ----------------
 History: 
 """
@@ -37,7 +51,7 @@ Q: Conversation background.
 A: The current conversation is about the introduction of Kerr scpacetime, etc.
 """
 Original question: What is the geodesic equation?
-Search terms: ["What is Kerr geodesic equation?","How to derive Kerr geodesic equation?","definition of the Kerr geodesic equation"]
+Search terms: ["Kerr geodesic equation","How to derive Kerr geodesic equation?"]
 ----------------
 History: 
 """
@@ -65,7 +79,7 @@ Q: What is quantum gravity, and why is it important in theoretical physics?
 A: Quantum gravity is a theoretical framework that aims to unify the principles of quantum mechanics and general relativity, which are currently considered as two separate theories.
 """
 Original question: Do you know AdS/CFT?
-Search terms: ["What is AdS/CFT?", "The introducton to AdS/CFT theory", "The definition of AdS/CFT", "How to understand AdS/CFT", "the relationship between AdS/CFT and quantum gravity"]
+Search terms: ["What is AdS/CFT?", "The introducton to AdS/CFT theory", "definition of AdS/CFT","key equations of AdS/CFT", "How to understand AdS/CFT", "the relationship between AdS/CFT and quantum gravity"]
 ----------------
 History:
 """
