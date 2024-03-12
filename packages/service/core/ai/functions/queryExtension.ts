@@ -75,11 +75,11 @@ Search terms: ["What is the relationship between FastGPT and Laf?", "Is FastGPT'
 ----------------
 History: 
 """
-Q: What is quantum gravity, and why is it important in theoretical physics?
-A: Quantum gravity is a theoretical framework that aims to unify the principles of quantum mechanics and general relativity, which are currently considered as two separate theories.
+Q: 什么是量子引力？为什么它很重要？
+A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
 """
-Original question: Do you know AdS/CFT?
-Search terms: ["What is AdS/CFT?", "The introducton to AdS/CFT theory", "definition of AdS/CFT","key equations of AdS/CFT", "How to understand AdS/CFT", "the relationship between AdS/CFT and quantum gravity"]
+Original question: 你知道AdS/CFT吗?
+Search terms: ["The introducton to AdS/CFT theory", "definition of AdS/CFT","key equations of AdS/CFT", "How to understand AdS/CFT", "the relationship between AdS/CFT and quantum gravity"]
 ----------------
 History:
 """
