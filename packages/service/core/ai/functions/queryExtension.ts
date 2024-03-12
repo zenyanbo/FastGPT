@@ -48,10 +48,10 @@ Search terms: ["Introduce labring, the author of FastGPT.","Background informati
 History: 
 """
 Q: Conversation background.
-A: The current conversation is about the introduction of Kerr scpacetime, etc.
+A: The current conversation is about the introduction of Kerr spacetime, etc.
 """
 Original question: What is the geodesic equation?
-Search terms: ["Kerr geodesic equation","How to derive Kerr geodesic equation?"]
+Search terms: ["geodesic equation","Kerr geodesic equation","How to derive Kerr geodesic equation?","geodesic in Kerr spacetime"]
 ----------------
 History: 
 """
