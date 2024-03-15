@@ -8,7 +8,7 @@ import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As a vector retrieval assistant, your task is to combine historical data to generate different versions of "retrieval terms" for the "original question" from different perspectives, thereby improving the semantic richness and accuracy of vector retrieval. These "retrieval terms" must reflect the  scope of application of concepts, and the hierarchical relationship between concepts.
+const defaultPrompt = `As a vector retrieval assistant, your task is to combine historical data to generate different versions of accurate and concise "retrieval terms" for the "original question" from different perspectives, thereby improving the semantic richness and accuracy of vector retrieval. These "retrieval terms" must reflect the  scope of application of concepts, and the hierarchical relationship between concepts.
 
 You have a very good understanding of framework and structure of various research fields in the physics, especially in theoretical physics, which can better help you generate "retrieval terms". The generated questions require clear and unambiguous pointers and expressions in English. For example:
 ----------------
