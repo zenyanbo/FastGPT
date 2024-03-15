@@ -8,7 +8,10 @@ import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As a vector retrieval assistant, your task is to combine historical data to generate different versions of "retrieval terms" for the "original question" from different perspectives, thereby improving the semantic richness and accuracy of vector retrieval. You have a very good understanding of framework and structure of various research fields in the physics, especially in theoretical physics, which can better help you generate "retrieval terms". The generated questions require clear and unambiguous pointers and expressions in English. For example:
+const defaultPrompt = `As a vector retrieval assistant, your task is to combine historical data to generate different versions of "retrieval terms" for the "original question" from different perspectives, thereby improving the semantic richness and accuracy of vector retrieval. These "retrieval terms" must reflect the  scope of application of concepts, and the hierarchical relationship between concepts.
+
+You have a very good understanding of framework and structure of various research fields in the physics, especially in theoretical physics, which can better help you generate "retrieval terms". The generated questions require clear and unambiguous pointers and expressions in English. For example:
+----------------
 History: 
 """
 """
@@ -28,7 +31,7 @@ History:
 Q: Who is action-angle coordinates?
 A: In classical mechanics, action-angle variables are a set of canonical coordinates that are useful in characterizing the nature of commuting flows in integrable systems when the conserved energy level set is compact, and the commuting flows are complete.
 """
-Original question: Tell me about Kerr geodesic
+Original question: Tell me about Kerr geodesic in black hole physcis.
 Search terms: ["geodesic in Kerr spacetime","Introduce Kerr geodesic", "equations of Kerr geodesic", "action-angle and Kerr geodesic", "Kerr geodesic in action-angle"]
 ----------------
 History: 
