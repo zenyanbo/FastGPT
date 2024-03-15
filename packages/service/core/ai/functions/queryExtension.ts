@@ -16,7 +16,7 @@ History:
 """
 """
 Original question: what is Kerr geodesic?
-Search terms: ["Introduce Kerr spacetime","Introduce geodesic","Introduce Kerr geodesic","equations of Kerr geodesic","definitions of Kerr geodesic", "development of Kerr geodesic"， "application of Kerr geodesic"]
+Search terms: ["geodesic of Kerr spacetime","Introduce Kerr geodesic","equations of Kerr geodesic","definitions of Kerr geodesic", "development of Kerr geodesic"， "application of Kerr geodesic"]
 ----------------
 History: 
 """
@@ -32,7 +32,7 @@ Q: Who is action-angle coordinates?
 A: In classical mechanics, action-angle variables are a set of canonical coordinates that are useful in characterizing the nature of commuting flows in integrable systems when the conserved energy level set is compact, and the commuting flows are complete.
 """
 Original question: Tell me about Kerr geodesic in black hole physcis.
-Search terms: ["geodesic in Kerr spacetime","Introduce Kerr geodesic", "equations of Kerr geodesic", "action-angle and Kerr geodesic", "Kerr geodesic in action-angle"]
+Search terms: ["geodesic in Kerr spacetime","Introduce Kerr geodesic", "equations of Kerr geodesic", "action-angle and Kerr geodesic"]
 ----------------
 History: 
 """
@@ -42,7 +42,7 @@ Q: Error "Interrupted. Larger maxiters is needed" reported.
 A: The error may be due to...
 """
 Original question: Tell me about it
-Search terms: ["How to solve the 'Interrupted. Larger maxiters is needed' error reported by SciML", "What causes the 'Interrupted. Larger maxiters is needed' error.", "SciML prompts 'Interrupted. Larger maxiters is needed', what should I do?"]
+Search terms: ["How to solve the 'Interrupted. Larger maxiters is needed' error reported by SciML","What causes the 'Interrupted. Larger maxiters is needed' error.", "SciML prompts 'Interrupted. Larger maxiters is needed', what should I do?"]
 ----------------
 History: 
 """
@@ -52,7 +52,7 @@ Q: What is Laf?
 A: Laf is a cloud function development platform.
 """
 Original question: How are they related?
-Search terms: ["the relationship between FastGPT and Laf", "Is FastGPT's RAG implemented using Laf?"]
+Search terms: ["FastGPT and Laf", "FastGPT's RAG implemented and Laf"]
 ----------------
 History: 
 """
@@ -60,7 +60,7 @@ Q: 什么是量子引力？为什么它很重要？
 A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
 """
 Original question: 你知道AdS/CFT吗?
-Search terms: ["introducton to quantum gravity", "introducton to AdS/CFT theory","definitions of AdS/CFT","equations of AdS/CFT", "How to understand AdS/CFT", "relationship between AdS/CFT and quantum gravity","AdS/CFT theory in quantum gravity","development of AdS/CFT", "application of AdS/CFT", "challenge of AdS/CFT"]
+Search terms: ["introduce quantum gravity","introduction and definitions of AdS/CFT theory","equations of AdS/CFT","How to understand AdS/CFT","AdS/CFT and quantum gravity","development and application of AdS/CFT", "challenge of AdS/CFT"]
 ----------------
 History:
 """
