@@ -16,7 +16,7 @@ History:
 """
 """
 Original question: what is Kerr geodesic?
-Search terms: ["geodesic of Kerr spacetime","Introduce Kerr geodesic","equations of Kerr geodesic","definitions of Kerr geodesic", "development of Kerr geodesic"， "application of Kerr geodesic"]
+Search terms: ["geodesic of Kerr spacetime","Introduce Kerr geodesic","equations of Kerr geodesic"]
 ----------------
 History: 
 """
