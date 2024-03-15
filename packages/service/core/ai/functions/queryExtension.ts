@@ -12,56 +12,34 @@ const defaultPrompt = `As a vector retrieval assistant, your task is to combine 
 History: 
 """
 """
-Original question: Introduce the plot.
-Search terms: ["Introduce the background and main characters of the story.","What is the theme of the story?","How does the plot develop?"]
+Original question: what is Kerr geodesic?
+Search terms: ["Introduce Kerr spacetime","Introduce geodesic","Introduce Kerr geodesic","equations of Kerr geodesic","definitions of Kerr geodesic", "development of Kerr geodesic"， "application of Kerr geodesic"]
 ----------------
 History: 
 """
 Q: Conversation history.
-A: The current conversation is about the introduction and mathematical derivation of Kerr geodesic, etc.
+A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
 """
 Original question: I don't understand.
-Search terms: ["Introduce Kerr geodesic.","terminology of Kerr geodesic.","definition of Kerr geodesic."，"equations of Kerr geodesic."]
+Search terms: ["Introduce gauge symmetry","Introduce gauge field theory","framework of gauge field theory","terminology of gauge field theory","definition of gauge field theory"，"equations of gauge field theory","development of gauge field theory", "application of gauge field theory"]
 ----------------
 History: 
 """
+Q: Who is action-angle coordinates?
+A: In classical mechanics, action-angle variables are a set of canonical coordinates that are useful in characterizing the nature of commuting flows in integrable systems when the conserved energy level set is compact, and the commuting flows are complete.
 """
-Original question: Introduce gauge field theory.
-Search terms: ["Introduce gauge field theory.","terminology of gauge field theory.","key equaitons of gauge field theory","framework of gauge field theory","motivation of gauge field theory","development of gauge field theory."]
-----------------
-History: 
-"""
-Q: Conversation background.
-A: Black hole perturbation theory is useful for gravitational waveform template.
-"""
-Original question: Please introduce
-Search terms: ["Introduce BHPT","core equation of black hole perturbation theory","math framework of black hole perturbation theory","how useful is  BHPT for GW template"]
-----------------
-History: 
-"""
-Q: Who is the author?
-A: The author of FastGPT is labring.
-"""
-Original question: Tell me about him
-Search terms: ["Introduce labring, the author of FastGPT.","Background information on author labring.","Why does labring do FastGPT?"]
+Original question: Tell me about Kerr geodesic
+Search terms: ["geodesic in Kerr spacetime","Introduce Kerr geodesic", "equations of Kerr geodesic", "action-angle and Kerr geodesic", "Kerr geodesic in action-angle"]
 ----------------
 History: 
 """
 Q: Conversation background.
-A: The current conversation is about the introduction of Kerr spacetime, etc.
+A: The current conversation is about the introduction and use of SciML.
+Q: Error "Interrupted. Larger maxiters is needed" reported. 
+A: The error may be due to...
 """
-Original question: What is the geodesic equation?
-Search terms: ["geodesic equation","Kerr geodesic equation","How to derive Kerr geodesic equation?","geodesic in Kerr spacetime"]
-----------------
-History: 
-"""
-Q: Conversation background.
-A: The current conversation is about the introduction and use of nginx.
-Q: Error "no connection" reported
-A: The "no connection" error may be due to...
-"""
-Original question: Tell me about him
-Search terms: ["How to solve the "no connection" error reported by nginx?", "What causes the 'no connection' error.", "nginx prompts 'no connection', what should I do?"]
+Original question: Tell me about it
+Search terms: ["How to solve the 'Interrupted. Larger maxiters is needed' error reported by SciML", "What causes the 'Interrupted. Larger maxiters is needed' error.", "SciML prompts 'Interrupted. Larger maxiters is needed', what should I do?"]
 ----------------
 History: 
 """
@@ -71,7 +49,7 @@ Q: What is Laf?
 A: Laf is a cloud function development platform.
 """
 Original question: How are they related?
-Search terms: ["What is the relationship between FastGPT and Laf?", "Is FastGPT's RAG implemented using Laf?"]
+Search terms: ["the relationship between FastGPT and Laf", "Is FastGPT's RAG implemented using Laf?"]
 ----------------
 History: 
 """
@@ -79,7 +57,7 @@ Q: 什么是量子引力？为什么它很重要？
 A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
 """
 Original question: 你知道AdS/CFT吗?
-Search terms: ["The introducton to AdS/CFT theory", "definition of AdS/CFT","key equations of AdS/CFT", "How to understand AdS/CFT", "the relationship between AdS/CFT and quantum gravity"]
+Search terms: ["introducton to quantum gravity", "introducton to AdS/CFT theory","definitions of AdS/CFT","equations of AdS/CFT", "How to understand AdS/CFT", "relationship between AdS/CFT and quantum gravity","AdS/CFT theory in quantum gravity","development of AdS/CFT", "application of AdS/CFT", "challenge of AdS/CFT"]
 ----------------
 History:
 """
