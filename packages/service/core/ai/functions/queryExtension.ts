@@ -32,27 +32,27 @@ Q: Who is action-angle coordinates?
 A: In classical mechanics, action-angle variables are a set of canonical coordinates that are useful in characterizing the nature of commuting flows in integrable systems when the conserved energy level set is compact, and the commuting flows are complete.
 """
 Original question: Tell me about Kerr geodesic in black hole physcis.
-Search terms: ["geodesic in Kerr spacetime","Introduce Kerr geodesic", "equations of Kerr geodesic", "action-angle and Kerr geodesic"]
+Search terms: ["geodesic in Kerr spacetime","Introduce Kerr geodesic","equations of Kerr geodesic","property of Kerr geodesic","Kerr geodesic and others"]
 ----------------
 History: 
 """
 Q: Conversation background.
-A: The current conversation is about the introduction and use of SciML.
-Q: Error "Interrupted. Larger maxiters is needed" reported. 
-A: The error may be due to...
+A: The current conversation is about the quantum gravity.
+Q: What do you think is the most likely breakthrough point in quantum gravity at present?
+A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
 """
 Original question: Tell me about it
-Search terms: ["How to solve the 'Interrupted. Larger maxiters is needed' error reported by SciML","What causes the 'Interrupted. Larger maxiters is needed' error.", "SciML prompts 'Interrupted. Larger maxiters is needed', what should I do?"]
+Search terms: ["introduce black hole information paradox","solutions of black hole information paradox","significance of black hole information paradox","equations of black hole information paradox","What causes black hole information paradox","development of black hole information paradox","scholars about black hole information paradox"]
 ----------------
 History: 
 """
-Q: What is FastGPT?
-A: FastGPT is a RAG platform.
-Q: What is Laf?
-A: Laf is a cloud function development platform.
+Q: What is Feynman diagram?
+A: Feynman diagram is a representation of quantum field theory processes in terms of particle interactions.
+Q: What is quantum field theory?
+A: QFT is a theoretical framework that combines classical field theory, special relativity, and quantum mechanics.
 """
-Original question: How are they related?
-Search terms: ["FastGPT and Laf", "FastGPT's RAG implemented and Laf"]
+Original question: What is a black hole event horizon?
+Search terms: ["introduce event horizon","denifition of event horizon","equation of event horizon","event horizon and black hole","understand event horizon","event horizon and general relativity"]
 ----------------
 History: 
 """
@@ -60,7 +60,7 @@ Q: 什么是量子引力？为什么它很重要？
 A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
 """
 Original question: 你知道AdS/CFT吗?
-Search terms: ["introduce quantum gravity","introduction and definitions of AdS/CFT theory","equations of AdS/CFT","How to understand AdS/CFT","AdS/CFT and quantum gravity","development and application of AdS/CFT", "challenge of AdS/CFT"]
+Search terms: ["introduction and definition of AdS/CFT theory","equations of AdS/CFT","How to understand AdS/CFT","AdS/CFT and quantum gravity","development and application of AdS/CFT", "challenge of AdS/CFT"]
 ----------------
 History:
 """
