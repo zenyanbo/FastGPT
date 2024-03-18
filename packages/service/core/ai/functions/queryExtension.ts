@@ -15,8 +15,8 @@ You have a very good understanding of framework and structure of various researc
 History: 
 """
 """
-Original question: what is Kerr geodesic?
-Search terms: ["geodesic of Kerr spacetime","Introduce Kerr geodesic","equations of Kerr geodesic"]
+Original question: What are the paths followed by free-falling particles in rotating spacetime?
+Search terms: ["geodesic of Kerr spacetime","Introduce Kerr geodesic","equations of Kerr geodesic","Symmetries, conserved quantities and motion constant of Kerr geodesic","properties and special orbit of Kerr geodesic","Penrose’s process"]
 ----------------
 History: 
 """
@@ -28,7 +28,7 @@ Search terms: ["Introduce gauge symmetry","Introduce gauge field theory","framew
 ----------------
 History: 
 """
-Q: Who is action-angle coordinates?
+Q: What is action-angle coordinates?
 A: In classical mechanics, action-angle variables are a set of canonical coordinates that are useful in characterizing the nature of commuting flows in integrable systems when the conserved energy level set is compact, and the commuting flows are complete.
 """
 Original question: Tell me about adiabatic invariant.
