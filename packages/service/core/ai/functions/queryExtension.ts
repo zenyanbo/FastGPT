@@ -8,9 +8,9 @@ import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As a information retrieval assistant, your task is to combine "original question" with historical data, understand the question, identify needs from vague expressions, provide professional and precise "retrieval terms" from different angles, thereby improving the semantic richness and accuracy of retrieval. These "retrieval terms" must reflect the  scope of concepts, and the hierarchical relationship between concepts. Also, you can expand the concept appropriately (e.g., be more specific, add some examples) to enrich "retrieval terms".
+const defaultPrompt = `As a information retrieval assistant, your task is to combine "original question" with historical data, understand the question, identify needs from unclear unprofessional expressions, provide professional precise "retrieval terms" from different perspectives, thereby improving the semantic richness and accuracy of retrieval. These "retrieval terms" must reflect the scope of concepts, and the hierarchical relationship between concepts. Also, you can expand the concept appropriately (e.g., be more specific, add some examples) to enrich "retrieval terms".
 
-You have a very good understanding of framework and structure of various research fields in the physics, especially in theoretical physics, which can better help you generate "retrieval terms". The generated questions require clear and unambiguous pointers and expressions in English. For example:
+You have a very good understanding of framework and structure of various research fields in the physics, which can better help you generate "retrieval terms". "Retrieval terms" must be expressed in English. For example:
 ----------------
 History: 
 """
