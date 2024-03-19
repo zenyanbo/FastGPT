@@ -16,7 +16,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Search terms: ["geodesic of Kerr spacetime","Introduce Kerr geodesic","equations of Kerr geodesic","Symmetries, conserved quantities and motion constant of Kerr geodesic","properties and special orbit of Kerr geodesic","Penrose’s process"]
+Search terms: ["introduction and review about geodesic motion in Kerr spacetime","Constants of motion, seperable geodesic equation","Orbital dynamics in Kerr spacetime","properties of bound Kerr geodesic",""]
 ----------------
 History: 
 """
@@ -24,15 +24,7 @@ Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
 """
 Original question: I don't understand.
-Search terms: ["Introduce gauge symmetry","Introduce gauge field theory","framework of gauge field theory","terminology of gauge field theory","equations about gauge field theory","development and application of gauge field theory","Yang–Mills Lagrangian for the gauge field","Scalar O(n) gauge theory"]
-----------------
-History: 
-"""
-Q: What is action-angle coordinates?
-A: In classical mechanics, action-angle variables are a set of canonical coordinates that are useful in characterizing the nature of commuting flows in integrable systems when the conserved energy level set is compact, and the commuting flows are complete.
-"""
-Original question: Tell me about adiabatic invariant.
-Search terms: ["action-angle and adiabatic invariant","Introduce adiabatic invariant","equation about adiabatic invariant"]
+Search terms: ["Introduce gauge symmetry and gauge field theory","framework and background of gauge field theory","equations about gauge field theory","development and application of gauge field theory","example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
 ----------------
 History: 
 """
@@ -42,7 +34,7 @@ Q: What do you think is the most likely breakthrough point in quantum gravity at
 A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
 """
 Original question: Tell me about it
-Search terms: ["introduce black hole information paradox","solutions of black hole information paradox","development of black hole information paradox","Hawking radiation, Black hole evaporation and Page curve","Susskind, Maldacena, holographic complexity and ER=EPR"]
+Search terms: ["review, development and solutions of black hole information paradox","Hawking radiation, Black hole evaporation and Page curve","Susskind, Maldacena, holographic complexity and ER=EPR"]
 ----------------
 History: 
 """
@@ -52,7 +44,7 @@ Q: What is quantum field theory?
 A: QFT is a theoretical framework that combines classical field theory, special relativity, and quantum mechanics.
 """
 Original question: What is a black hole event horizon?
-Search terms: ["introduce event horizon","denifition of event horizon","event horizon of cosmic and black hole","event horizon and metric","event horizon, black hole and gravitational collapse","event horizon and causal structure","quantum gravity and event horizon"]
+Search terms: ["denifition of event horizon","event horizon of cosmic and black hole","event horizon, black hole and gravitational collapse","event horizon and causal structure","quantum gravity and event horizon"]
 ----------------
 History: 
 """
@@ -60,13 +52,13 @@ Q: 什么是量子引力？为什么它很重要？
 A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
 """
 Original question: 你知道AdS/CFT吗?
-Search terms: ["introduction of AdS/CFT theory","holographic entanglement entropy and RT formula","examples of AdS/CFT","AdS/CFT and Black hole information paradox","AdS/CFT and quantum gravity","AdS/CFT and non-perturbative formulation of string theory"]
+Search terms: ["review, development and challenge of AdS/CFT theory","holographic entanglement entropy and RT formula","basic formula and cacalculation examples of AdS/CFT","AdS/CFT and Black hole information paradox","AdS/CFT and quantum gravity","AdS/CFT and non-perturbative formulation of string theory"]
 ----------------
 History: 
 """
 """
 Original question: How are the three known fundamental forces unified?
-Search terms: ["introduce Yang–Mills theory","introduce Standard Model of particle physics","symmetry group of Yang–Mills theory","Lagrangian and action of Yang–Mills theory","Yang–Mills–Higgs equations","Yang–Mills existence and mass gap"]
+Search terms: ["introduce Yang–Mills theory","introduce Standard Model of particle physics","symmetry group, Lagrangian of Yang–Mills theory","Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap"]
 ----------------
 History:
 """
