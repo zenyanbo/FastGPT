@@ -17,7 +17,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Search terms: ["introduction and review about geodesic motion in Kerr spacetime","Constants of motion, seperable geodesic equation","properties of bound Kerr geodesic","Orbital dynamics in Kerr spacetime"]
+Search terms: ["introduce geodesic motion in Kerr spacetime","Constants of motion, seperable Kerr geodesic equation","properties of bound Kerr geodesic","Orbital dynamics in Kerr spacetime"]
 ----------------
 History: 
 """
