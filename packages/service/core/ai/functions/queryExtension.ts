@@ -17,7 +17,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Search terms: ["introduction and review about geodesic motion in Kerr spacetime","Constants of motion, seperable geodesic equation","Orbital dynamics in Kerr spacetime","properties of bound Kerr geodesic",""]
+Search terms: ["introduction and review about geodesic motion in Kerr spacetime","Constants of motion, seperable geodesic equation","properties of bound Kerr geodesic","Orbital dynamics in Kerr spacetime"]
 ----------------
 History: 
 """
@@ -25,7 +25,7 @@ Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
 """
 Original question: I don't understand.
-Search terms: ["Introduce gauge symmetry and gauge field theory","framework and background of gauge field theory","equations about gauge field theory","development and application of gauge field theory","example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
+Search terms: ["review of gauge symmetry and gauge field theory","equations about gauge field theory","example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory","development, application and background of gauge field theory"]
 ----------------
 History: 
 """
@@ -45,7 +45,7 @@ Q: What is quantum field theory?
 A: QFT is a theoretical framework that combines classical field theory, special relativity, and quantum mechanics.
 """
 Original question: What is a black hole event horizon?
-Search terms: ["denifition of event horizon","event horizon of cosmic and black hole","event horizon, black hole and gravitational collapse","event horizon and causal structure","quantum gravity and event horizon"]
+Search terms: ["denifition of event horizon","gravitational collapse, black hole formation and event horizon","event horizon and causal structure","quantum gravity and event horizon"]
 ----------------
 History: 
 """
@@ -59,7 +59,7 @@ History:
 """
 """
 Original question: How are the three known fundamental forces unified?
-Search terms: ["introduce Yang–Mills theory","introduce Standard Model of particle physics","symmetry group, Lagrangian of Yang–Mills theory","Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap"]
+Search terms: ["introduce Yang–Mills theory","symmetry group, Lagrangian of Yang–Mills theory","Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
 ----------------
 History:
 """
