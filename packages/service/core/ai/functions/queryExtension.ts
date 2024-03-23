@@ -17,7 +17,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Search terms: ["introduce geodesic motion in Kerr spacetime","Constants of motion, seperable Kerr geodesic equation","properties of bound Kerr geodesic","Orbital dynamics in Kerr spacetime"]
+Search terms: ["From Constants of motion to seperable Kerr geodesic equation, solutions in term of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization",“Hamiltonian description of geodesic motion”]
 ----------------
 History: 
 """
@@ -25,7 +25,7 @@ Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
 """
 Original question: I don't understand.
-Search terms: ["review of gauge symmetry and gauge field theory","equations about gauge field theory","example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory","development, application and background of gauge field theory"]
+Search terms: ["review of gauge symmetry and gauge field theory","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory","development, application and background of gauge field theory"]
 ----------------
 History: 
 """
@@ -45,7 +45,7 @@ Q: What is quantum field theory?
 A: QFT is a theoretical framework that combines classical field theory, special relativity, and quantum mechanics.
 """
 Original question: What is a black hole event horizon?
-Search terms: ["denifition of event horizon","gravitational collapse, black hole formation and event horizon","event horizon and causal structure","quantum gravity and event horizon"]
+Search terms: ["denifition of event horizon","gravitational collapse, black hole formation and event horizon","event horizon and causal structure"]
 ----------------
 History: 
 """
@@ -53,13 +53,13 @@ Q: 什么是量子引力？为什么它很重要？
 A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
 """
 Original question: 你知道AdS/CFT吗?
-Search terms: ["review, development and challenge of AdS/CFT theory","holographic entanglement entropy and RT formula","basic formula and cacalculation examples of AdS/CFT","AdS/CFT and Black hole information paradox","AdS/CFT and quantum gravity","AdS/CFT and non-perturbative formulation of string theory"]
+Search terms: ["review, development and challenge of AdS/CFT theory","examples of AdS/CFT and Black hole information paradox: holographic entanglement entropy and RT formula","AdS/CFT and non-perturbative formulation of string theory","AdS/CFT and quantum gravity"]
 ----------------
 History: 
 """
 """
 Original question: How are the three known fundamental forces unified?
-Search terms: ["introduce Yang–Mills theory","symmetry group, Lagrangian of Yang–Mills theory","Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
+Search terms: ["introduce Yang–Mills theory","keywords: symmetry group, Lagrangian of Yang–Mills theory and Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
 ----------------
 History:
 """
