@@ -17,7 +17,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Search terms: ["From Constants of motion to seperable Kerr geodesic equation, solutions in term of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization",“Hamiltonian description of geodesic motion”]
+Search terms: ["Introduction about Kerr geodesic, including background, development or challenges","From Constants of motion to seperable Kerr geodesic equation, solutions in term of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization",“Other formalism: hamiltonian description of geodesic motion”]
 ----------------
 History: 
 """
@@ -25,7 +25,7 @@ Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
 """
 Original question: I don't understand.
-Search terms: ["review of gauge symmetry and gauge field theory","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory","development, application and background of gauge field theory"]
+Search terms: ["review of gauge symmetry and gauge field theory, which include background, development, application or challenges","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
 ----------------
 History: 
 """
@@ -35,17 +35,7 @@ Q: What do you think is the most likely breakthrough point in quantum gravity at
 A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
 """
 Original question: Tell me about it
-Search terms: ["review, development and solutions of black hole information paradox","Hawking radiation, Black hole evaporation and Page curve","Susskind, Maldacena, holographic complexity and ER=EPR"]
-----------------
-History: 
-"""
-Q: What is Feynman diagram?
-A: Feynman diagram is a representation of quantum field theory processes in terms of particle interactions.
-Q: What is quantum field theory?
-A: QFT is a theoretical framework that combines classical field theory, special relativity, and quantum mechanics.
-"""
-Original question: What is a black hole event horizon?
-Search terms: ["denifition of event horizon","gravitational collapse, black hole formation and event horizon","event horizon and causal structure"]
+Search terms: ["review, development, challenges and solutions of black hole information paradox","Hawking radiation, Black hole evaporation and Page curve","Susskind and Maldacena's ER=EPR conjecture suggests wormholes may resolve the black hole information paradox by linking them to entangled particles."]
 ----------------
 History: 
 """
@@ -59,7 +49,7 @@ History:
 """
 """
 Original question: How are the three known fundamental forces unified?
-Search terms: ["introduce Yang–Mills theory","keywords: symmetry group, Lagrangian of Yang–Mills theory and Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
+Search terms: ["introduction, development and application of Yang–Mills theory","keywords: symmetry group, Lagrangian of Yang–Mills theory and Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
 ----------------
 History:
 """
