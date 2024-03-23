@@ -17,7 +17,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Search terms: ["Introduction about Kerr geodesic, including background, development or challenges","From Constants of motion to seperable Kerr geodesic equation, solutions in term of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization",“Other formalism: hamiltonian description of geodesic motion”]
+Search terms: ["Introduction about Kerr geodesic, including background, development and challenges","From Constants of motion to seperable Kerr geodesic equation, solutions in terms of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization","Other formalism: hamiltonian description of geodesic motion"]
 ----------------
 History: 
 """
@@ -25,7 +25,7 @@ Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
 """
 Original question: I don't understand.
-Search terms: ["review of gauge symmetry and gauge field theory, which include background, development, application or challenges","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
+Search terms: ["review of gauge symmetry and gauge field theory, which include background, development, application and challenges","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
 ----------------
 History: 
 """
@@ -35,7 +35,7 @@ Q: What do you think is the most likely breakthrough point in quantum gravity at
 A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
 """
 Original question: Tell me about it
-Search terms: ["review, development, challenges and solutions of black hole information paradox","Hawking radiation, Black hole evaporation and Page curve","Susskind and Maldacena's ER=EPR conjecture suggests wormholes may resolve the black hole information paradox by linking them to entangled particles."]
+Search terms: ["review, development, challenges and solutions of black hole information paradox","Hawking radiation, Black hole evaporation and Page curve","Susskind and Maldacena's ER=EPR conjecture suggests wormholes may resolve the black hole information paradox by linking them to entangled particles"]
 ----------------
 History: 
 """
