@@ -78,7 +78,7 @@ History:
 {{histories}}
 """
 Original question: {{query}}
-Search terms: `;
+Retrieval fragments: `;
 
 export const queryExtension = async ({
   chatBg,
