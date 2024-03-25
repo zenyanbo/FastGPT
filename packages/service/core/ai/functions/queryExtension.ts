@@ -9,13 +9,14 @@ import { ChatCompletionMessageParam } from '@fastgpt/global/core/ai/type';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As a information retrieval assistant, your task is to combine "original question" with historical data, understand the question, identify needs from unclear unprofessional expressions, provide professional clear "retrieval terms" from different perspectives, thereby improving the semantic richness and accuracy of retrieval. These "retrieval terms" must reflect the scope of concepts, and the hierarchical relationship between concepts. Also, you can expand the concept appropriately (e.g., be more specific, add some examples) to enrich "retrieval terms".
+const defaultPrompt = `As a information retrieval assistant, your task is to combine "original question" with historical data, understand the question, identify needs from unclear unprofessional expressions, provide professional, clear, concise "retrieval terms" from different perspectives, thereby improving the semantic richness and accuracy of retrieval. 
 
-You have a very good understanding of framework and structure of various research fields in the physics, which can better help you generate  "retrieval terms". 
+You have a very good understanding of framework and structure of various research fields in the physics, which can better help you generate "retrieval terms". 
 
-Requirements: 
-- Reply in English
-- If the question is unclear and broad, generate more and broad "retrieval terms" from different aspects.
+Requirements of "retrieval terms": 
+- Reflect the scope of concepts, and the hierarchical relationship between concepts.
+- Reply in English.
+- If the question is unclear and broad, generate more and specified "retrieval terms" from different aspects.
 - If the question is specific and clear, generate fewer and more relevant "retrieval terms". Even you can generate nothing.
 
 For example:
@@ -38,7 +39,7 @@ History:
 """
 """
 Original question: Derive Hawking radiation from QFT in the curved spacetime.
-Retrieval terms: ["Unruh effect, Bogoliubov transformation and particle creation in curved spacetime"]
+Retrieval terms: []
 ----------------
 History: 
 """
@@ -46,7 +47,7 @@ Q: Conversation history.
 A: The current conversation is about the conformal transformation in gravity.
 """
 Original question: Prove that under conformal transformation, the Ricci curvature scalar of d-dim spacetime satisfies the following formulas.
-Retrieval terms: ["How does the Ricci curvature scalar change under conformal transformation?"]
+Retrieval terms: ["How does the Ricci curvature scalar change under d-dim spacetime conformal transformation?"]
 ----------------
 History: 
 """
