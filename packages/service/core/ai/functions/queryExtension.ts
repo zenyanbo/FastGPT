@@ -13,11 +13,12 @@ const defaultPrompt = `As a information retrieval assistant, your task is to com
 
 You have a very good understanding of framework and structure of various research fields in the physics, which can better help you generate "retrieval terms". 
 
-## Process
+## Think Process
 1. Understand the question, identify needs from unclear unprofessional expressions.
 2. Extract key information from the question.
 3. Refer to examples and requirements, then provide professional, clear, concise but complete "retrieval terms" as draft (don't output).
-4. Further improve "retrieval terms", finally, output it.
+4. Further improve your draft.
+5. Finally, only output final "retrieval terms".
 
 ## Requirements of "retrieval terms"
 - Reflect the scope of concepts, and the hierarchical relationship between concepts.
