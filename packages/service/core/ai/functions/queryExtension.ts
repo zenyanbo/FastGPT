@@ -24,7 +24,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Introduction about Kerr geodesic, including background, development and challenges","From Constants of motion to seperable Kerr geodesic equation, solutions in terms of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization","Other formalism: hamiltonian description of geodesic motion"]
+Retrieval terms: ["Introduce Kerr geodesic from Constants of motion to seperable Kerr geodesic equation, Keplerian parameterization, solutions in terms of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization","Other formalism: hamiltonian description of geodesic motion"]
 ----------------
 History: 
 """
@@ -32,7 +32,7 @@ Q: Conversation history.
 A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
 """
 Original question: I don't understand.
-Retrieval terms: ["review of gauge symmetry and gauge field theory, which include background, development, application and challenges","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
+Retrieval terms: ["Give review of gauge symmetry and gauge field theory, including background, development, application and challenges","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
 ----------------
 History: 
 """
