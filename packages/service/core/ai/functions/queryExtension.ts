@@ -15,9 +15,8 @@ You have a very good understanding of framework and structure of various researc
 
 Requirements: 
 - Reply in English
-- Generate more, broad and deep "retrieval terms" from different aspects if the question is vague and broad.
-- Generate fewer, deeper and specific "retrieval terms" if the question is 
-specific.
+- If the question is unclear and broad, generate more and broad "retrieval terms" from different aspects.
+- If the question is specific and clear, generate fewer and more relevant "retrieval terms". Even you can generate nothing.
 
 For example:
 ----------------
@@ -47,7 +46,7 @@ Q: Conversation history.
 A: The current conversation is about the conformal transformation in gravity.
 """
 Original question: Prove that under conformal transformation, the Ricci curvature scalar of d-dim spacetime satisfies the following formulas.
-Retrieval terms: ["Ricci curvature scalar under conformal transformation"]
+Retrieval terms: ["How does the Ricci curvature scalar change under conformal transformation?"]
 ----------------
 History: 
 """
@@ -57,7 +56,7 @@ Q: What do you think is the most likely breakthrough point in quantum gravity at
 A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
 """
 Original question: Tell me about it
-Retrieval terms: ["review, development and solutions of black hole information paradox","Hawking radiation, Black hole evaporation and Page curve","Susskind and Maldacena's ER=EPR conjecture suggests wormholes may resolve the black hole information paradox by linking them to entangled particles"]
+Retrieval terms: ["Give review, development and solutions of black hole information paradox","Hawking radiation leads to black hole evaporation, and the Page curve tracks the process of information loss","Susskind and Maldacena's ER=EPR conjecture suggests wormholes may resolve the black hole information paradox by linking them to entangled particles"]
 ----------------
 History: 
 """
@@ -65,13 +64,13 @@ Q: 什么是量子引力？为什么它很重要？
 A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
 """
 Original question: 你知道AdS/CFT吗?
-Retrieval terms: ["review, development and challenge of AdS/CFT theory","examples of AdS/CFT and Black hole information paradox: holographic entanglement entropy and RT formula","AdS/CFT and non-perturbative formulation of string theory","AdS/CFT and quantum gravity"]
+Retrieval terms: ["Give review, development and challenge of AdS/CFT theory","some quantity and equation of AdS/CFT: holographic entanglement entropy and RT formula","example of AdS/CFT and quantum gravity: non-perturbative formulation of string theory"]
 ----------------
 History: 
 """
 """
 Original question: How are the three known fundamental forces unified?
-Retrieval terms: ["introduction, development and application of Yang–Mills theory","symmetry group, Lagrangian of Yang–Mills theory and Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
+Retrieval terms: ["Give introduction, development and application of Yang–Mills theory.","From symmetry group to Lagrangian of Yang–Mills theory, Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
 ----------------
 History: 
 """
@@ -79,7 +78,7 @@ Q: What is black hole thermodynamics?
 A: The four laws of black hole mechanics are physical properties that black holes are believed to satisfy. The laws, analogous to the laws of thermodynamics, were discovered by Jacob Bekenstein, Brandon Carter, and James Bardeen. Further considerations were made by Stephen Hawking......
 """
 Original question: In Kerr-Newman black hole case, derive the first law of black hole thermodynamics from smarr-like relation.
-Retrieval terms: ["Kerr-Newman black hole, smarr-like relation and first law of thermodynamics."]
+Retrieval terms: ["Derive first law of thermodynamics from smarr-like relation of Kerr-Newman black hole."]
 ----------------
 History:
 """
