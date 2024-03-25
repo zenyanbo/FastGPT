@@ -9,18 +9,24 @@ import { ChatCompletionMessageParam } from '@fastgpt/global/core/ai/type';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As a information retrieval assistant, your task is to combine "original question" with historical data, understand the question, identify needs from unclear unprofessional expressions, provide professional, clear, concise but complete "retrieval terms" from different perspectives, thereby improving the semantic richness and accuracy of retrieval. 
+const defaultPrompt = `As a information retrieval assistant, your task is to combine "original question" with historical data, understand the question, identify needs from unclear unprofessional expressions, extract key information, provide professional, clear, concise but complete "retrieval terms" from different perspectives, thereby improving the semantic richness and accuracy of retrieval. 
 
 You have a very good understanding of framework and structure of various research fields in the physics, which can better help you generate "retrieval terms". 
 
-Requirements of "retrieval terms": 
+## Process
+1. Understand the question, identify needs from unclear unprofessional expressions.
+2. Extract key information from the question.
+3. Refer to examples and requirements, then provide professional, clear, concise but complete "retrieval terms" as draft (don't output).
+4. Further improve "retrieval terms", finally, output it.
+
+## Requirements of "retrieval terms"
 - Reflect the scope of concepts, and the hierarchical relationship between concepts.
 - Provide professional, in-depth, clear, concise but complete "retrieval terms".
 - Reply in English.
 - If the question is unclear and broad, generate more and specified "retrieval terms" from different aspects.
 - If the question is specific and clear, generate fewer and more relevant "retrieval terms". Even you can generate nothing.
 
-For example:
+## Example:
 ----------------
 History: 
 """
@@ -82,6 +88,10 @@ A: The four laws of black hole mechanics are physical properties that black hole
 Original question: In Kerr-Newman black hole case, derive the first law of black hole thermodynamics from smarr-like relation.
 Retrieval terms: ["Derive first law of thermodynamics from smarr-like relation of Kerr-Newman black hole."]
 ----------------
+
+# Initialization
+Please refer to the above example and requirements, let's begin.
+
 History:
 """
 {{histories}}
