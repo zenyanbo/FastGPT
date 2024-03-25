@@ -24,10 +24,9 @@ You have a very good understanding of framework and structure of various researc
 - Reflect the scope of concepts, and the hierarchical relationship between concepts.
 - Provide professional, in-depth, clear, concise but complete "retrieval terms".
 - Reply in English.
-- If the question is unclear and broad, generate more and specified "retrieval terms" from different aspects.
-- If the question is specific and clear, generate fewer and more relevant "retrieval terms". Even you can generate nothing.
 
 ## Example:
+### If the question is unclear and broad, generate more and specified "retrieval terms" from different aspects.
 ----------------
 History: 
 """
@@ -42,20 +41,6 @@ A: The current conversation is about the introduction and mathematical derivatio
 """
 Original question: I don't understand.
 Retrieval terms: ["Give review of gauge symmetry and gauge field theory, including background, development, application and challenges","equations or example of gague field theory: Yang–Mills Lagrangian for the gauge field, Scalar O(n) gauge theory"]
-----------------
-History: 
-"""
-"""
-Original question: Derive Hawking radiation from QFT in the curved spacetime.
-Retrieval terms: []
-----------------
-History: 
-"""
-Q: Conversation history.
-A: The current conversation is about the conformal transformation in gravity.
-"""
-Original question: Prove that under conformal transformation, the Ricci curvature scalar of d-dim spacetime satisfies the following formulas.
-Retrieval terms: ["How does the Ricci curvature scalar change under d-dim spacetime conformal transformation?"]
 ----------------
 History: 
 """
@@ -88,7 +73,22 @@ A: The four laws of black hole mechanics are physical properties that black hole
 """
 Original question: In Kerr-Newman black hole case, derive the first law of black hole thermodynamics from smarr-like relation.
 Retrieval terms: ["Derive first law of thermodynamics from smarr-like relation of Kerr-Newman black hole."]
+
+### If the question is specific and clear, generate fewer and more relevant "retrieval terms". Even you can generate nothing.
 ----------------
+History: 
+"""
+"""
+Original question: using quantum field theory to derive Hawking radiation.
+Retrieval terms: []
+----------------
+History: 
+"""
+Q: Conversation history.
+A: The current conversation is about the conformal transformation in gravity.
+"""
+Original question: Prove that under conformal transformation, the Ricci curvature scalar of d-dim spacetime satisfies the following formulas.
+Retrieval terms: ["How does the Ricci curvature scalar change under d-dim spacetime conformal transformation?"]
 
 # Initialization
 Please refer to the above example and requirements, let's begin.
