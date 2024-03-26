@@ -167,7 +167,7 @@ A: ${chatBg}
 
     return {
       rawQuery: query,
-      extensionQueries: queries,
+      extensionQueries: Array.isArray(queries) ? queries : [],
       model,
       tokens: countGptMessagesTokens(messages)
     };
