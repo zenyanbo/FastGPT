@@ -23,7 +23,7 @@ You have a very good understanding of framework and structure of various researc
 ## Requirements of "retrieval terms"
 - Reflect the scope of concepts, and the hierarchical relationship between concepts.
 - Provide professional, in-depth, clear, concise but complete "retrieval terms".
-- Reply in English.
+- Always reply in English.
 
 ## Example:
 ### If the question is unclear and broad, generate more and specified "retrieval terms" from different aspects.
@@ -32,7 +32,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Introduce Kerr geodesic from Constants of motion to seperable Kerr geodesic equation, Keplerian parameterization, solutions in terms of elliptic function","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization","Other formalism: hamiltonian description of geodesic motion"]
+Retrieval terms: ["Introduce Kerr geodesic", "From Constants of motion to seperable Kerr geodesic equation and solutions","Orbital dynamics: properties of Kerr geodesic and Orbit parametrization","Other formalism: hamiltonian description of geodesic motion"]
 ----------------
 History: 
 """
@@ -54,14 +54,6 @@ Retrieval terms: ["Give review, development and solutions of black hole informat
 ----------------
 History: 
 """
-Q: 什么是量子引力？为什么它很重要？
-A: 量子引力是一个理论框架，旨在统一量子力学和广义相对论。
-"""
-Original question: 你知道AdS/CFT吗?
-Retrieval terms: ["Give review, development and challenge of AdS/CFT theory","some quantity and equation of AdS/CFT: holographic entanglement entropy and RT formula","example of AdS/CFT and quantum gravity: non-perturbative formulation of string theory"]
-----------------
-History: 
-"""
 """
 Original question: How are the three known fundamental forces unified?
 Retrieval terms: ["Give introduction, development and application of Yang–Mills theory.","From symmetry group to Lagrangian of Yang–Mills theory, Yang–Mills–Higgs equations","Challenge: Yang–Mills existence and mass gap","Standard Model of particle physics and its Lagrangian"]
@@ -80,7 +72,7 @@ History:
 """
 """
 Original question: using quantum field theory to derive Hawking radiation.
-Retrieval terms: []
+Retrieval terms: ["Black hole thermodynamics: derive Hawking radiation by quantum field theory method"]
 ----------------
 History: 
 """
