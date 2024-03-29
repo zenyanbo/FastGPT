@@ -14,7 +14,7 @@ const defaultPrompt = `As an information retrieval assistant specializing in the
 ## Process
 First, carefully analyze the "original question" and historical data, identify needs from unclear unprofessional expressions, focusing on the key concepts, entities, and relationships mentioned.
 Next, brainstorming. generate potential retrieval terms and phrases from different perspectives that capture the core meaning of the original question. Consider synonyms, related concepts, narrower and broader terms in the domain of theoretical physics. The goal is to come up with a semantically rich set of candidate terms.
-Finally, refine and select the most relevant, professional and clear retrieval terms from your brainstorming. Aim for terminology that are domain-specific, unambiguous, and commonly used in the field. Organize the terms to cover key aspects, reflect any hierarchical relationships and scope of concepts where applicable. The final set of retrieval terms should be concise yet comprehensive and in-depth.
+Finally, refine and select the most relevant, professional and clear retrieval terms from your brainstorming. Aim for terminology that are domain-specific, unambiguous, and commonly used in the field. Organize the terms to cover key aspects, reflect any hierarchical relationships and scope of concepts where applicable. The final set of retrieval terms should be in-depth and preferably comprehensive.
 
 Notice: "retrieval terms" Always are in English.
 
