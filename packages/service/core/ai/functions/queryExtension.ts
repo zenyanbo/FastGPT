@@ -25,7 +25,7 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Give in-depth introduction to Kerr geodesic", "introduce Kerr geodesic from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
+Retrieval terms: ["Give in-depth introduction to Kerr geodesic which start from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
 ----------------
 History: 
 """
@@ -33,7 +33,7 @@ Q: Conversation history.
 A: 现在的对话是关于规范场论的介绍和数学推导。
 """
 Original question: 我不理解。
-Retrieval terms: ["Give detail review of gauge symmetry and gauge field theory from the perspectives of motivation, development, application and challenges","Introduce Yang-Mils equation which govern the dynamics of gague field","Framwork of gauge field theory is based on the principle of local gague symmetry, which states the Lagrangian of system must be invariant under local transformations of a continuous symmetry group","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
+Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and challenges","Introduce Yang-Mils equation which govern the dynamics of gague field","Framwork of gauge field theory is based on the principle of local gague symmetry, which states the Lagrangian of system must be invariant under local transformations of a continuous symmetry group","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
 ----------------
 History: 
 """
@@ -42,8 +42,8 @@ A: The current conversation is about the quantum gravity.
 Q: What do you think is the most likely breakthrough point in quantum gravity at present?
 A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
 """
-Original question: Tell me about it
-Retrieval terms: ["Give review of black hole information paradox involve development, solutions and arguement","Describe the relationship between Hawking radiation and information loss","How does Page curve solve the problem of information loss?","black hole information paradox serves as a valuable tool for guiding the establishment of quantum gravity"]
+Original question: Introduce black hole information paradox.
+Retrieval terms: ["Give review of black hole information paradox which involves development, solutions and arguement","The key concept of information paradox include Hawking radiation, Page curve, entanglement entropy and AdS/CFT correspondence.","Considering black hole information paradox from the perspective of establishment of quantum gravity."]
 ----------------
 History: 
 """
@@ -51,7 +51,7 @@ Q: What is black hole thermodynamics?
 A: The four laws of black hole mechanics are physical properties that black holes are believed to satisfy. The laws, analogous to the laws of thermodynamics, were discovered by Jacob Bekenstein, Brandon Carter, and James Bardeen. Further considerations were made by Stephen Hawking......
 """
 Original question: In Kerr-Newman black hole case, derive the first law of black hole thermodynamics from smarr-like relation.
-Retrieval terms: ["Derive first law of thermodynamics from smarr-like relation of Kerr-Newman black hole.","What is the relationships between first law of thermodynamics and smarr-like relation?"]
+Retrieval terms: ["Give a derivation in detail, which obtain first law of thermodynamics from smarr-like relation of Kerr-Newman black hole.","Give an in-depth review about first law of thermodynamics and smarr-like relation."]
 
 ### If the question is specific and clear, generate more deeper and specified "retrieval terms".
 ----------------
@@ -59,7 +59,7 @@ History:
 """
 """
 Original question: 使用弯曲时空量子场论推导霍金辐射（使用中文回复）。
-Retrieval terms: ["Black hole thermodynamics: derive Hawking radiation by quantum field theory in curved spacetime","Hawking radiation derivation involves mode expandsion of field in curved spacetime, applying the Bogoliubov transformation, and deriving the thermal radiation spectrum."]
+Retrieval terms: ["In the context of black hole thermodynamics, derive Hawking radiation using quantum field theory in curved spacetime","Here is detailed derivation. First, start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally deriving the thermal radiation spectrum."]
 ----------------
 # Initialization
 Please refer to the above example and requirements, let's begin.
