@@ -33,7 +33,7 @@ Q: Conversation history.
 A: 现在的对话是关于规范场论的介绍和数学推导。
 """
 Original question: 我不理解。
-Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and challenges","Introduce Yang-Mils equation which govern the dynamics of gague field","Framwork of gauge field theory is based on the principle of local gague symmetry, which states the Lagrangian of system must be invariant under local transformations of a continuous symmetry group","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
+Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and challenges","Introduce Yang-Mils equation which govern the dynamics of gague field","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
 ----------------
 History: 
 """
@@ -55,7 +55,7 @@ History:
 """
 """
 Original question: Under what conditions is the product topology of infinitely many spaces also a compact space?
-Retrieval terms: ["Introduce the concept of product topology and its properties, including the Tychonoff theorem which states that the product of any collection of compact spaces is compact in the product topology.","Explore the conditions under which the product topology of infinitely many spaces is also a compact space, including the role of compactness in each individual space and the interplay between them.","Provide examples and counterexamples to illustrate the conditions for compactness in product topology, such as the countable product of non-trivial finite discrete spaces, and the product of uncountably many copies of the two-point discrete space."]
+Retrieval terms:  ["Introduce the concept of product topology and its properties, including the Tychonoff theorem.","Explore the conditions under which the product topology of infinitely many spaces is also a compact space","Provide examples and counterexamples to illustrate the conditions for compactness in product topology, such as the countable product of non-trivial finite discrete spaces, and the product of uncountably many copies of the two-point discrete space."]
 ----------------
 History: 
 """
@@ -83,7 +83,7 @@ Q: Conversation background.
 A: The current conversation is about the quantum field theory in the curved space.
 """
 Original question: Introduce Neumann algebras and its appication in qft.
-Retrieval terms: ["What is the concept of von Neumann algebras, definition, and significance in the field of operator algebras?","Discuss the type I von Neumann algebras, representation, and connection to measurable spaces and abelian von Neumann algebras.","Provide examples of each type of von Neumann algebra and their corresponding representations.","Explain the role of Neumann algebras in quantum mechanics, particularly in the context of von Neumann's formulation of quantum mechanics and the algebraic approach to quantum field theory.","Explore the connection between Neumann algebras and conformal field theory, particularly in the context of the Bisognano-Wichmann theorem and modular theory.","Provide examples of physical systems where Neumann algebras play a crucial role, such as in the study of quantum Hall effect, topological insulators, and quantum phase transitions."]
+Retrieval terms: ["What is the concept of von Neumann algebras, definition, and significance in the field of operator algebras?","Discuss the type I von Neumann algebras, representation, and connection to measurable spaces and abelian von Neumann algebras.","Provide examples of each type of von Neumann algebra and their corresponding representations.","Give von Neumann's formulation of quantum mechanics and the algebraic approach to quantum field theory.","Explore the connection between Neumann algebras and conformal field theory."]
 ----------------
 # Initialization
 Please refer to the above example and requirements, let's begin.
