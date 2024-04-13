@@ -25,15 +25,15 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Give in-depth introduction to Kerr geodesic which start from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
+Retrieval terms: ["Give in-depth introduction to Kerr geodesic, which start from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
 ----------------
 History: 
 """
 Q: Conversation history.
-A: 现在的对话是关于规范场论的介绍和数学推导。
+A: 现在的对话是关于规范场论的介绍。
 """
-Original question: 我不理解。
-Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and challenges","Introduce Yang-Mils equation which govern the dynamics of gague field","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
+Original question: 我仍然不理解，请进一步解释。
+Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development","Introduce Yang-Mils equation which govern the dynamics of gague field","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
 ----------------
 History: 
 """
