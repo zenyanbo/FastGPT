@@ -25,15 +25,15 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Introduce Kerr geodesic", "From Constants of motion to seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","what is hamiltonian description of geodesic motion?"]
+Retrieval terms: ["Give in-depth introduction to Kerr geodesic", "introduce Kerr geodesic from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
 ----------------
 History: 
 """
 Q: Conversation history.
-A: The current conversation is about the introduction and mathematical derivation of gauge field theory, etc.
+A: 现在的对话是关于规范场论的介绍和数学推导。
 """
-Original question: I don't understand.
-Retrieval terms: ["Give review of gauge symmetry and gauge field theory from the perspectives of motivation, development, application and challenges","What is the key concept/euqation/feature of gauge field theory?","What is the core principles/framwork/ of gauge field theory?","Give simple example of gague field theory, Scalar O(n) gauge theory"]
+Original question: 我不理解。
+Retrieval terms: ["Give detail review of gauge symmetry and gauge field theory from the perspectives of motivation, development, application and challenges","Introduce Yang-Mils equation which govern the dynamics of gague field","Framwork of gauge field theory is based on the principle of local gague symmetry, which states the Lagrangian of system must be invariant under local transformations of a continuous symmetry group","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
 ----------------
 History: 
 """
@@ -43,7 +43,7 @@ Q: What do you think is the most likely breakthrough point in quantum gravity at
 A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
 """
 Original question: Tell me about it
-Retrieval terms: ["Give review of black hole information paradox involve development, solutions and arguement","What is the relationship between Hawking radiation and information loss?","How does Page curve solve the problem of information loss?","black hole information paradox serves as a valuable tool for guiding the establishment of quantum gravity"]
+Retrieval terms: ["Give review of black hole information paradox involve development, solutions and arguement","Describe the relationship between Hawking radiation and information loss","How does Page curve solve the problem of information loss?","black hole information paradox serves as a valuable tool for guiding the establishment of quantum gravity"]
 ----------------
 History: 
 """
