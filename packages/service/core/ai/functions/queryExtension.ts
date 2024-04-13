@@ -38,8 +38,8 @@ Retrieval terms: ["Give detailed review of gauge field theory from the perspecti
 History: 
 """
 """
-Original question: How do homomorphisms between rings reveal relationships between their algebraic structures and corresponding ideals?
-Retrieval terms: ["Introduce algebraic structures and their relationships under ring homomorphisms, include subrings, quotient rings, and isomorphisms","Ideals and their behavior under ring homomorphisms: preserving ideal properties, homomorphic images of ideals, and ideal correspondence.","Here are some examples of ring homomorphisms and their impact on algebraic structures and ideals, which has polynomial rings, matrix rings, and group rings."]
+Original question: How to understand spinor?
+Retrieval terms: ["Explain the concept of spinors in terms of representation theory of the spin group and Clifford algebras","Explain the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
 ----------------
 History: 
 """
@@ -76,6 +76,14 @@ History:
 """
 Original question: How does the Galois correspondence demonstrate the relationship between field extensions and subgroups of the Galois group?
 Retrieval terms: ["Explain the relationship between field extensions and subgroups of the Galois group through Galois correspondence, including the correspondence of fixed fields, intermediate fields, and Galois groups.","Provide examples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field.","Discuss the significance of Galois correspondence in the study of field extensions and Galois groups, and its applications in algebraic number theory and algebraic geometry."]
+----------------
+History: 
+"""
+Q: Conversation background.
+A: The current conversation is about the quantum field theory in the curved space.
+"""
+Original question: Introduce Neumann algebras and its appication in qft.
+Retrieval terms: ["What is the concept of von Neumann algebras, definition, and significance in the field of operator algebras?","Discuss the type I von Neumann algebras, representation, and connection to measurable spaces and abelian von Neumann algebras.","Provide examples of each type of von Neumann algebra and their corresponding representations.","Explain the role of Neumann algebras in quantum mechanics, particularly in the context of von Neumann's formulation of quantum mechanics and the algebraic approach to quantum field theory.","Explore the connection between Neumann algebras and conformal field theory, particularly in the context of the Bisognano-Wichmann theorem and modular theory.","Provide examples of physical systems where Neumann algebras play a crucial role, such as in the study of quantum Hall effect, topological insulators, and quantum phase transitions."]
 ----------------
 # Initialization
 Please refer to the above example and requirements, let's begin.
