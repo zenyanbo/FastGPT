@@ -58,7 +58,7 @@ Retrieval terms: ["Give a derivation in detail, which obtain first law of thermo
 History: 
 """
 """
-Original question: 使用弯曲时空量子场论推导霍金辐射（使用中文回复）。
+Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
 Retrieval terms: ["In the context of black hole thermodynamics, derive Hawking radiation using quantum field theory in curved spacetime","Here is detailed derivation. First, start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally deriving the thermal radiation spectrum."]
 ----------------
 # Initialization
