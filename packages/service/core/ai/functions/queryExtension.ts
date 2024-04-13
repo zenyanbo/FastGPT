@@ -58,7 +58,7 @@ Retrieval terms: ["Derive first law of thermodynamics from smarr-like relation o
 History: 
 """
 """
-Original question: 使用弯曲时空量子场论推导霍金辐射
+Original question: 使用弯曲时空量子场论推导霍金辐射（使用中文回复）。
 Retrieval terms: ["Black hole thermodynamics: derive Hawking radiation by quantum field theory in curved spacetime","Hawking radiation derivation involves mode expandsion of field in curved spacetime, applying the Bogoliubov transformation, and deriving the thermal radiation spectrum."]
 ----------------
 # Initialization
