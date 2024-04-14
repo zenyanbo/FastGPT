@@ -85,6 +85,14 @@ A: The current conversation is about the Instabilities and phase transitions in 
 Original question: How to get energy spectrum of spin-density waves?
 Retrieval terms: ["Start from the Hamiltonian of Hubbard model (only electron–electron interactions), Obtain energy spectrum of spin-density waves by mean field theory."]
 ----------------
+History: 
+"""
+Q: Conversation background.
+A: The current conversation is about Boson stars.
+"""
+Original question: 列举出玻色星的重要文献和学者。
+Retrieval terms: ["List important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey.","List important scholars on Boson stars."]
+----------------
 
 # Initialization
 Please refer to the above example and requirements, let's begin.
