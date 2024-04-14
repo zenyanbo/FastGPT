@@ -25,15 +25,13 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Give in-depth introduction to Kerr geodesic, which start from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
+Retrieval terms: ["Give in-depth introduction to Kerr geodesic, which start from Kerr spacetime to constants of motion associated with symmetries, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
 ----------------
 History: 
 """
-Q: Conversation history.
-A: 现在的对话是关于规范场论的介绍。
 """
-Original question: 我仍然不理解，请进一步解释。
-Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development","Introduce Yang-Mils equation which govern the dynamics of gague field","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
+Original question: 介绍规范场论。
+Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and problem","Introduce Yang-Mils equation which govern the dynamics of gague field","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
 ----------------
 History: 
 """
@@ -44,12 +42,12 @@ Retrieval terms: ["Explain the concept of spinors in terms of representation the
 History: 
 """
 Q: Conversation background.
-A: The current conversation is about the quantum gravity.
-Q: What do you think is the most likely breakthrough point in quantum gravity at present?
-A: I think key point is black hole information paradox, which poses a significant challenge because it suggests a breakdown in our understanding of fundamental physics, particularly...
+A: The current conversation is about the quantum field theory.
+Q: How do we understand Feynman diagrams?
+A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state...
 """
-Original question: Introduce black hole information paradox.
-Retrieval terms: ["Give review of black hole information paradox which involves development, solutions and arguement","The key concept of information paradox include Hawking radiation, Page curve, entanglement entropy and AdS/CFT correspondence.","Considering black hole information paradox from the perspective of establishment of quantum gravity."]
+Original question: Can you provide some examples of calculations? For example, derive Compton scattering.
+Retrieval terms: ["Consider the scattering of a photon by an electron to lowest order in e.","Process is that, at first label the initial and final state, then consider the lowest order Feynman diagrams to get S-matrix element. finally, calculate differential scattering cross section."]
 ----------------
 History: 
 """
@@ -59,32 +57,41 @@ Retrieval terms:  ["Introduce the concept of product topology and its properties
 ----------------
 History: 
 """
-Q: What is black hole thermodynamics?
-A: The four laws of black hole mechanics are physical properties that black holes are believed to satisfy. The laws, analogous to the laws of thermodynamics, were discovered by Jacob Bekenstein, Brandon Carter, and James Bardeen. Further considerations were made by Stephen Hawking......
-"""
-Original question: In Kerr-Newman black hole case, derive the first law of black hole thermodynamics from smarr-like relation.
-Retrieval terms: ["Give a derivation in detail, which obtain first law of thermodynamics from smarr-like relation of Kerr-Newman black hole.","Give an in-depth review about first law of thermodynamics and smarr-like relation."]
-----------------
-History: 
-"""
 """
 Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
 Retrieval terms: ["In the context of black hole thermodynamics, derive Hawking radiation using quantum field theory in curved spacetime.","Here is detailed derivation. First, start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally deriving the thermal radiation spectrum."]
 ----------------
 History: 
 """
+Q: Conversation background.
+A: The current conversation is about the cosmology.
+Q: I want to work out the history of the falling temperature of the early universe.
+A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs...
+"""
+Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials.
+Retrieval terms: ["From adiabatic change of thermal equilibrium system in a co-moving volume, we can get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles and antiparticles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
+----------------
+History: 
+"""
 """
 Original question: How does the Galois correspondence demonstrate the relationship between field extensions and subgroups of the Galois group?
-Retrieval terms: ["Explain the relationship between field extensions and subgroups of the Galois group through Galois correspondence, including the correspondence of fixed fields, intermediate fields, and Galois groups.","Provide examples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field.","Discuss the significance of Galois correspondence in the study of field extensions and Galois groups, and its applications in algebraic number theory and algebraic geometry."]
+Retrieval terms: ["Explain the relationship between field extensions and subgroups of the Galois group through Galois correspondence, including the correspondence of fixed fields, intermediate fields, and Galois groups.","Provide examples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
 ----------------
 History: 
 """
 Q: Conversation background.
-A: The current conversation is about the quantum field theory in the curved space.
+A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
-Original question: Introduce Neumann algebras and its appication in qft.
-Retrieval terms: ["What is the concept of von Neumann algebras, definition, and significance in the field of operator algebras?","Discuss the type I von Neumann algebras, representation, and connection to measurable spaces and abelian von Neumann algebras.","Provide examples of each type of von Neumann algebra and their corresponding representations.","Give von Neumann's formulation of quantum mechanics and the algebraic approach to quantum field theory.","Explore the connection between Neumann algebras and conformal field theory."]
+Original question: Describe energy spectrum of spin-density waves.
+Retrieval terms: ["Start from the Hamiltonian of Hubbard model (only electron–electron interactions), Obtain energy spectrum of spin-density waves by mean field theory."]
 ----------------
+History: 
+"""
+"""
+Original question: How to understand spinor?
+Retrieval terms: ["Explain the concept of spinors in terms of representation theory of the spin group and Clifford algebras","Explain the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
+----------------
+
 # Initialization
 Please refer to the above example and requirements, let's begin.
 
