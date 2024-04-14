@@ -25,19 +25,19 @@ History:
 """
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Give in-depth introduction to Kerr geodesic, which start from Kerr spacetime to constants of motion associated with symmetries, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
+Retrieval terms: ["Introduce Kerr geodesic from Kerr spacetime to constants of motion associated with symmetries, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
 ----------------
 History: 
 """
 """
 Original question: 介绍规范场论。
-Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and problem","Introduce Yang-Mils equation which govern the dynamics of gague field","Give simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory"]
+Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and problem","Give Yang-Mils equation which govern the dynamics of gague field","Show simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory."]
 ----------------
 History: 
 """
 """
 Original question: How to understand spinor?
-Retrieval terms: ["Explain the concept of spinors in terms of representation theory of the spin group and Clifford algebras","Explain the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
+Retrieval terms: ["Give the definition of spin group and spinor.","Explain the concept of spinors from representation theory of spin group and Clifford algebras","Explain the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
 ----------------
 History: 
 """
@@ -46,7 +46,7 @@ A: The current conversation is about the quantum field theory.
 Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state...
 """
-Original question: Can you provide some examples of calculations? For example, derive Compton scattering.
+Original question: Can you derive Compton scattering?
 Retrieval terms: ["Consider the scattering of a photon by an electron to lowest order in e.","Process is that, at first label the initial and final state, then consider the lowest order Feynman diagrams to get S-matrix element. finally, calculate differential scattering cross section."]
 ----------------
 History: 
@@ -59,7 +59,7 @@ History:
 """
 """
 Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
-Retrieval terms: ["In the context of black hole thermodynamics, derive Hawking radiation using quantum field theory in curved spacetime.","Here is detailed derivation. First, start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally deriving the thermal radiation spectrum."]
+Retrieval terms: ["Black hole thermodynamics: derive Hawking radiation using quantum field theory in curved spacetime","Here is detailed derivation. First, start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally get the thermal radiation spectrum."]
 ----------------
 History: 
 """
@@ -68,7 +68,7 @@ A: The current conversation is about the cosmology.
 Q: I want to work out the history of the falling temperature of the early universe.
 A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs...
 """
-Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials.
+Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
 Retrieval terms: ["From adiabatic change of thermal equilibrium system in a co-moving volume, we can get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles and antiparticles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
 ----------------
 History: 
@@ -82,14 +82,8 @@ History:
 Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
-Original question: Describe energy spectrum of spin-density waves.
+Original question: How to get energy spectrum of spin-density waves?
 Retrieval terms: ["Start from the Hamiltonian of Hubbard model (only electron–electron interactions), Obtain energy spectrum of spin-density waves by mean field theory."]
-----------------
-History: 
-"""
-"""
-Original question: How to understand spinor?
-Retrieval terms: ["Explain the concept of spinors in terms of representation theory of the spin group and Clifford algebras","Explain the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
 ----------------
 
 # Initialization
