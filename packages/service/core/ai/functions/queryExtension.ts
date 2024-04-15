@@ -10,14 +10,16 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your task is to analyze an "original question" along with relevant historical data in order to generate optimized "retrieval terms" that will improve the semantic richness and accuracy of information retrieval for the given query. You have a very good understanding of framework and structure of various research fields in the physics and mathematics. 
+const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your task is to analyze an "original question" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will improve the semantic richness and accuracy of information retrieval for the given query. You have a very good understanding of framework and structure of various research fields in the physics and mathematics. 
 
 ## Process
 First, carefully analyze the "original question" and historical data, identify needs from unclear unprofessional expressions, focusing on the key concepts, entities, and relationships mentioned.
-Next, brainstorming. generate potential retrieval terms and phrases from different perspectives that capture the core meaning of the "original question". Consider synonyms, related concepts, narrower and broader terms in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate terms.
-Finally, refine and select the most relevant, in-depth, professional and clear retrieval terms from your brainstorming. Aim for terminology that are domain-specific, unambiguous, and commonly used in the field. Organize the terms to cover key aspects, reflect any hierarchical relationships and scope of concepts where applicable. The final set of retrieval terms should be in-depth and preferably comprehensive.
+Next, brainstorming. generate potential "retrieval terms" and phrases from different perspectives that capture the core meaning of the "original question". Consider synonyms, related concepts, narrower and broader terms in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate terms.
+Finally, refine and select the most relevant, in-depth, professional and clear "retrieval terms" from your brainstorming. Aim for terminology that are domain-specific, unambiguous, and commonly used in the field. Organize the terms to cover key aspects, reflect any hierarchical relationships and scope of concepts where applicable. The final set of "retrieval terms" should be in-depth and preferably comprehensive.
 
-Notice: "retrieval terms" Always are in English.
+## Notice
+- If "original question" is so professional that you cannot generate more specialized and accurate "retrieval terms", you can generate fewer terms or even return an empty list.
+- The "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least English version.
 
 ## Example:
 ----------------
@@ -37,7 +39,7 @@ History:
 """
 """
 Original question: How to understand spinor?
-Retrieval terms: ["Give the definition of spin group and spinor.","Explain the concept of spinors from representation theory of spin group and Clifford algebras","Explain the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
+Retrieval terms: ["Give the definition of spin group and spinor.","Explain the concept of spinors from representation theory of spin group and Clifford algebras","What is the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
 ----------------
 History: 
 """
@@ -59,7 +61,7 @@ History:
 """
 """
 Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
-Retrieval terms: ["Black hole thermodynamics: derive Hawking radiation using quantum field theory in curved spacetime","Here is detailed derivation. First, start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally get the thermal radiation spectrum."]
+Retrieval terms: ["Derive Hawking radiation spectrum using quantum field theory in curved spacetime","Here is detailed derivation, which start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally get the thermal radiation spectrum."]
 ----------------
 History: 
 """
@@ -69,7 +71,7 @@ Q: I want to work out the history of the falling temperature of the early univer
 A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs...
 """
 Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
-Retrieval terms: ["From adiabatic change of thermal equilibrium system in a co-moving volume, we can get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles and antiparticles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
+Retrieval terms: ["Derive the thermal equilibrium behavior of different particles in cosmology","From adiabatic change of thermal equilibrium system in a co-moving volume, we can get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
 ----------------
 History: 
 """
@@ -96,7 +98,7 @@ Retrieval terms: ["List important studies and reference on Boson stars, include 
 
 # Initialization
 Please refer to the above example and requirements, let's begin.
-
+----------------
 History:
 """
 {{histories}}
