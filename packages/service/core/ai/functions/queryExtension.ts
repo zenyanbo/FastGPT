@@ -21,6 +21,12 @@ Finally, according to the following examples and requirements, refine and select
 ----------------
 History: 
 """
+"""
+Original question: Introduce Kerr geodesic.
+Retrieval terms: ["Introduce Kerr geodesic from Kerr spacetime and its symmetry, geodesic constants of motion, seperable Kerr geodesic equation and its analytical solutions","Describe orbital dynamics and properties of Kerr geodesic.","Give hamiltonian description and action-angle formailsm of Kerr geodesic.","What is the development and application of Kerr geodesic?"]
+----------------
+History: 
+"""
 Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
@@ -55,19 +61,13 @@ Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
 Original question: Can you strictly derive Compton scattering? I need more detail.
-Retrieval terms: ["Consider the scattering of a photon by an electron to lowest order in e.","Process is that, at first label the initial and final state, then consider the lowest order Feynman diagrams to get S-matrix element. finally, calculate differential scattering cross section."]
-----------------
-History: 
-"""
-"""
-Original question: Under what conditions is the product topology of infinitely many spaces also a compact space?
-Retrieval terms:  ["Introduce the concept of product topology and its properties, including the Tychonoff theorem.","Explore the conditions under which the product topology of infinitely many spaces is also a compact space","Provide examples and counterexamples to illustrate the conditions for compactness in product topology, such as the countable product of non-trivial finite discrete spaces, and the product of uncountably many copies of the two-point discrete space."]
+Retrieval terms: ["Derive Compton scattering using Feynman diagra. Consider the scattering of a photon by an electron to lowest order in e. The Process is that, at first label the initial and final state, then consider the lowest order Feynman diagrams to get S-matrix element. finally, calculate differential scattering cross section."]
 ----------------
 History: 
 """
 """
 Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
-Retrieval terms: ["Derive Hawking radiation spectrum using quantum field theory in curved spacetime","Here is detailed derivation, which start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally get the thermal radiation spectrum."]
+Retrieval terms: ["Derive Hawking radiation spectrum using quantum field theory in curved spacetime","Here is detailed derivation of Hawking radiation by quantum field theory in the curved spacetime. Start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally get the thermal radiation spectrum."]
 ----------------
 History: 
 """
@@ -77,13 +77,13 @@ Q: I want to work out the history of the falling temperature of the early univer
 A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs, ......
 """
 Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
-Retrieval terms: ["Derive the thermal equilibrium behavior of different particles in cosmology","From adiabatic change of thermal equilibrium system in a co-moving volume, we can get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
+Retrieval terms: ["Derive the thermal equilibrium behavior of different particles in cosmology","From adiabatic change of thermal equilibrium system in a co-moving volume, get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
 ----------------
 History: 
 """
 """
 Original question: How does the Galois correspondence demonstrate the relationship between field extensions and subgroups of the Galois group?
-Retrieval terms: ["Explain the relationship between field extensions and subgroups of the Galois group through Galois correspondence, including the correspondence of fixed fields, intermediate fields, and Galois groups.","Provide examples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
+Retrieval terms: ["Explain the relationship between field extensions and subgroups of the Galois group through Galois correspondence, including the correspondence of fixed fields, intermediate fields, and Galois groups.","Provide examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
 ----------------
 History: 
 """
@@ -118,9 +118,8 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 ## Requirements
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
 - Generally, you should avoid repeating content that has already been mentioned in [History]. Such as the first case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
-- For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
-- So you should think about when should be broader (horizontally) and when should focus deeper and specified concept (vertically). If "original question" is enough clear, specific and non-ambiguous, go deeper. Such as two contrasting cases of "Kerr geodesic" and the case of "spin-density waves" and "Hawking radiation", "retrieval terms" is fewer but deeper.
-- The number of "retrieval terms" depends on clarity of "original question" and your understanding of "original question". The clearer the question, the greater the number of "retrieval terms". Refer to two contrasting cases of "Kerr geodesic". Even if you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms" such as the case of SWSOH in [Example].
+- For professional and specific "original question", please making reasonable generalizations to "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
+- So you should think about when should be broader (horizontally) and when should focus deeper and specified detail (vertically). If "original question" is enough clear, specific and non-ambiguous, "retrieval terms" is fewer but longer, detailed and specified.
 - "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version. Like Chinese case in examples.
 
 # Initialization
