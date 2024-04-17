@@ -21,9 +21,11 @@ Finally, refine and select the most relevant, in-depth, professional and clear "
 ----------------
 History: 
 """
+Q: Introduce Kerr spacetime in detail.
+A: Ok, Let's discuss the Kerr spacetime and its symetry.
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
-Retrieval terms: ["Introduce Kerr geodesic from Kerr spacetime to constants of motion associated with symmetries, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
+Retrieval terms: ["Introduce Kerr geodesic from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
 ----------------
 History: 
 """
@@ -100,10 +102,11 @@ Original question: Give examples or approximate expression of "spin weighted sph
 Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (SWSH) as solutions to the spin-weighted spheroidal wave equation (SWSE)","Provide examples of SWSH in various contexts, such as in the study of gravitational waves and black hole perturbation theory","Explain the approximate expression of SWSH in terms of spin-weighted spherical harmonics (SWSH)"]
 
 ## Notice
+Please understand the above examples and counterexamples.
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
-- To introduce new knowledge, unless "original question" indicates that there is no understanding, try to avoid content that has already been mentioned in [History].
+- To introduce new knowledge, unless "original question" indicates that there is no understanding, try to avoid content that has already been mentioned in [History]. Such as the case of Kerr geodesic.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
-- So, if you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
+- So you should think about when you should expand semantics (expand horizontally) and when you should focus specified concept (go deeper). If you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
 - Finally, "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
 
 # Initialization
