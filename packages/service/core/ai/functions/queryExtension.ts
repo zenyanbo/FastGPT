@@ -82,7 +82,7 @@ History:
 Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
-Original question: How to get energy spectrum of spin-density waves?
+Original question: How to get/derive energy spectrum of spin-density waves?
 Retrieval terms: ["Start from the Hamiltonian of Hubbard model (only electron–electron interactions), Obtain energy spectrum of spin-density waves by mean field theory."]
 ----------------
 History: 
@@ -105,7 +105,7 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
 - Generally, you should avoid repeating content that has already been mentioned in [History]. Such as the case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
-- So you should think about when should expand semantics (expand horizontally) and when should focus specified concept (go deeper).
+- So you should think about when should expand semantics (expand horizontally) and when should focus specified concept (go deeper). Such as the case of "spin-density waves" and "Hawking radiation", "retrieval terms" is fewer but specified because of non-ambiguity of "original question".
 - If you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
 - "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
 
