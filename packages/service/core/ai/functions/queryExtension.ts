@@ -22,7 +22,7 @@ Finally, refine and select the most relevant, in-depth, professional and clear "
 History: 
 """
 Q: Introduce Kerr spacetime in detail.
-A: Ok, Let's discuss the Kerr spacetime and its symetry.
+A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Original question: What are the paths followed by free-falling particles in rotating spacetime?
 Retrieval terms: ["Introduce Kerr geodesic from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and solutions","Describe orbital dynamics and properties of Kerr geodesic","Give hamiltonian description of Kerr geodesic in detail"]
@@ -44,7 +44,7 @@ History:
 Q: Conversation background.
 A: The current conversation is about the quantum field theory.
 Q: How do we understand Feynman diagrams?
-A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state...
+A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
 Original question: Can you derive Compton scattering?
 Retrieval terms: ["Consider the scattering of a photon by an electron to lowest order in e.","Process is that, at first label the initial and final state, then consider the lowest order Feynman diagrams to get S-matrix element. finally, calculate differential scattering cross section."]
@@ -66,7 +66,7 @@ History:
 Q: Conversation background.
 A: The current conversation is about the cosmology.
 Q: I want to work out the history of the falling temperature of the early universe.
-A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs...
+A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs, ......
 """
 Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
 Retrieval terms: ["Derive the thermal equilibrium behavior of different particles in cosmology","From adiabatic change of thermal equilibrium system in a co-moving volume, we can get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
@@ -104,9 +104,9 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 ## Notice
 Please understand the above examples and counterexamples.
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
-- To introduce new knowledge, unless "original question" indicates that there is no understanding, try to avoid content that has already been mentioned in [History]. Such as the case of Kerr geodesic.
+- To introduce new knowledge, you can use [History] to decide whether to avoid content that has already been mentioned. Such as the case of Kerr geodesic.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
-- So you should think about when you should expand semantics (expand horizontally) and when you should focus specified concept (go deeper). If you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
+- So you should think about when you should expand semantics (expand horizontally) and when you should focus specified concept (go deeper). If it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
 - Finally, "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
 
 # Initialization
