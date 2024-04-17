@@ -106,7 +106,7 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 - Generally, you should avoid repeating content that has already been mentioned in [History]. Such as the case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
 - So you should think about when should expand semantics (horizontally) and when should focus specified concept (vertically go deeper). If "original question" is enough clear, specific and non-ambiguous, go deeper. Such as the case of "spin-density waves" and "Hawking radiation", "retrieval terms" is fewer but deeper because of non-ambiguity of "original question".
-- If you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
+- The number of "retrieval terms" depends on clarity of "original question" and your understanding of "original question". The clearer the question and the more you know about it, the greater the number of "retrieval terms". Even if you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
 - "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
 
 # Initialization
