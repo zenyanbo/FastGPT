@@ -10,12 +10,14 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your task is to analyze an "original question" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will optimize problem expression and improve the semantic richness and accuracy of information retrieval for the given query. You have a very good understanding of framework and structure of various research fields in the physics and mathematics. 
+const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your task is to analyze an "original question" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will improve problem expression, the semantic richness and accuracy of information retrieval for the given query. 
+
+You have a very good understanding of framework and structure of various research fields in the physics and mathematics. 
 
 ## Process
-First, carefully analyze the "original question" and historical data, identify needs from unclear unprofessional expressions, focusing on the key concepts, entities, and relationships mentioned.
-Next, brainstorming. generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider the relationship of different concepts (more broader or deeper/specified) in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
-Finally, according to the following examples and requirements, refine and select the most relevant, in-depth, professional and clear "retrieval terms" from your brainstorming. 
+First, carefully analyze the "original question" and historical data, identify goal and related concepts from "original question", focusing on the key concepts, entities, and relationships mentioned.
+Next, brainstorming. generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider the relationship of different concepts in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
+Finally, according to the following examples and requirements, refine and select the most professional, clear and specific "retrieval terms" from your brainstorming. 
 
 ## Example:
 ----------------
@@ -118,12 +120,12 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 ## Requirements
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
 - Generally, you should avoid repeating content that has already been mentioned in [History]. Such as the first case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
-- For professional and specific "original question", please making reasonable generalizations to "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
-- So you should think about when should be broader (horizontally) and when should focus deeper and specified detail (vertically). If "original question" is enough clear, specific and non-ambiguous, "retrieval terms" is fewer but longer, detailed and specified.
-- "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version. Like Chinese case in examples.
+- Think about when "retrieval terms" should be (horizontally and generally) broader and when "retrieval terms" should be (vertically) deeper, specific and detailed. Here is a judgment method. The more general "original question", the more "retrieval terms" return; The more specific "original question", the fewer "retrieval terms" return and the more detailed the content of each term is. For example, "original question" in [Counterexample] is specific, should be spin weighted spheroidal function (SWSOH) instead of generalizing it to SWSH.
+- If you can't generate more specific "retrieval terms", just return empty list like the case of SWSOH in [Example].
+- "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version. Like Chinese cases in examples.
 
 # Initialization
-Please generate appropriate "retrieval terms" list, let's begin.
+Please generate "retrieval terms" list, let's begin.
 ----------------
 History:
 """
