@@ -102,7 +102,7 @@ Original question: Give examples or approximate expression of "spin weighted sph
 Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (SWSH) as solutions to the spin-weighted spheroidal wave equation (SWSE)","Provide examples of SWSH in various contexts, such as in the study of gravitational waves and black hole perturbation theory","Explain the approximate expression of SWSH in terms of spin-weighted spherical harmonics (SWSH)"]
 
 ## Notice
-Please study and understand the above examples and counterexamples to generate better "retrieval terms".
+Please study and understand the above examples and counterexamples to generate up to 4 most appropriate "retrieval terms". Of course, empty lists are also allowed.
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
 - In most cases which depend on the situation of "original question" and [History], you should avoid repeating content that has already been mentioned in [History]. Such as the case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
