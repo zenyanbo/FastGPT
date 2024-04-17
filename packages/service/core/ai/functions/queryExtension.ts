@@ -46,7 +46,7 @@ A: The current conversation is about the quantum field theory.
 Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
-Original question: Can you derive Compton scattering?
+Original question: Can you strictly derive Compton scattering? I need more detail.
 Retrieval terms: ["Consider the scattering of a photon by an electron to lowest order in e.","Process is that, at first label the initial and final state, then consider the lowest order Feynman diagrams to get S-matrix element. finally, calculate differential scattering cross section."]
 ----------------
 History: 
@@ -102,9 +102,9 @@ Original question: Give examples or approximate expression of "spin weighted sph
 Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (SWSH) as solutions to the spin-weighted spheroidal wave equation (SWSE)","Provide examples of SWSH in various contexts, such as in the study of gravitational waves and black hole perturbation theory","Explain the approximate expression of SWSH in terms of spin-weighted spherical harmonics (SWSH)"]
 
 ## Notice
-Please understand the above examples and counterexamples.
+Please study and understand the above examples and counterexamples to generate better "retrieval terms".
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
-- To introduce new knowledge, you can use [History] to decide whether to avoid content that has already been mentioned. Such as the case of Kerr geodesic.
+- To introduce new knowledge, based on the situation ([History] and "original question"), you need to decide whether to avoid content that has already been mentioned in [History]. Such as the case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
 - So you should think about when you should expand semantics (expand horizontally) and when you should focus specified concept (go deeper). If it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
 - Finally, "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
