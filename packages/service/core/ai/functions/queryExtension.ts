@@ -103,7 +103,7 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 - Each "retrieval terms" should contain information from "original question", yet should be an extension of "original question" with different focuses.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
 - So, if you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
-- The "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
+- Finally, "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
 
 # Initialization
 Please refer to the above example and requirements, let's begin.
