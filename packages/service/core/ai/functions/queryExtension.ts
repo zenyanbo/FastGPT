@@ -33,7 +33,7 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Original question: So, further give/derive Kerr geodesic equation.
-Retrieval terms: ["Give seperable Kerr geodesic equation and its analytical solutions","Give hamiltonian description and action-angle formailsm of Kerr geodesic equation."]
+Retrieval terms: ["Give seperable Kerr geodesic equation and its analytical solutions"]
 ----------------
 History: 
 """
@@ -100,6 +100,12 @@ A: The current conversation is about Boson stars.
 """
 Original question: 列举出玻色星的重要文献和学者。
 Retrieval terms: ["List important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey.","List important scholars on Boson stars."]
+----------------
+History: 
+"""
+"""
+Original question: Give examples or approximate expression of "spin weighted spheroidal function".
+Retrieval terms: []
 
 ## Counterexample:
 ----------------
