@@ -110,7 +110,7 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 - "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
 
 # Initialization
-Please refer to the above [Example] and [Counterexample] to generate appropriate "retrieval terms" based on [Requirements], let's begin.
+Please refer to the above examples and requirements to generate appropriate "retrieval terms", let's begin.
 ----------------
 History:
 """
