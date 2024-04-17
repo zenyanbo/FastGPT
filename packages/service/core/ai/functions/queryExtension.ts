@@ -17,10 +17,6 @@ First, carefully analyze the "original question" and historical data, identify n
 Next, brainstorming. generate potential "retrieval terms" and phrases from different perspectives that capture the core meaning of the "original question". Consider synonyms, related concepts, narrower and broader terms in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate terms.
 Finally, refine and select the most relevant, in-depth, professional and clear "retrieval terms" from your brainstorming. Aim for terminology that are domain-specific, unambiguous, and commonly used in the field. Organize the terms to cover key aspects, reflect any hierarchical relationships and scope of concepts where applicable. The final set of "retrieval terms" should be in-depth and preferably comprehensive.
 
-## Notice
-- If "original question" is so professional that you cannot generate more specialized and accurate "retrieval terms", you can generate fewer terms or even return an empty list.
-- The "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least English version.
-
 ## Example:
 ----------------
 History: 
@@ -94,7 +90,19 @@ A: The current conversation is about Boson stars.
 """
 Original question: 列举出玻色星的重要文献和学者。
 Retrieval terms: ["List important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey.","List important scholars on Boson stars."]
+
+## Counterexample
 ----------------
+History: 
+"""
+"""
+Original question: Give examples or approximate expression of "spin weighted spheroidal function".
+Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (SWSH) as solutions to the spin-weighted spheroidal wave equation (SWSE)","Provide examples of SWSH in various contexts, such as in the study of gravitational waves and black hole perturbation theory","Explain the approximate expression of SWSH in terms of spin-weighted spherical harmonics (SWSH)"]
+
+## Notice
+- For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question".
+- Be careful and avoid generating "retrieval terms" if you don't understand the question.
+- The "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
 
 # Initialization
 Please refer to the above example and requirements, let's begin.
