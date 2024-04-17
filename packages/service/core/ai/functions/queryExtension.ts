@@ -14,7 +14,7 @@ const defaultPrompt = `As an information retrieval assistant specializing in the
 
 ## Process
 First, carefully analyze the "original question" and historical data, identify needs from unclear unprofessional expressions, focusing on the key concepts, entities, and relationships mentioned.
-Next, brainstorming. generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider related concepts, narrower and broader terms in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
+Next, brainstorming. generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider the relationship of different concepts (more broader or deeper/specified) in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
 Finally, according to the following examples and requirements, refine and select the most relevant, in-depth, professional and clear "retrieval terms" from your brainstorming. 
 
 ## Example:
@@ -25,15 +25,15 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Original question: So, further introduce Kerr geodesic.
-Retrieval terms: ["Introduce Kerr geodesic from Kerr spacetime to constants of motion, seperable Kerr geodesic equation and its analytical solutions","Describe orbital dynamics and properties of Kerr geodesic.","Give hamiltonian description and action-angle formailsm of Kerr geodesic"]
+Retrieval terms: ["Introduce Kerr geodesic from constants of motion, seperable Kerr geodesic equation and its analytical solutions","Describe orbital dynamics and properties of Kerr geodesic.","Give hamiltonian description and action-angle formailsm of Kerr geodesic."]
 ----------------
 History: 
 """
 Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
-Original question: Please give Kerr geodesic equation.
-Retrieval terms: ["Give seperable Kerr geodesic equation and its analytical solutions"]
+Original question: So, further give/derive Kerr geodesic equation.
+Retrieval terms: ["Give seperable Kerr geodesic equation and its analytical solutions","Give hamiltonian description and action-angle formailsm of Kerr geodesic equation."]
 ----------------
 History: 
 """
@@ -113,9 +113,9 @@ Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
 - Generally, you should avoid repeating content that has already been mentioned in [History]. Such as the first case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
 - For professional and specific "original question", avoid making unreasonable generalizations to maintain the accuracy of "original question". For example, Should be spin weighted spheroidal function (SWSOH) instead of SWSH in [Counterexample].
-- So you should think about when should expand semantics (horizontally) and when should focus specified concept (vertically go deeper). If "original question" is enough clear, specific and non-ambiguous, go deeper. Such as two contrasting cases of "Kerr geodesic" and the case of "spin-density waves" and "Hawking radiation", "retrieval terms" is fewer but deeper.
-- The number of "retrieval terms" depends on clarity of "original question" and your understanding of "original question". The clearer the question and the more you know about it, the greater the number of "retrieval terms". Such as two contrasting cases of "Kerr geodesic". Even if you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
-- "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version.
+- So you should think about when should be broader (horizontally) and when should focus deeper and specified concept (vertically). If "original question" is enough clear, specific and non-ambiguous, go deeper. Such as two contrasting cases of "Kerr geodesic" and the case of "spin-density waves" and "Hawking radiation", "retrieval terms" is fewer but deeper.
+- The number of "retrieval terms" depends on clarity of "original question" and your understanding of "original question". The clearer the question and the more you know about it, the greater the number of "retrieval terms". Refer to two contrasting cases of "Kerr geodesic". Even if you think it's hard to generate satisfactory "retrieval terms", you can generate no "retrieval terms".
+- "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version. Like Chinese case in examples.
 
 # Initialization
 Please generate appropriate "retrieval terms" list, let's begin.
