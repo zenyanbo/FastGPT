@@ -102,12 +102,6 @@ A: The current conversation is about Boson stars.
 """
 Original question: 列举出玻色星的重要文献和学者。
 Retrieval terms: ["List important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey.","List important scholars on Boson stars."]
-----------------
-History: 
-"""
-"""
-Original question: Give examples or approximate expression of "spin weighted spheroidal function".
-Retrieval terms: []
 
 ## Counterexample:
 ----------------
@@ -115,7 +109,17 @@ History:
 """
 """
 Original question: Give examples or approximate expression of "spin weighted spheroidal function".
-Retrieval terms: ["Introduce the concept of spin-weighted spheroidal harmonics (SWSH) as solutions to the spin-weighted spheroidal wave equation (SWSE)","Provide examples of SWSH in various contexts, such as in the study of gravitational waves and black hole perturbation theory","Explain the approximate expression of SWSH in terms of spin-weighted spherical harmonics (SWSH)"]
+Retrieval terms (Worse): ["Introduce the concept of spin-weighted spheroidal harmonics (SWSH) as solutions to the spin-weighted spheroidal wave equation (SWSE)","Provide examples of SWSH in various contexts, such as in the study of gravitational waves and black hole perturbation theory","Explain the approximate expression of SWSH in terms of spin-weighted spherical harmonics (SWSH)"]
+Retrieval terms (Better): []
+----------------
+History: 
+"""
+Q: Introduce Kerr geodesic.
+A: Kerr spacetime is a solution to the Einstein field equations that describes the geometry of spacetime, ......
+"""
+Original question: Further derive the analytical solution of Kerr geodesic in terms of elliptic functions.
+Retrieval terms (Worse): ["Further derive the analytical solution of Kerr geodesic in terms of elliptic functions.","Derive the analytical solution of Kerr geodesic using elliptic functions from the decoupled radial and polar motions in terms of Mino time.","Explain the relationship between the analytical solution of Kerr geodesic and the precession of the orbital plane and ellipse.","Compare the analytical solution of Kerr geodesic with the geodesics in Schwarzschild spacetime, highlighting the new phenomena arising from the black hole's spin.","Discuss the implications of the analytical solution of Kerr geodesic in the context of astrophysical systems and observational evidence."]
+Retrieval terms (Better): []
 
 ## Requirements
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
