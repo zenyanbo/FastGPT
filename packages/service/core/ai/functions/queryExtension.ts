@@ -123,8 +123,8 @@ Retrieval terms (Better): []
 ## Requirements
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
 - Generally, you should avoid repeating content that has already been mentioned in [History]. Such as the first case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
-- Think about when "retrieval terms" should be (horizontally and generally) broader and when "retrieval terms" should be (vertically) deeper, specific and detailed. Here is a judgment method. The more general "original question", the more "retrieval terms" return; The more specific "original question", the fewer "retrieval terms" return and the more detailed the content of each term is.
-- If you can't generate more specific "retrieval terms", just return empty list like the case in [Counterexample].
+- Think about when list of "retrieval terms" should be (horizontally and generally) broader and when list of "retrieval terms" should be (vertically) deeper, specific and detailed. Here is a judgment method. The more general "original question", the more "retrieval terms" return in list; The more specific "original question", the fewer "retrieval terms" return in list and the more detailed and specific the content of "retrieval terms" is.
+- Please be honest and carefully. If you can't generate more specific "retrieval terms", or don't know the related concept, just return empty list honestly. Such as the case in [Counterexample], spin-weighted spheroidal function is SWSOH instead of SWSH. You don't know, thus return empty list.
 - "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version. Like Chinese cases in examples.
 
 # Initialization
