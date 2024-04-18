@@ -45,6 +45,14 @@ Retrieval terms: ["Give seperable Kerr geodesic equation and its analytical solu
 ----------------
 History: 
 """
+Q: Introduce Kerr geodesic.
+A: Kerr spacetime is a solution to the Einstein field equations that describes the geometry of spacetime, ......
+"""
+Original question: Further derive the analytical solution of Kerr geodesic in terms of elliptic functions.
+Retrieval terms: []
+----------------
+History: 
+"""
 """
 Original question: 介绍规范场论。
 Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and problem","Give Yang-Mils equation which govern the dynamics of gague field","Show simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory."]
@@ -111,20 +119,11 @@ History:
 Original question: Give examples or approximate expression of "spin weighted spheroidal function".
 Retrieval terms (Worse): ["Introduce the concept of spin-weighted spheroidal harmonics (SWSH) as solutions to the spin-weighted spheroidal wave equation (SWSE)","Provide examples of SWSH in various contexts, such as in the study of gravitational waves and black hole perturbation theory","Explain the approximate expression of SWSH in terms of spin-weighted spherical harmonics (SWSH)"]
 Retrieval terms (Better): []
-----------------
-History: 
-"""
-Q: Introduce Kerr geodesic.
-A: Kerr spacetime is a solution to the Einstein field equations that describes the geometry of spacetime, ......
-"""
-Original question: Further derive the analytical solution of Kerr geodesic in terms of elliptic functions.
-Retrieval terms (Worse): ["Further derive the analytical solution of Kerr geodesic in terms of elliptic functions.","Derive the analytical solution of Kerr geodesic using elliptic functions from the decoupled radial and polar motions in terms of Mino time.","Explain the relationship between the analytical solution of Kerr geodesic and the precession of the orbital plane and ellipse.","Compare the analytical solution of Kerr geodesic with the geodesics in Schwarzschild spacetime, highlighting the new phenomena arising from the black hole's spin.","Discuss the implications of the analytical solution of Kerr geodesic in the context of astrophysical systems and observational evidence."]
-Retrieval terms (Better): []
 
 ## Requirements
 - Each "retrieval terms" should contain key information of "original question", yet should be an extension of "original question" with different focuses.
 - Generally, you should avoid repeating content that has already been mentioned in [History]. Such as the first case of Kerr geodesic, its "retrieval terms" don't include the definition of Kerr spacetime which has been mentioned.
-- Think about when "retrieval terms" should be (horizontally and generally) broader and when "retrieval terms" should be (vertically) deeper, specific and detailed. Here is a judgment method. The more general "original question", the more "retrieval terms" return; The more specific "original question", the fewer "retrieval terms" return and the more detailed the content of each term is. Refer to the cases of "Kerr geodesic" and [Counterexample].
+- Think about when "retrieval terms" should be (horizontally and generally) broader and when "retrieval terms" should be (vertically) deeper, specific and detailed. Here is a judgment method. The more general "original question", the more "retrieval terms" return; The more specific "original question", the fewer "retrieval terms" return and the more detailed the content of each term is.
 - If you can't generate more specific "retrieval terms", just return empty list like the case in [Counterexample].
 - "retrieval terms" must be in English. If "original question" contains Chinese characters, list of "retrieval terms" must include at least it's English version. Like Chinese cases in examples.
 
