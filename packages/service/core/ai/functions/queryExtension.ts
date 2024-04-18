@@ -71,13 +71,13 @@ Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
 Original question: Can you strictly derive Compton scattering? I need more detail.
-Retrieval terms: ["Derive Compton scattering using Feynman diagra. Consider the scattering of a photon by an electron to lowest order in e. The Process is that, at first label the initial and final state, then consider the lowest order Feynman diagrams to get S-matrix element. finally, calculate differential scattering cross section."]
+Retrieval terms: ["Derive Compton scattering using Feynman diagra. Consider some core concepts which contain initial and final state, from Feynman diagrams to get S-matrix element and differential scattering cross section."]
 ----------------
 History: 
 """
 """
 Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
-Retrieval terms: ["Derive Hawking radiation spectrum using quantum field theory in curved spacetime","Here is detailed derivation of Hawking radiation by quantum field theory in the curved spacetime. Start from mode expandsion of field in curved spacetime, then applying the Bogoliubov transformation, finally get the thermal radiation spectrum."]
+Retrieval terms: ["Derive Hawking radiation spectrum using quantum field theory in curved spacetime","Here are key concepts: mode expandsion of field in curved spacetime, Bogoliubov transformation and thermal radiation spectrum about particle numbers."]
 ----------------
 History: 
 """
@@ -87,7 +87,7 @@ Q: I want to work out the history of the falling temperature of the early univer
 A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs, ......
 """
 Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
-Retrieval terms: ["Derive the thermal equilibrium behavior of different particles in cosmology","From adiabatic change of thermal equilibrium system in a co-moving volume, get Stefan–Boltzmann law and entropy density of radiation.","Consider the number of particles in early universe with momentum $p$ by Fermi–Dirac or Bose–Einstein distributions.","The contribution of each species of particle to the energy density, pressure, and entropy of early universe can be computed."]
+Retrieval terms: ["Derive the thermal equilibrium behavior of different particles Fermi–Dirac or Bose–Einstein distributions in cosmology, obtain the contribution of each species of particle to the energy density, pressure, and entropy.]
 ----------------
 History: 
 """
@@ -101,7 +101,7 @@ Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
 Original question: How to get/derive energy spectrum of spin-density waves?
-Retrieval terms: ["Start from the Hamiltonian of Hubbard model (only electron–electron interactions), Obtain energy spectrum of spin-density waves by mean field theory."]
+Retrieval terms: ["Derive energy spectrum of spin-density by mean field theory."]
 ----------------
 History: 
 """
