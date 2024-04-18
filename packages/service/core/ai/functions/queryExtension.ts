@@ -114,7 +114,7 @@ Retrieval terms (Better): []
 - "retrieval terms" must be in English. If "original question" contains Chinese characters, "retrieval terms" must include at least it's English version such as Chinese cases in examples.
 
 # Initialization
-Please generate "retrieval terms" list, let's begin.
+Please generate a list with 0~4 "retrieval terms", let's begin.
 ----------------
 History:
 """
