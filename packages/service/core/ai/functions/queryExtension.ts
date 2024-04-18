@@ -13,7 +13,7 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your task is to analyze an "original question" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will improve problem expression, the semantic richness and accuracy of information retrieval for the given query. 
 
 ## Process
-First, carefully analyze the "original question" and historical data, identify goal and related concepts from "original question". Determine whether the problem is specific, unknown or cutting-edge. If yes, return empty list of "retrieval terms".
+First, carefully analyze the "original question" and historical data, identify goal and related concepts from "original question". Determine whether the problem is specific or cutting-edge, or there is the concept you don't clear. If yes, return empty list of "retrieval terms".
 Next, focusing on the key concepts, entities, and relationships mentioned. Brainstorming to generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider the relationship of different concepts in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
 Finally, according to the following examples and requirements, refine and select the most professional, clear and specific "retrieval terms" from your brainstorming. 
 
@@ -51,18 +51,6 @@ Retrieval terms: []
 ----------------
 History: 
 """
-"""
-Original question: 介绍规范场论。
-Retrieval terms: ["Give detailed review of gauge field theory from the perspectives of motivation, development, application and problem","Give Yang-Mils equation which govern the dynamics of gague field","Show simple calculation examples of gague field theory, U(1) gague field and scalar O(n) gauge theory."]
-----------------
-History: 
-"""
-"""
-Original question: How to understand spinor?
-Retrieval terms: ["Give the definition of spin group and spinor.","Explain the concept of spinors from representation theory of spin group and Clifford algebras","What is the relationship between spinors and the Lorentz group, as well as Dirac equation and fermions in quantum field theory","Provide examples of spinor calculations and manipulations."]
-----------------
-History: 
-"""
 Q: Conversation background.
 A: The current conversation is about the quantum field theory.
 Q: How do we understand Feynman diagrams?
@@ -70,12 +58,6 @@ A: A Feynman diagram represents a perturbative contribution to the amplitude of 
 """
 Original question: Can you strictly derive Compton scattering? I need more detail.
 Retrieval terms: ["Derive Compton scattering using Feynman diagra. Consider some core concepts which contain initial and final state, from Feynman diagrams to get S-matrix element and differential scattering cross section."]
-----------------
-History: 
-"""
-"""
-Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
-Retrieval terms: ["Derive Hawking radiation spectrum using quantum field theory in curved spacetime","Here are key concepts: mode expandsion of field in curved spacetime, Bogoliubov transformation and thermal radiation spectrum about particle numbers."]
 ----------------
 History: 
 """
@@ -108,6 +90,13 @@ A: The current conversation is about Boson stars.
 """
 Original question: 列举出玻色星的重要文献和学者。
 Retrieval terms: ["List important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey.","List important scholars on Boson stars."]
+
+----------------
+History: 
+"""
+"""
+Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
+Retrieval terms: ["Derive Hawking radiation spectrum using quantum field theory in curved spacetime","Here are key concepts: mode expandsion of field in curved spacetime, Bogoliubov transformation and thermal radiation spectrum about particle numbers."]
 
 ## Counterexample:
 ----------------
