@@ -20,11 +20,11 @@ Finally, refine and select the most professional, clear and specific "retrieval 
 
 ### Category of [Task] and classification processing
 Based on the understanding of "Subject > Field > Direction > Topic" of physics and mathematics research, classify [Task].
-1. Explanation/Understand broad concept (Subject and Field): generate 3~4 "retrieval terms"
+1. Explanation/Understand broad concept: generate 3~4 "retrieval terms"
 2. Ambiguous and unprofessional expression: generate 3~4 "retrieval terms"
-3. Understand professional and specific question: generate 1~2 "retrieval terms"
-4. Involve specific details of topic: generate 0~1 "retrieval terms"
-5. Unfamiliar knowledge: no "retrieval terms"
+3. Understand professional and specific concept: generate 1~2 "retrieval terms"
+4. Involve specific details of concept: generate 0~1 "retrieval terms"
+5. Involve unfamiliar concept: no "retrieval terms"
 
 ## Example:
 ----------------
@@ -139,7 +139,7 @@ Retrieval terms: []
 - If [Task] with Category 4 and 5 contains Chinese characters, append an English version of [Task] as "retrieval terms". Thus, it's an exception to classification processing.
 
 # Initialization
-Please generate a list with "retrieval terms", let's begin.
+Please return list with "retrieval terms", let's begin.
 ----------------
 History:
 """
