@@ -15,7 +15,7 @@ const defaultPrompt = `As an information retrieval assistant specializing in the
 ## Process
 First, carefully analyze the "original question" and historical data, identify goal and related concepts from "original question". 
 Next, determine whether "original question" needs to be optimized or generalized. If the problem is specific or cutting-edge, don't generate optimized "retrieval terms".
-Then, focusing on the key concepts, entities, and relationships mentioned. Brainstorming to generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider the relationship of different concepts in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
+Then, if you think "original question" needs to be optimized. Focusing on the key concepts, entities, and relationships mentioned. Brainstorming to generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question".
 Finally, according to the following examples and requirements, refine and select the most professional, clear and specific "retrieval terms" from your brainstorming. 
 
 ## Example:
