@@ -23,7 +23,7 @@ History:
 """
 """
 Original question: Introduce Kerr geodesic.
-Retrieval terms: ["Introduce Kerr geodesic from Kerr spacetime and its symmetry, geodesic constants of motion, seperable Kerr geodesic equation and its analytical solutions","Describe orbital dynamics and properties of Kerr geodesic.","Give hamiltonian description and action-angle formailsm of Kerr geodesic.","What is the development and application of Kerr geodesic?"]
+Retrieval terms: ["In the form of lecture, please introduce Kerr geodesic from Kerr spacetime and its symmetry, geodesic constants of motion and seperable Kerr geodesic equation, as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of bound Kerr geodesic, such as Mino/BL frequecy.","We can find action-angle form is very suitable for periodic and quasi-periodic systems. So provide the hamiltonian description and action-angle formailsm of bound Kerr geodesic."]
 ----------------
 History: 
 """
@@ -31,7 +31,7 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Original question: So, further introduce Kerr geodesic.
-Retrieval terms: ["Introduce Kerr geodesic from constants of motion, seperable Kerr geodesic equation and its analytical solutions","Describe orbital dynamics and properties of Kerr geodesic.","Give hamiltonian description and action-angle formailsm of Kerr geodesic."]
+Retrieval terms: [In the form of lecture, please introduce Kerr geodesic from constants of motion and seperable Kerr geodesic equation, as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of bound Kerr geodesic, such as Mino/BL frequecy.","We can find action-angle form is very suitable for periodic and quasi-periodic systems. So provide the hamiltonian description and action-angle formailsm of bound Kerr geodesic."]
 ----------------
 History: 
 """
@@ -39,7 +39,7 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Original question: So, further give/derive Kerr geodesic equation.
-Retrieval terms: ["Give seperable Kerr geodesic equation and its analytical solutions"]
+Retrieval terms: ["In the form of lecture, please strictly derive seperable Kerr geodesic equation and its analytical solutions."]
 ----------------
 History: 
 """
@@ -57,7 +57,7 @@ Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
 Original question: Can you strictly derive Compton scattering? I need more detail.
-Retrieval terms: ["Derive Compton scattering using Feynman diagra. Consider some core concepts which contain initial and final state, from Feynman diagrams to get S-matrix element and differential scattering cross section."]
+Retrieval terms: ["Derive Compton scattering using Feynman diagra. Consider some core concepts which contain initial and final state, then we can compute S-matrix element and differential scattering cross section from Feynman diagrams."]
 ----------------
 History: 
 """
