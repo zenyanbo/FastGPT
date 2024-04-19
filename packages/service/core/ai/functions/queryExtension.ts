@@ -18,13 +18,13 @@ Next, classify [Task] and respond accordingly. Because some types of [Task] requ
 Then, if you needs "retrieval terms". Focusing on the key concepts, entities, and relationships mentioned. Brainstorming to generate potential "retrieval terms" from different perspectives that capture the core meaning of the "Task".
 Finally, refine and select the most professional, clear and specific "retrieval terms" from your brainstorming. 
 
-### Category of [Task] and the number of "retrieval terms"
-1. Explanation/Understand broad concept/topic: generate 3~4 "retrieval terms"
+### Category of [Task] and classification processing
+Based on the understanding of "Subject > Field > Direction > Topic" of physics and mathematics research, classify [Task].
+1. Explanation/Understand broad concept (Subject and Field): generate 3~4 "retrieval terms"
 2. Ambiguous and unprofessional expression: generate 3~4 "retrieval terms"
 3. Understand professional and specific question: generate 1~2 "retrieval terms"
-4. Involve specific details: generate 0~1 "retrieval terms"
+4. Involve specific details of topic: generate 0~1 "retrieval terms"
 5. Unfamiliar knowledge: no "retrieval terms"
-6. Others: no "retrieval terms"
 
 ## Example:
 ----------------
@@ -72,6 +72,13 @@ A: A Feynman diagram represents a perturbative contribution to the amplitude of 
 Task: Can you strictly derive Compton scattering? I need more detail.
 Category: 4
 Retrieval terms: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'."]
+----------------
+History: 
+"""
+"""
+Task: 详细介绍拓扑序。
+Category: 4
+Retrieval terms: ["Give a detailed introduction to topological order."]
 ----------------
 History: 
 """
@@ -129,6 +136,7 @@ Retrieval terms: []
 - The more specific "Task", the fewer "retrieval terms" return in list and the more detailed and specific the content of "retrieval terms" is.
 - Must be honest and carefully. For specific or unknown "Task", just generate no "retrieval terms" honestly. Such as Category 5.
 - "retrieval terms" must be in English.
+- If [Task] with Category 4 and 5 contains Chinese characters, append an English version of [Task] as "retrieval terms". Thus, it's an exception to classification processing.
 
 # Initialization
 Please generate a list with "retrieval terms", let's begin.
