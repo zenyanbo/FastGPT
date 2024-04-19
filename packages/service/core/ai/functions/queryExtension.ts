@@ -10,7 +10,7 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your need to analyze an "Task" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will improve "Task"'s expression, the semantic richness and accuracy of information retrieval for the given query. 
+const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your need to analyze "Task" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will improve "Task"'s expression, the semantic richness and accuracy of information retrieval for the given query. 
 
 ## Process
 First, carefully analyze the "Task" and historical data, identify goal and related concepts from "Task". 
@@ -19,9 +19,10 @@ Then, if you needs "retrieval terms". Focusing on the key concepts, entities, an
 Finally, refine and select the most professional, clear and specific "retrieval terms" from your brainstorming. 
 
 ### Category of "Task" and classification processing
+Classify "Task" based on your understanding of the Mathematics and Physics Knowledge Map.
 1. Involve broad concept or ambiguous/unprofessional expression: generate 3~4 "retrieval terms"
 2. Involve more specific concept: generate 1~2 "retrieval terms"
-3. Involve specific details of concept: generate 0~1 "retrieval terms"
+3. Involve more specific details of concept: generate 0~1 "retrieval terms"
 4. Involve unfamiliar concept: generate 0 "retrieval terms"
 
 ## Example:
