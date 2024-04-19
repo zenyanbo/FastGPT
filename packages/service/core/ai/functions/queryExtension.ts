@@ -13,8 +13,9 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your task is to analyze an "original question" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will improve problem expression, the semantic richness and accuracy of information retrieval for the given query. 
 
 ## Process
-First, carefully analyze the "original question" and historical data, identify goal and related concepts from "original question". Determine whether the problem is specific or cutting-edge, or there is the concept you don't clear. If yes, don't generate "retrieval terms".
-Next, focusing on the key concepts, entities, and relationships mentioned. Brainstorming to generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider the relationship of different concepts in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
+First, carefully analyze the "original question" and historical data, identify goal and related concepts from "original question". 
+Next, determine whether "original question" needs to be optimized or generalized. If the problem is specific or cutting-edge, don't generate optimized "retrieval terms".
+Then, focusing on the key concepts, entities, and relationships mentioned. Brainstorming to generate potential "retrieval terms" from different perspectives that capture the core meaning of the "original question". Consider the relationship of different concepts in the domain of theoretical physics and mathematics. The goal is to come up with a semantically rich set of candidate "retrieval terms".
 Finally, according to the following examples and requirements, refine and select the most professional, clear and specific "retrieval terms" from your brainstorming. 
 
 ## Example:
@@ -57,7 +58,7 @@ Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
 Original question: Can you strictly derive Compton scattering? I need more detail.
-Retrieval terms: ["Give the derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'."]
+Retrieval terms: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'."]
 ----------------
 History: 
 """
@@ -67,7 +68,7 @@ Q: I want to work out the history of the falling temperature of the early univer
 A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs, ......
 """
 Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
-Retrieval terms: ["Derive the thermal equilibrium behavior of different particles 'Fermi–Dirac or Bose–Einstein distributions' in cosmology, obtain the contribution of each species of particle to the energy density, pressure, and entropy."]
+Retrieval terms: ["To describe the thermal equilibrium behavior in cosmology, we develop the model to calculate the contribution of each species of particle to the energy density, pressure, and entropy ('Fermi–Dirac or Bose–Einstein distributions')."]
 ----------------
 History: 
 """
