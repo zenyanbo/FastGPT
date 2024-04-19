@@ -23,7 +23,7 @@ History:
 """
 """
 Original question: Introduce Kerr geodesic.
-Retrieval terms: ["In the form of lecture, please introduce Kerr geodesic from Kerr spacetime and its symmetry, geodesic constants of motion and seperable Kerr geodesic equation, as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of bound Kerr geodesic, such as Mino/BL frequecy.","We can find action-angle form is very suitable for periodic and quasi-periodic systems. So provide the hamiltonian description and action-angle formailsm of bound Kerr geodesic."]
+Retrieval terms: ["In the form of lecture, please introduce Kerr geodesic from Kerr spacetime and its symmetry, 'geodesic constants of motion' and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","We can find, for periodic and quasi-periodic systems, 'action-angle formailsm' of bound Kerr geodesic is very suitable."]
 ----------------
 History: 
 """
@@ -31,7 +31,7 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Original question: So, further introduce Kerr geodesic.
-Retrieval terms: [In the form of lecture, please introduce Kerr geodesic from constants of motion associated with Killing vector/tensor, and seperable Kerr geodesic equation, as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of bound Kerr geodesic, such as Mino/BL frequecy.","We can find action-angle form is very suitable for periodic and quasi-periodic systems. So provide the hamiltonian description and action-angle formailsm of bound Kerr geodesic."]
+Retrieval terms: [In the form of lecture, please introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and seperable Kerr geodesic equation, as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","We can find, for periodic and quasi-periodic systems, 'action-angle formailsm' of bound Kerr geodesic."]
 ----------------
 History: 
 """
@@ -39,14 +39,14 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Original question: So, further give/derive Kerr geodesic equation.
-Retrieval terms: ["In the form of lecture, please strictly derive seperable Kerr geodesic equation and its analytical solutions."]
+Retrieval terms: ["In the form of lecture, please strictly derive 'seperable Kerr geodesic equation' and its 'analytical solutions'."]
 ----------------
 History: 
 """
-Q: Introduce Kerr geodesic.
+Q: Introduce Kerr geodesic in detailed.
 A: Kerr spacetime is a solution to the Einstein field equations that describes the geometry of spacetime, ......
 """
-Original question: Further derive the analytical solution of Kerr geodesic in terms of elliptic functions.
+Original question: Further derive the analytical solution of bound Kerr geodesic in terms of elliptic functions.
 Retrieval terms: []
 ----------------
 History: 
@@ -57,7 +57,7 @@ Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
 Original question: Can you strictly derive Compton scattering? I need more detail.
-Retrieval terms: ["Derive Compton scattering using Feynman diagra. Consider some core concepts which contain initial and final state, then we can compute S-matrix element and differential scattering cross section from Feynman diagrams."]
+Retrieval terms: ["Give the derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'."]
 ----------------
 History: 
 """
@@ -67,13 +67,13 @@ Q: I want to work out the history of the falling temperature of the early univer
 A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs, ......
 """
 Original question: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
-Retrieval terms: ["Derive the thermal equilibrium behavior of different particles Fermi–Dirac or Bose–Einstein distributions in cosmology, obtain the contribution of each species of particle to the energy density, pressure, and entropy.]
+Retrieval terms: ["Derive the thermal equilibrium behavior of different particles 'Fermi–Dirac or Bose–Einstein distributions' in cosmology, obtain the contribution of each species of particle to the energy density, pressure, and entropy."]
 ----------------
 History: 
 """
 """
 Original question: How does the Galois correspondence demonstrate the relationship between field extensions and subgroups of the Galois group?
-Retrieval terms: ["First, let's disccuss the relationship between field extensions and subgroups of the Galois group through Galois correspondence, which include the correspondence of fixed fields, intermediate fields, and Galois groups.","To deepen our understanding, let's we start to discuss examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
+Retrieval terms: ["First, let's disccuss the relationship between field extensions and subgroups of the 'Galois group' through 'Galois correspondence', which include the correspondence of fixed fields, intermediate fields, and 'Galois groups'.","To deepen our understanding, let's we start to discuss examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
 ----------------
 History: 
 """
@@ -81,7 +81,7 @@ Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
 Original question: How to describe of spin-density wave?
-Retrieval terms: ["Well, the instabilities and phase transitions in electronic systems is interesting. Spin density waves are one of the important phenomena. Model it and obtain its energy spectrum."]
+Retrieval terms: ["Well, the instabilities and phase transitions in electronic systems is interesting. 'Spin density waves' are one of the important phenomena. Model it and obtain its energy spectrum."]
 ----------------
 History: 
 """
@@ -89,14 +89,14 @@ Q: Conversation background.
 A: The current conversation is about Boson stars.
 """
 Original question: 列举出玻色星的重要文献和学者。
-Retrieval terms: ["In order to better understand the research field of Boson stars, list all important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey. Of course, researcher is also important."]
+Retrieval terms: ["In order to better understand the research field of 'Boson stars', list all important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey. Of course, researcher is also important."]
 
 ----------------
 History: 
 """
 """
 Original question: 使用弯曲时空QFT推导Hawking辐射（使用中文回复）。
-Retrieval terms: ["In this case, we make use of quantum field theory to derive Hawking radiation spectrum in the Schwarzschild black hole spacetime."]
+Retrieval terms: ["In this case, we make use of quantum field theory to derive 'Hawking radiation spectrum' in the Schwarzschild black hole spacetime."]
 
 ## Counterexample:
 ----------------
