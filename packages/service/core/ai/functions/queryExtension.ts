@@ -10,13 +10,13 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As an information retrieval assistant specializing in theoretical physics and mathematics, your need to analyze the provided text, which includes "Task" and "History", and generate an optimized list of "retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.
+const defaultPrompt = `As an information retrieval assistant specializing in theoretical physics and mathematics, your need to analyze the provided text, which includes "Task" and "History", and generate an optimized list of "retrieval terms", which is . This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.
 
 ## Optimization Strategy
-Optimizing "retrieval terms" requires a careful understanding of the "Task" and the ability to express it clearly and professionally.
-- **Clarity and Professionalism:** Ensure that the retrieval terms are clear, concise, and professionally expressed. Use terminology that aligns with the expertise of scholars in the field to avoid ambiguity. 
+Optimizing "retrieval terms" requires a careful understanding of the "Task" and the ability to express it clearly and professionally. Each "retrieval terms" should contain key information of "Task", yet should be an extension of "Task" with different focuses.
+- **Clarity and Professionalism:** Ensure that the "retrieval terms" are clear, concise, and professionally expressed. Aligns with the expertise of scholars in the field to avoid ambiguity.
 - **Specificity and Integrity:** Strike a balance between specificity and the integrity of "Task". The "retrieval terms" should capture the core meaning and critical details of the task without diverting from the original intent. For broader topics, introducing specific "retrieval terms" helps narrow the scope and improve accuracy. However, when the "Task" is already narrow and well-defined, caution is crucial. Adding unnecessary new terms may divert from the original intent and lead to inaccurate outcomes.
-- **Categorization:** Categorize the task based on the richness of its topic. This will help determine the number and focus of the retrieval terms. 
+- **Categorization:** Categorize the task based on the richness of its topic. This will help determine the number and focus of the retrieval terms.
 
 ## Process:
 First, carefully analyze the provided text to identify the needs, topic and related concepts.
@@ -38,7 +38,7 @@ History:
 """
 """
 Task: What is a free-falling orbit near a spinning black hole?
-Retrieval terms: ["In the form of lecture, introduce Kerr geodesic from Kerr spacetime and its symmetry, 'geodesic constants of motion' and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
+Retrieval terms list: ["In the form of lecture, introduce Kerr geodesic from Kerr spacetime and its symmetry, 'geodesic constants of motion' and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
 ----------------
 History: 
 """
@@ -46,7 +46,7 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Task: So, further introduce Kerr geodesic.
-Retrieval terms: [In the form of lecture, introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
+Retrieval terms list: [In the form of lecture, introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
 
 ### Category: 2
 ----------------
@@ -58,19 +58,19 @@ Q: How do we understand Feynman diagrams?
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
 Task: Can you strictly derive Compton scattering? I need more detail.
-Retrieval terms: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'."]
+Retrieval terms list: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'."]
 ----------------
 History: 
 """
 """
 Task: 详细介绍拓扑序。
-Retrieval terms: ["Give a detailed introduction to topological order."]
+Retrieval terms list: ["Give a detailed introduction to topological order."]
 ----------------
 History: 
 """
 """
 Task: How does the Galois correspondence demonstrate the relationship between field extensions and subgroups of the Galois group?
-Retrieval terms: ["First, let's disccuss the relationship between field extensions and subgroups of the 'Galois group' through 'Galois correspondence', which include the correspondence of fixed fields, intermediate fields, and 'Galois groups'.","To deepen our understanding, let's we start to discuss examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
+Retrieval terms list: ["First, let's disccuss the relationship between field extensions and subgroups of the 'Galois group' through 'Galois correspondence', which include the correspondence of fixed fields, intermediate fields, and 'Galois groups'.","To deepen our understanding, let's we start to discuss examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
 ----------------
 History: 
 """
@@ -78,13 +78,13 @@ Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
 Task: How to describe of spin-density wave?
-Retrieval terms: ["Well, the instabilities and phase transitions in electronic systems is interesting. 'Spin density waves' are one of the important phenomena. Model it and obtain its energy spectrum."]
+Retrieval terms list: ["Well, the instabilities and phase transitions in electronic systems is interesting. 'Spin density waves' are one of the important phenomena. Model it and obtain its energy spectrum."]
 ----------------
 History: 
 """
 """
 Task: 如何理解旋量（使用中文回复）。
-Retrieval terms: ["How to understand spinor in physics and mathematics? What is its definition?","What is the role of spinors in differential geometry and group representation theory?"]
+Retrieval terms list: ["How to understand spinor in physics and mathematics? What is its definition?","What is the role of spinors in differential geometry and group representation theory?"]
 
 ### Category: 3
 ----------------
@@ -94,7 +94,7 @@ Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
 Task: So, further give/derive Kerr geodesic equation.
-Retrieval terms: ["In the form of lecture, please strictly derive 'seperable Kerr geodesic equation' and its 'analytical solutions'."]
+Retrieval terms list: ["In the form of lecture, please strictly derive 'seperable Kerr geodesic equation' and its 'analytical solutions'."]
 ----------------
 History: 
 """
@@ -102,7 +102,7 @@ Q: Introduce Kerr geodesic in detailed.
 A: Kerr spacetime is a solution to the Einstein field equations that describes the geometry of spacetime, ......
 """
 Task: Further derive the analytical solution of bound Kerr geodesic in terms of elliptic functions.
-Retrieval terms: []
+Retrieval terms list: []
 ----------------
 History: 
 """
@@ -112,7 +112,7 @@ Q: I want to work out the history of the falling temperature of the early univer
 A: The early universe underwent a sequence of pivotal events as it expanded and cooled. The cooling rate was tied to the Hubble parameter, signifying that it was proportional to the inverse of the universe's age at any given point. This cooling journey can be divided into several key epochs, ......
 """
 Task: take a brief look at the thermodynamics and statistical mechanics of different matter, in thermal equilibrium with negligible chemical potentials. Derive the contribution of different matter to the energy density, pressure, and entropy.
-Retrieval terms: ["To describe the thermal equilibrium behavior in cosmology, we develop the model to calculate the contribution of each species of particle to the energy density, pressure, and entropy (by 'Fermi–Dirac or Bose–Einstein distributions')."]
+Retrieval terms list: ["To describe the thermal equilibrium behavior in cosmology, we develop the model to calculate the contribution of each species of particle to the energy density, pressure, and entropy (by 'Fermi–Dirac or Bose–Einstein distributions')."]
 ----------------
 History: 
 """
@@ -120,7 +120,7 @@ Q: Conversation background.
 A: The current conversation is about Boson stars.
 """
 Task: 列举出玻色星的重要文献和学者。
-Retrieval terms: ["In order to better understand the research field of 'Boson stars', list all important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey. Of course, researcher is also important."]
+Retrieval terms list: ["In order to better understand the research field of 'Boson stars', list all important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey. Of course, researcher is also important."]
 
 ### Category: 4 (Assuming you don't know 'Taiji Program in Space')
 ----------------
@@ -128,23 +128,24 @@ History:
 """
 """
 Task: Write a detailed introduction to 'Taiji Program in Space'.
-Retrieval terms: []
+Retrieval terms list: []
 
 ## Requirements:
 - **Avoid Redundancy:** Refrain from repeating content already mentioned in the "History."
 - **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate retrieval terms truthfully and only provide terms for "Task" that can be understood and interpreted.
 - **Specific**： The more specific the topic, the fewer "retrieval term" should be returned, and the more detailed and specific the content of the "retrieval term" should be.
-- **Use English**. If tasks in categories 4 and 5 include Chinese, attach an English version of the task as a retrieval term.
+- **Use English**: If tasks in categories 4 and 5 include Chinese, attach an English version of the task as a retrieval term.
+- **Square bracket lists**: Please use square bracket lists ([]) to represent "Retrieval terms list".
 
 # Initialization
-Please only return a list with "retrieval terms", let's begin.
+Please only generate the "retrieval terms list", let's begin.
 ----------------
 History:
 """
 {{histories}}
 """
 Task: {{query}}
-Retrieval terms: `;
+Retrieval terms list: `;
 
 export const queryExtension = async ({
   chatBg,
