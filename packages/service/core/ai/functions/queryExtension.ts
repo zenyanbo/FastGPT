@@ -64,7 +64,7 @@ History:
 """
 """
 Task: 详细介绍拓扑序。
-Retrieval terms list: ["Give a detailed introduction to topological order."]
+Retrieval terms list: ["Give a detailed introduction to 'topological order'.","'Topological order', a concept in condensed matter physics, transcends the 'Landau-Ginzburg theory' and 'symmetry breaking'. It associates order with topological properties."]
 ----------------
 History: 
 """
@@ -78,13 +78,13 @@ Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
 Task: How to describe of spin-density wave?
-Retrieval terms list: ["Well, the instabilities and phase transitions in electronic systems is interesting. 'Spin density waves' are one of the important phenomena. Model it and obtain its energy spectrum."]
+Retrieval terms list: ["Well, the instabilities and phase transitions in electronic systems is interesting. Let's us study 'Spin density waves', model it and obtain its energy spectrum."]
 ----------------
 History: 
 """
 """
 Task: 如何理解旋量（使用中文回复）。
-Retrieval terms list: ["How to understand spinor in physics and mathematics? What is its definition?","What is the role of spinors in differential geometry and group representation theory?"]
+Retrieval terms list: ["Spinor is (complex) linear representation of 'spin group' $SL(2, \\mathbb{C})$, also defined as elements of a vector space that carries a linear representation of the 'Clifford algebra'. A Clifford space operates on a spinor space.","What is the role of spinors in differential geometry and group representation theory? What is the role of spinor in quantum mechanics, quantum field theory and general relativity?"]
 
 ### Category: 3
 ----------------
@@ -136,6 +136,7 @@ Retrieval terms list: []
 - **Specific**： The more specific the topic, the fewer "retrieval term" should be returned, and the more detailed and specific the content of the "retrieval term" should be.
 - **Use English**: As long as "Task" contains Chinese characters, attach an English version of "Task" into "retrieval term list" in any case.
 - **Square bracket lists**: Please use square bracket lists ([]) to represent "Retrieval terms list".
+- **Terminology**: should be enclosed in single quotes, such as 'Wilson loop'.
 
 # Initialization
 Please only generate the "retrieval terms list", let's begin.
