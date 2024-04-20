@@ -134,7 +134,7 @@ Retrieval terms list: []
 - **Avoid Redundancy:** Refrain from repeating content already mentioned in the "History."
 - **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate retrieval terms truthfully and only provide terms for "Task" that can be understood and interpreted.
 - **Specific**： The more specific the topic, the fewer "retrieval term" should be returned, and the more detailed and specific the content of the "retrieval term" should be.
-- **Use English**: In any case, as long as "Task" contains Chinese characters, attach an English version of "Task" to "retrieval term list".
+- **Use English**: In any case, as long as "Task" contains Chinese characters, attach an English version of "Task" into "retrieval term list".
 - **Square bracket lists**: Please use square bracket lists ([]) to represent "Retrieval terms list".
 
 # Initialization
