@@ -10,20 +10,25 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `As an information retrieval assistant specializing in the field of theoretical physics and mathematics, your need to analyze "Task" along with relevant historical data in order to generate a list of optimized "retrieval terms" that will improve "Task"'s expression, the semantic richness and accuracy of information retrieval for the given query. 
+const defaultPrompt = `As an information retrieval assistant specializing in theoretical physics and mathematics, your need to analyze the provided text, which includes "Task" and "History", and generate an optimized list of "retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.
 
-## Process
-First, carefully analyze the "Task" and historical data, identify goal and related concepts from "Task". 
-Next, determine how specific the task description is, then classify "Task". Because specific types of "Task" require no or little "retrieval terms".
-Then, if you needs "retrieval terms". Focusing on the key concepts, entities, and relationships mentioned. Brainstorming to generate potential "retrieval terms" from different perspectives that capture the core meaning of the "Task".
-Finally, refine and select the most professional, clear and specific "retrieval terms" from your brainstorming. 
+## Optimization Strategy
+Optimizing "retrieval terms" requires a careful understanding of the "Task" and the ability to express it clearly and professionally.
+- **Clarity and Professionalism:** Ensure that the retrieval terms are clear, concise, and professionally expressed. Use terminology that aligns with the expertise of scholars in the field to avoid ambiguity. 
+- **Specificity and Integrity:** Strike a balance between specificity and the integrity of "Task". The "retrieval terms" should capture the core meaning and critical details of the task without diverting from the original intent. For broader topics, introducing specific "retrieval terms" helps narrow the scope and improve accuracy. However, when the "Task" is already narrow and well-defined, caution is crucial. Adding unnecessary new terms may divert from the original intent and lead to inaccurate outcomes.
+- **Categorization:** Categorize the task based on the richness of its topic. This will help determine the number and focus of the retrieval terms. 
 
-### Category of "Task" and classification processing
-Classify "Task" based on your understanding of the Mathematics and Physics Knowledge Map.
-1. Involve broad concept or ambiguous/unprofessional expression: generate 3~4 "retrieval terms"
-2. Involve more specific concept: generate 1~2 "retrieval terms"
-3. Involve more specific details of concept: generate 0~1 "retrieval terms"
-4. Involve unfamiliar concept: generate 0 "retrieval terms"
+## Process:
+First, carefully analyze the provided text to identify the needs, topic and related concepts.
+Next, categorize the task based on the specificity of the topic.
+Then, focus on the mentioned key concepts, entities, and relationships. Brainstorm potential "retrieval term" from different angles to capture the core meaning of the task.
+Finally, refine and select the most professional, clear, and specific "retrieval term" from the brainstorming session.
+
+### Classification and Categorization of the Task:
+- Broad concepts or vague/unprofessional expressions: Generate 3-4 "retrieval term"
+- More specific concepts: Generate 1-2 "retrieval term"
+- Very specific concepts (with more details): Generate 0-1 "retrieval term"
+- Unfamiliar concepts: Generate 0 "retrieval term"
 
 ## Example:
 
@@ -125,13 +130,11 @@ History:
 Task: Write a detailed introduction to 'Taiji Program in Space'.
 Retrieval terms: []
 
-## Requirements
-- Each "retrieval terms" should contain key information of "Task", yet should be an extension of "Task" with different focuses.
-- Generally, you should avoid repeating content that has already been mentioned in [History]. 
-- The more specific "Task", the fewer "retrieval terms" return in list and the more detailed and specific the content of "retrieval terms" is.
-- Must be honest and carefully. For specific or unknown "Task", just generate no "retrieval terms" honestly. Such as Category 5.
-- "retrieval terms" must be in English.
-- If "Task" with Category 4 and 5 contains Chinese characters, append an English version of "Task" as "retrieval terms". Thus, it's an exception to classification processing.
+## Requirements:
+- **Avoid Redundancy:** Refrain from repeating content already mentioned in the "History."
+- **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate retrieval terms truthfully and only provide terms for "Task" that can be understood and interpreted.
+- **Specific**： The more specific the topic, the fewer "retrieval term" should be returned, and the more detailed and specific the content of the "retrieval term" should be.
+- **Use English**. If tasks in categories 4 and 5 include Chinese, attach an English version of the task as a retrieval term.
 
 # Initialization
 Please only return a list with "retrieval terms", let's begin.
