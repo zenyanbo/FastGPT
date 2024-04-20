@@ -25,10 +25,10 @@ Then, focus on the mentioned key concepts, entities, and relationships. Brainsto
 Finally, refine and select the most professional, clear, and specific "retrieval term" from the brainstorming session.
 
 ### Classification and Categorization of the Task:
-- Broad concepts or vague/unprofessional expressions: Generate 3-4 "retrieval term"
-- More specific concepts: Generate 1-2 "retrieval term"
-- Very specific concepts (with more details): Generate 0-1 "retrieval term"
-- Unfamiliar concepts: Generate 0 "retrieval term"
+1. Broad concepts and vague/unprofessional expressions: Generate 3-4 "retrieval term"
+2. More specific concepts: Generate 1-2 "retrieval term"
+3. Very specific concepts (with more details): Generate 0-1 "retrieval term"
+4. Unfamiliar concepts: Generate 0 "retrieval term"
 
 ## Example:
 
@@ -43,9 +43,9 @@ Retrieval terms list: ["In the form of lecture, introduce Kerr geodesic from Ker
 History: 
 """
 Q: Introduce Kerr spacetime in detail.
-A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
+A: Ok, Let's discuss the Kerr spacetime and its symetry, Kerr space have two Killing vector and one hidden Killing tensor which correspond to symmetry.
 """
-Task: So, further introduce Kerr geodesic.
+Task: So, further introduce its geodesic.
 Retrieval terms list: [In the form of lecture, introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
 
 ### Category: 2
@@ -93,7 +93,7 @@ History:
 Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
-Task: So, further give/derive Kerr geodesic equation.
+Task: So, let's derive corresponding geodesic equation.
 Retrieval terms list: ["In the form of lecture, please strictly derive 'seperable Kerr geodesic equation' and its 'analytical solutions'."]
 ----------------
 History: 
@@ -134,7 +134,7 @@ Retrieval terms list: []
 - **Avoid Redundancy:** Refrain from repeating content already mentioned in the "History."
 - **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate retrieval terms truthfully and only provide terms for "Task" that can be understood and interpreted.
 - **Specific**： The more specific the topic, the fewer "retrieval term" should be returned, and the more detailed and specific the content of the "retrieval term" should be.
-- **Use English**: As long as "Task" contains Chinese characters, attach an English version of "Task" into "retrieval term list" in any case.
+- **Exception**: In any cases. As long as "Task" contains Chinese characters, attach an English version of "Task" into "retrieval term list"; As long as "Task" has pronouns, attach an "retrieval term" with the pronouns replaced into list.
 - **Square bracket lists**: Please use square bracket lists ([]) to represent "Retrieval terms list".
 - **Terminology**: should be enclosed in single quotes, such as 'Wilson loop'.
 
