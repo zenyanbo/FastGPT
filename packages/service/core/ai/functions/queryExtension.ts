@@ -37,7 +37,7 @@ Finally, refine and select the most professional, clear, and specific "retrieval
 History: 
 """
 """
-Task: What is a free-falling orbit near a spinning black hole?
+Task: What is a free-falling orbit near a spinning black hole? Don't provide irrelevant content.
 Retrieval terms list: ["In the form of lecture, introduce Kerr geodesic from Kerr spacetime and its symmetry, 'geodesic constants of motion' and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
 ----------------
 History: 
@@ -45,8 +45,8 @@ History:
 Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, Kerr space have two Killing vector and one hidden Killing tensor which correspond to symmetry.
 """
-Task: So, further introduce its geodesic.
-Retrieval terms list: [In the form of lecture, introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
+Task: Write an introduction to its geodesics, and plagiarism is not allowed.
+Retrieval terms list: ["Introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
 
 ### Category: 2
 ----------------
@@ -54,11 +54,11 @@ History:
 """
 Q: Conversation background.
 A: The current conversation is about the quantum field theory.
-Q: How do we understand Feynman diagrams?
+Q: How do we understand Feynman diagrams? 
 A: A Feynman diagram represents a perturbative contribution to the amplitude of a quantum transition from some initial quantum state to some final quantum state, ......
 """
-Task: Can you strictly derive Compton scattering? I need more detail.
-Retrieval terms list: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'."]
+Task: Can you strictly derive Compton scattering? I need more detail. Then draw a Feynman diagram for Compton scattering.
+Retrieval terms list: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'.","Give the Feynman diagram for Compton scattering."]
 ----------------
 History: 
 """
@@ -77,7 +77,7 @@ History:
 Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 """
-Task: How to describe of spin-density wave?
+Task: How to describe of spin-density wave? 
 Retrieval terms list: ["Well, the instabilities and phase transitions in electronic systems is interesting. Let's us study 'Spin density waves', model it and obtain its energy spectrum."]
 ----------------
 History: 
@@ -93,7 +93,7 @@ History:
 Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 """
-Task: So, let's derive corresponding geodesic equation.
+Task: So, let's derive corresponding geodesic equation, and then output it in the LaTeX code box. 
 Retrieval terms list: ["In the form of lecture, please strictly derive 'seperable Kerr geodesic equation' and its 'analytical solutions'."]
 ----------------
 History: 
@@ -101,7 +101,7 @@ History:
 Q: Introduce Kerr geodesic in detailed.
 A: Kerr spacetime is a solution to the Einstein field equations that describes the geometry of spacetime, ......
 """
-Task: Further derive the analytical solution of bound Kerr geodesic in terms of elliptic functions.
+Task: Further derive the analytical solution of bound Kerr geodesic in terms of elliptic functions. Only mathematical derivation is given, no physical explanation is required.
 Retrieval terms list: []
 ----------------
 History: 
@@ -116,10 +116,22 @@ Retrieval terms list: ["To describe the thermal equilibrium behavior in cosmolog
 ----------------
 History: 
 """
+"""
+Task: 有多少种方法可以模拟开放量子系统？ 请进行全面调查。 只输出他们的名字。 不需要解释他们。
+Retrieval terms list: ["How many methods can simulate open quantum system?"]
+----------------
+History: 
+"""
+"""
+Task: How many methods can simulate open quantum system? Please make a full investigation. Only output their name. don't need explain them.
+Retrieval terms list: []
+----------------
+History: 
+"""
 Q: Conversation background.
 A: The current conversation is about Boson stars.
 """
-Task: 列举出玻色星的重要文献和学者。
+Task: 列举出玻色星的重要文献和学者，请按重要性由上到下排序。
 Retrieval terms list: ["In order to better understand the research field of 'Boson stars', list all important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey. Of course, researcher is also important."]
 
 ### Category: 4 (Assuming you don't know 'Taiji Program in Space')
@@ -129,6 +141,12 @@ History:
 """
 Task: Write a detailed introduction to 'Taiji Program in Space'.
 Retrieval terms list: []
+----------------
+History: 
+"""
+"""
+Task: 对太极项目写一个详细的简介。
+Retrieval terms list: ["Write a detailed introduction to 'Taiji Program in Space'."]
 
 ## Requirements:
 - **Avoid Redundancy:** Refrain from repeating content already mentioned in the "History."
