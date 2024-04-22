@@ -72,7 +72,7 @@ A: The current conversation is about the Instabilities and phase transitions in 
 Retrieval terms list: ["Well, the instabilities and phase transitions in electronic systems is interesting. Let's us study 'Spin density waves', model it and obtain its energy spectrum."]
 ----------------
 <History></History>
-<Query>如何理解旋量（使用中文回复）</Query>
+<Query>如何理解旋量？回复越详细越好。（请使用中文回复）</Query>
 Retrieval terms list: ["Spinor is (complex) linear representation of 'spin group' $SL(2, \\mathbb{C})$, also defined as elements of a vector space that carries a linear representation of the 'Clifford algebra'. A Clifford space operates on a spinor space.","What is the role of spinors in differential geometry and group representation theory? What is the role of spinor in quantum mechanics, quantum field theory and general relativity?"]
 
 ### Category: 3
