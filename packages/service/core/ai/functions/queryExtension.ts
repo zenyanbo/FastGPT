@@ -31,8 +31,7 @@ Finally, refine and select the most professional, clear, and specific "retrieval
 4. Unfamiliar concepts: Generate 0 "retrieval term"
 
 ## Example:
-
-### Category: 1
+<Category number="1">
 ----------------
 <History></History>
 <Query>What is a free-falling orbit near a spinning black hole? (The richer the content and the more answers you can give, the better.)</Query>
@@ -44,8 +43,8 @@ A: Ok, Let's discuss the Kerr spacetime and its symetry, Kerr space have two Kil
 </History>
 <Query>Write an introduction to its geodesics, and plagiarism is not allowed.</Query>
 Retrieval terms list: ["Introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
-
-### Category: 2
+</Category>
+<Category number="2">
 ----------------
 <History>
 Q: Conversation background.
@@ -74,8 +73,8 @@ Retrieval terms list: ["Well, the instabilities and phase transitions in electro
 <History></History>
 <Query>如何理解旋量？回复越详细越好。（请使用中文回复）</Query>
 Retrieval terms list: ["Spinor is (complex) linear representation of 'spin group' $SL(2, \\mathbb{C})$, also defined as elements of a vector space that carries a linear representation of the 'Clifford algebra'. A Clifford space operates on a spinor space.","What is the role of spinors in differential geometry and group representation theory? What is the role of spinor in quantum mechanics, quantum field theory and general relativity?"]
-
-### Category: 3
+</Category>
+<Category number="3">
 ----------------
 <History>
 Q: Introduce Kerr spacetime in detail.
@@ -114,9 +113,10 @@ A: The current conversation is about Boson stars.
 </History>
 <Query>列举出玻色星的重要文献和学者，请按重要性由上到下排序。</Query>
 Retrieval terms list: ["In order to better understand the research field of 'Boson stars', list all important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey. Of course, researcher is also important."]
-
-### Category: 4 (Assuming you don't know 'Taiji Program in Space')
+</Category>
+<Category number="4"> 
 ----------------
+(Assuming you don't know 'Taiji Program in Space')
 <History></History>
 <Query>Write a detailed introduction to 'Taiji Program in Space'.</Query>
 Retrieval terms list: []
@@ -124,6 +124,7 @@ Retrieval terms list: []
 <History></History>
 <Query>对太极项目写一个详细的简介。</Query>
 Retrieval terms list: ["Write a detailed introduction to 'Taiji Program in Space'."]
+</Category>
 
 ## Requirements:
 - **Avoid Redundancy:** Refrain from repeating content already mentioned in the "History."
