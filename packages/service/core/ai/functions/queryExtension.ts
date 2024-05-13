@@ -43,6 +43,13 @@ A: Ok, Let's discuss the Kerr spacetime and its symetry, Kerr space have two Kil
 </History>
 <Query>Write an introduction to its geodesics, and plagiarism is not allowed.</Query>
 Retrieval terms list: ["Introduce Kerr geodesic from 'constants of motion' associated with Killing vector/tensor, and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/BL frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
+----------------
+<History>
+Q: 建立描述平衡态白矮星的模型。
+A: 建立一个描述白矮星平衡状态的模型需要考虑多种因素的复杂组合，包括量子力学、狭义相对论和引力。白矮星是密度极高的天体，主要由电子简并压力支撑，防止引力坍缩......
+</History>
+<Query>继续</Query>
+Retrieval terms list: ["Describe the equilibrium state of a white dwarf, including its 'equation of state', 'Fermi-Dirac distribution', and 'Chandrasekhar limit'.","Explain the role of 'electron degeneracy pressure' in maintaining the equilibrium state of a white dwarf.","Discuss the 'mass-radius relation' of a white dwarf in equilibrium.","Introduce the Thomas-Fermi approximation, a statistical model used to describe the behavior of a degenerate electron gas in white dwarfs, and its application in astrophysics."]
 
 ## Category 2
 ----------------
@@ -56,10 +63,6 @@ A: A Feynman diagram represents a perturbative contribution to the amplitude of 
 Retrieval terms list: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'.","Give the Feynman diagram for Compton scattering."]
 ----------------
 <History></History>
-<Query>详细介绍拓扑序。
-Retrieval terms list: ["Give a detailed introduction to 'topological order'.","'Topological order', a concept in condensed matter physics, transcends the 'Landau-Ginzburg theory' and 'symmetry breaking'. It associates order with topological properties."]
-----------------
-<History></History>
 <Query>How does the Galois correspondence demonstrate the relationship between field extensions and subgroups of the Galois group? Can you enerate a knowledge graph to describe these concept.</Query>
 Retrieval terms list: ["First, let's disccuss the relationship between field extensions and subgroups of the 'Galois group' through 'Galois correspondence', which include the correspondence of fixed fields, intermediate fields, and 'Galois groups'.","To deepen our understanding, let's we start to discuss examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
 ----------------
@@ -67,8 +70,8 @@ Retrieval terms list: ["First, let's disccuss the relationship between field ext
 Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 </History>
-<Query>How to describe of spin-density wave? </Query>
-Retrieval terms list: ["Well, the instabilities and phase transitions in electronic systems is interesting. Let's us study 'Spin density waves', model it and obtain its energy spectrum."]
+<Query>How to describe of spin-density wave?</Query>
+Retrieval terms list: ["The instabilities and phase transitions in electronic systems is interesting. Let's us study 'Spin density waves', model it and obtain its energy spectrum."]
 ----------------
 <History></History>
 <Query>如何理解旋量？回复越详细越好。（请使用中文回复）</Query>
@@ -77,11 +80,18 @@ Retrieval terms list: ["Spinor is (complex) linear representation of 'spin group
 ## Category 3
 ----------------
 <History>
+Q: Conversation background.
+A: The current conversation is about Boson stars.
+</History>
+<Query>提供一个使用量纲分析求解物理问题的特定例子</Query>
+Retrieval terms list: ["Provide a specific example of using dimensional analysis to solve a physics problem."]
+----------------
+<History>
 Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, ......
 </History>
 <Query>So, let's derive corresponding geodesic equation, and then output it in the LaTeX code box. </Query>
-Retrieval terms list: ["In the form of lecture, please strictly derive 'seperable Kerr geodesic equation' and its 'analytical solutions'."]
+Retrieval terms list: ["Strictly derive 'seperable Kerr geodesic equation' and its 'analytical solutions'."]
 ----------------
 <History>
 Q: Introduce Kerr geodesic in detailed.
@@ -101,10 +111,10 @@ Retrieval terms list: ["To describe the thermal equilibrium behavior in cosmolog
 ----------------
 <History></History>
 <Query>有多少种方法可以模拟开放量子系统？请进行全面调查。只输出他们的名字，不需要解释他们。</Query>
-Retrieval terms list: ["Introduce all methods which can simulate open quantum system."]
+Retrieval terms list: ["Introduce/list all methods of simulating open quantum system."]
 ----------------
 <History></History>
-<Query>How many methods can simulate open quantum system? Please make a full investigation. Only output their name. don't need explain them.</Query>
+<Query>How many methods can simulate open quantum system? Make a full investigation. Only output their name. don't need explain them.</Query>
 Retrieval terms list: []
 ----------------
 <History>
@@ -141,7 +151,7 @@ Retrieval terms list: ["Give a detailed introduction to 'Taiji Program in Space'
 - **Terminology**: should be enclosed in single quotes, such as 'Wilson loop'.
 
 # Initialization
-Please only generate the "retrieval terms list", let's begin.
+Only generate the "retrieval terms list", let's begin.
 ----------------
 <History>{{histories}}</History>
 <Query>{{query}}</Query>
