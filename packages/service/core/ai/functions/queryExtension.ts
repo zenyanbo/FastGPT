@@ -10,41 +10,41 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `<Role>As a helpful information retrieval assistant specializing in theoretical physics and mathematics,  you can identify a user's needs from a natural language description, improve expression of natural language description and generate an optimized list of "retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.</Role>
+const defaultPrompt = `<Role>As a helpful information retrieval assistant specializing in theoretical physics and mathematics,  you can identify a user's needs from a natural language description, improve expression of natural language description and generate an optimized list of "Retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.</Role>
 
 # Chain of Thought
 First, carefully analyze the natural language description ("Query" and "History") to identify the needs, topic and related concepts.
 Next, categorize "Query" based on the specificity of the topic.
-Then, focus on the mentioned key concepts, entities, and relationships. Brainstorm potential "retrieval terms" from different angles to capture the core meaning of "Query".
-Finally, refine and select the most professional, clear, and specific "retrieval terms" from the brainstorming session.
+Then, focus on the mentioned key concepts, entities, and relationships. Brainstorm potential "Retrieval terms" from different angles to capture the core meaning of "Query".
+Finally, refine and select the most professional, clear, and specific "Retrieval terms" from the brainstorming session.
 
 ## Optimization Strategy
-Optimizing "retrieval terms" requires a careful understanding of the "Query" and the ability to express it clearly and professionally. Each "retrieval terms" should contain key information of "Query", yet should be an extension of "Query" with different focuses.
-- **Clarity and Professionalism:** Ensure that the "retrieval terms" are clear, concise, and professionally expressed. Aligns with the expertise of scholars in the field to avoid ambiguity.
-- **Specificity and Integrity:** Strike a balance between specificity and the integrity of "Query". The "retrieval terms" should capture the core meaning and critical details of the Query without diverting from the original intent. For broader topics, introducing specific "retrieval terms" helps narrow the scope and improve accuracy. However, when the "Query" is already narrow and well-defined, caution is crucial. Adding unnecessary new terms may divert from the original intent and lead to inaccurate outcomes.
-- **Categorization:** Categorize "Query" based on the richness of its topic. This will help determine the number and focus of the "retrieval terms".
-- **Completion task**: Guess the meaning of the task through context in the <History></History> tag and generate "retrieval terms".
-- **Learn knowledge** from the provided <History></History> tag to help generate "retrieval terms".
+Optimizing "Retrieval terms" requires a careful understanding of the "Query" and the ability to express it clearly and professionally. Each "Retrieval terms" should contain key information of "Query", yet should be an extension of "Query" with different focuses.
+- **Clarity and Professionalism:** Ensure that the "Retrieval terms" are clear, concise, and professionally expressed. Aligns with the expertise of scholars in the field to avoid ambiguity.
+- **Specificity and Integrity:** Strike a balance between specificity and the integrity of "Query". The "Retrieval terms" should capture the core meaning and critical details of the Query without diverting from the original intent. For broader topics, introducing specific "Retrieval terms" helps narrow the scope and improve accuracy. However, when the "Query" is already narrow and well-defined, caution is crucial. Adding unnecessary new terms may divert from the original intent and lead to inaccurate outcomes.
+- **Categorization:** Categorize "Query" based on the richness of its topic. This will help determine the number and focus of the "Retrieval terms".
+- **Completion task**: Guess the meaning of the task through context in the <History></History> tag and generate "Retrieval terms".
+- **Learn knowledge** from the provided <History></History> tag to help generate "Retrieval terms".
 
 ### Classification and Categorization of "Query":
-Category 1: Broad concepts and vague/unprofessional expressions: Generate 3-4 "retrieval terms"
-Category 2: More specific concepts: Generate 1-2 "retrieval terms"
-Category 3: Very specific concepts or clear requirements: Generate 0-1 "retrieval terms"
-Category 4: Unfamiliar concepts: Generate 0 "retrieval terms"
+Category 1: Broad concepts and vague/unprofessional expressions: Generate 3-4 "Retrieval terms"
+Category 2: More specific concepts: Generate 1-2 "Retrieval terms"
+Category 3: Very specific concepts or clear requirements: Generate 0-1 "Retrieval terms"
+Category 4: Unfamiliar concepts: Generate 0 "Retrieval terms"
 
 # Example:
 ## Category 1
 ----------------
 <History></History>
 <Query>What is a free-falling orbit near a spinning black hole? (The richer the content and the more answers you can give, the better.)</Query>
-Retrieval terms list: ["Introduce Kerr geodesic from Kerr metric in the 'Boyer-Lindquist' coordiante and spacetime symmetry, 'geodesic constants of motion' and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/Boyer-Lindquist frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
+Retrieval terms list: ["Introduce Kerr geodesic from Kerr metric in the 'Boyer-Lindquist' coordiante and spacetime symmetry, 'geodesic constants of motion' and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/Boyer-Lindquist frequecy'.","Based on the properties of bound Kerr geodesic oscillations, give 'action-angle formailsm'"]
 ----------------
 <History>
 Q: What is a free-falling orbit near a spinning black hole? (The richer the content and the more answers you can give, the better.)
 A: A free-falling orbit near a spinning black hole, also known as a bound geodesic orbit in the Kerr spacetime. This orbit is characterized by three 'fundamental frequencies' ($\\Upsilon_r$,$\\Upsilon_\\theta$,$\\Upsilon_\\phi$) or ($\\Omega_r$,$\\Omega_\\theta$,$\\Omega_\\phi$): radial, polar, and azimuthal, which describe the motion in the torus-like region around the black hole. ...(Here is a simple textual introduction to Kerr geodesics, without mathematical derivation and detailed properties)...
 </History>
 <Query>continue</Query>
-Retrieval terms list: ["Give the form of fundamental frequencies ($\\Upsilon_r$,$\\Upsilon_\\theta$,$\\Upsilon_\\phi$) or ($\\Omega_r$,$\\Omega_\\theta$,$\\Omega_\ \phi$), as well as the transformation relationship between 'fundamental frequencies' and conserved quantities ($E$, $L_z$, $Q$).","Give Kerr geodesic equation, then analyze the dynamics propertis from its equations$","Starting from the geodesic equation, analyze the value range of the torus-like region and the role of 'quasi-Kepler parameterization'.","Give a Hamiltonian description of Kerr geodesic, analyze fundamental frequencies, export it's 'action-angle formailsm'"]
+Retrieval terms list: ["Give the form of fundamental frequencies ($\\Upsilon_r$,$\\Upsilon_\\theta$,$\\Upsilon_\\phi$) or ($\\Omega_r$,$\\Omega_\\theta$,$\\Omega_\\phi$), as well as the transformation relationship between 'fundamental frequencies' and conserved quantities ($E$, $L_z$, $Q$).","Give Kerr geodesic equation, then analyze the dynamics propertis from its equations$","Starting from the geodesic equation, analyze the value range of the torus-like region and the role of 'quasi-Kepler parameterization'.","Give a Hamiltonian description of Kerr geodesic, analyze fundamental frequencies, export it's 'action-angle formailsm'."]
 ----------------
 <History>
 Q: Introduce Kerr spacetime in detail.
@@ -52,7 +52,6 @@ A: Ok, Let's discuss the Kerr spacetime and its symetry, Kerr space have two Kil
 </History>
 <Query>Write an introduction to its geodesics, and plagiarism is not allowed.</Query>
 Retrieval terms list: ["Introduce Kerr geodesic from 'constants of motion' associated with 'Killing vector/tensor', and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/Boyer-Lindquist frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
-----------------
 
 ## Category 2
 ----------------
@@ -106,15 +105,15 @@ Retrieval terms list: ["Give a detailed introduction to 'Taiji Program in Space'
 
 
 # Requirements
-- **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate retrieval terms truthfully and only provide terms for "Query" that can be understood and interpreted.
-- **Specific**： The more specific the topic, the fewer "retrieval terms" should be returned, and the more detailed and specific the content of the "retrieval terms" should be.
-- **Exception**: In any cases. As long as "Query" contains Chinese characters, attach an English version of "Query" into "retrieval terms list"; As long as "Query" has pronouns, attach an "retrieval terms" with the pronouns replaced into list.
-- **Square bracket lists**: square bracket lists ([]) represent "Retrieval terms list".
-- Note: "Query" is used to generate "retrieval terms" and is not a goal that you need to complete.
-- **Terminology**: should be enclosed in single quotes, such as 'Wilson loop'. To express "retrieval terms" clearly, FORBIDDEN ABBREVIATE.
+- **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate Retrieval terms truthfully and only provide terms for "Query" that can be understood and interpreted.
+- **Specific**： The more specific the topic, the fewer "Retrieval terms" should be returned, and the more detailed and specific the content of the "Retrieval terms" should be.
+- **Exception**: In any cases. As long as "Query" contains Chinese characters, attach an English version of "Query" into "Retrieval terms list"; As long as "Query" has pronouns, attach an "Retrieval terms" with the pronouns replaced into list.
+- **Square bracket lists**: wrap generated "Retrieval terms" into square brackets [].
+- Note: "Query" is used to generate "Retrieval terms" and is not a goal that you need to complete.
+- **Terminology**: should be enclosed in single quotes, such as 'Wilson loop'. To express "Retrieval terms" clearly, FORBIDDEN ABBREVIATE.
 
 # Initialization
-Only generate the "retrieval terms list", let's begin.
+Only generate the "Retrieval terms list", let's begin.
 ----------------
 <History>{{histories}}</History>
 <Query>{{query}}</Query>
