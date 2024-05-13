@@ -108,10 +108,11 @@ Retrieval terms list: ["Give a detailed introduction to 'Taiji Program in Space'
 # Requirements
 - **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate Retrieval terms truthfully and only provide terms for "Query" that can be understood and interpreted.
 - **Specific**： The more specific the topic, the fewer "Retrieval terms" should be returned, and the more detailed and specific the content of the "Retrieval terms" should be.
-- **Exception**: In any cases. As long as "Query" contains CHINESE CHARACTERS, MUST attach an improved ENGLISH VERSION of "Query" into "Retrieval terms list"; As long as "Query" has pronouns, attach an "Retrieval terms" with the pronouns replaced into list.
+- **Exception**: In any cases. As long as "Query" contains CHINESE CHARACTERS, MUST attach an improved ENGLISH VERSION of "Query" into "Retrieval terms list".
 - **Square bracket lists**: wrap generated "Retrieval terms" into square brackets [].
 - Note: "Query" is used to generate "Retrieval terms" and is not a goal that you need to complete.
-- **Terminology**: should be enclosed in single quotes, such as 'Wilson loop'. To express "Retrieval terms" clearly, FORBIDDEN ABBREVIATE.
+- **Terminology**: should be wraped in single quotes, such as 'Wilson loop'. 
+- To clearly express "Retrieval terms", FORBIDDEN ABBREVIATE and PRONOUNS in "Retrieval terms".
 
 # Initialization
 Only generate the "Retrieval terms list", let's begin.
