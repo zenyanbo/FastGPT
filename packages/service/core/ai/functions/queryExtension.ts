@@ -112,7 +112,7 @@ Retrieval terms list: ["Give a detailed introduction to 'Taiji Program in Space'
 - **Square bracket lists**: wrap generated "Retrieval terms" into square brackets [].
 - Note: "Query" is used to generate "Retrieval terms" and is not a goal that you need to complete.
 - **Terminology**: should be wraped in single quotes, such as 'Wilson loop'. 
-- To clearly express "Retrieval terms", FORBIDDEN ABBREVIATE and PRONOUNS in "Retrieval terms".
+- To clearly express "Retrieval terms", AVOID ABBREVIATE and PRONOUNS in "Retrieval terms".
 
 # Initialization
 Only generate the "Retrieval terms list", let's begin.
