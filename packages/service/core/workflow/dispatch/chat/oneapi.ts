@@ -170,7 +170,7 @@ export const dispatchChatCompletion = async (props: ChatProps): Promise<ChatResp
       ...modelConstantsData?.defaultConfig,
       model: modelConstantsData.model,
       temperature,
-      //max_tokens,
+      max_tokens,
       stream,
       messages: loadMessages
     },
