@@ -51,10 +51,14 @@ Retrieval terms list: ["Give the form of fundamental frequencies, as well as the
 Q: Introduce Kerr spacetime in detail.
 A: Ok, Let's discuss the Kerr spacetime and its symetry, Kerr space have two Killing vector and one hidden Killing tensor which correspond to symmetry.
 </History>
-<Query>Write an introduction to its geodesics, and plagiarism is not allowed.</Query>
+<Query>给出在这个时空背景下的测地线的介绍，不允许抄袭。</Query>
 Retrieval terms list: ["Introduce Kerr geodesic from 'constants of motion' associated with 'Killing vector/tensor', and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/Boyer-Lindquist frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
 
 ## Category 2
+----------------
+<History></History>
+<Query>Galois对应如何证明域扩张和Galois子群之间的关系？</Query>
+Retrieval terms list: ["First, let's disccuss the relationship between field extensions and subgroups of the 'Galois group' through 'Galois correspondence', which include the correspondence of fixed fields, intermediate fields, and 'Galois groups'.","To deepen our understanding, let's we start to discuss examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
 ----------------
 <History>
 Q: Conversation background.
@@ -64,10 +68,6 @@ A: A Feynman diagram represents a perturbative contribution to the amplitude of 
 </History>
 <Query>Can you strictly derive Compton scattering? I need more detail.</Query>
 Retrieval terms list: ["Give the mathematical derivation of 'Compton scattering'. Consider from initial and final state, then we can compute 'S-matrix element' and 'differential scattering cross section' from 'Feynman diagrams'.","Give the Feynman diagram for Compton scattering, which describes the scattering of a photon off an electron."]
-----------------
-<History></History>
-<Query>How does the Galois correspondence demonstrate the relationship between field extensions and subgroups of the Galois group? Can you enerate a knowledge graph to describe these concept.</Query>
-Retrieval terms list: ["First, let's disccuss the relationship between field extensions and subgroups of the 'Galois group' through 'Galois correspondence', which include the correspondence of fixed fields, intermediate fields, and 'Galois groups'.","To deepen our understanding, let's we start to discuss examples and counterexamples of Galois correspondence in specific cases, such as the splitting field of a polynomial or the field extension of a finite field."]
 
 ## Category 3
 ----------------
@@ -94,8 +94,8 @@ Retrieval terms list: ["Starting from the symmetry of Kerr space-time, the Kerr 
 
 
 ## Category 4 
-----------------
 (Assuming you don't know 'Taiji Program in Space')
+----------------
 <History></History>
 <Query>Write a detailed introduction to 'Taiji Program in Space'.</Query>
 Retrieval terms list: []
@@ -108,7 +108,7 @@ Retrieval terms list: ["Give a detailed introduction to 'Taiji Program in Space'
 # Requirements
 - **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate Retrieval terms truthfully and only provide terms for "Query" that can be understood and interpreted.
 - **Specific**： The more specific the topic, the fewer "Retrieval terms" should be returned, and the more detailed and specific the content of the "Retrieval terms" should be.
-- **Exception**: In any cases. As long as "Query" contains CHINESE CHARACTERS, MUST attach an improved ENGLISH VERSION of "Query" into "Retrieval terms list".
+- As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into "Retrieval terms list".
 - **Square bracket lists**: wrap generated "Retrieval terms" into square brackets [].
 - Note: "Query" is used to generate "Retrieval terms" and is not a goal that you need to complete.
 - **Terminology**: should be wraped in single quotes, such as 'Wilson loop'. 
