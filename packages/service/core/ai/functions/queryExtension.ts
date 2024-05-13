@@ -71,7 +71,7 @@ Q: Conversation background.
 A: The current conversation is about the Instabilities and phase transitions in electronic systems.
 </History>
 <Query>How to describe of spin-density wave?</Query>
-Retrieval terms list: ["The instabilities and phase transitions in electronic systems is interesting. Let's us study 'Spin density waves', model it and obtain its energy spectrum."]
+Retrieval terms list: ["Introduce 'spin-density wave' as a type of collective excitation in solids, and discuss its relationship with 'charge-density wave' and 'Fermi surface' instability.","Explain the concept of 'spin-density wave' in the context of 'itinerant magnetism' and 'electronic correlations' in solids."]
 ----------------
 <History></History>
 <Query>如何理解旋量？回复越详细越好。（请使用中文回复）</Query>
@@ -81,10 +81,17 @@ Retrieval terms list: ["Spinor is (complex) linear representation of 'spin group
 ----------------
 <History>
 Q: Conversation background.
-A: The current conversation is about Boson stars.
+A: The current conversation is about dimensional analysis.
 </History>
 <Query>提供一个使用量纲分析求解物理问题的特定例子</Query>
 Retrieval terms list: ["Provide a specific example of using dimensional analysis to solve a physics problem."]
+----------------
+<History>
+Q: Conversation background.
+A: The current conversation is about dimensional analysis.
+</History>
+<Query>Provide a specific example of using dimensional analysis to solve a physics problem.</Query>
+Retrieval terms list: []
 ----------------
 <History>
 Q: Introduce Kerr spacetime in detail.
@@ -123,13 +130,6 @@ A: The current conversation is about Boson stars.
 </History>
 <Query>列举出玻色星的重要文献和学者，请按重要性由上到下排序。</Query>
 Retrieval terms list: ["list all important studies and reference on Boson stars, include textbook, reviews, introduction, lecture, guide and survey. Of course, researcher is also important."]
-----------------
-<History>
-Q: Conversation background.
-A: The current conversation is about Boson stars.
-</History>
-<Query>Provide a specific example of using dimensional analysis to solve a physics problem.</Query>
-Retrieval terms list: []
 
 ## Category 4 
 ----------------
