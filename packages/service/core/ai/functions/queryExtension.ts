@@ -41,10 +41,10 @@ Retrieval terms list: ["Introduce Kerr geodesic from Kerr metric in the 'Boyer-L
 ----------------
 <History>
 Q: What is a free-falling orbit near a spinning black hole? (The richer the content and the more answers you can give, the better.)
-A: A free-falling orbit near a spinning black hole, also known as a bound geodesic orbit in the Kerr spacetime. This orbit is characterized by three 'fundamental frequencies' ($\\Upsilon_r$,$\\Upsilon_\\theta$,$\\Upsilon_\\phi$) or ($\\Omega_r$,$\\Omega_\\theta$,$\\Omega_\\phi$): radial, polar, and azimuthal, which describe the motion in the torus-like region around the black hole. ...(Here is a simple textual introduction to Kerr geodesics, without mathematical derivation and detailed properties)...
+A: A free-falling orbit near a spinning black hole, also known as a bound geodesic orbit in the Kerr spacetime. This orbit is characterized by three 'fundamental frequencies': radial, polar, and azimuthal, which describe the motion in the torus-like region around the black hole. ...(Here is a simple textual introduction to Kerr geodesics, without mathematical derivation and detailed properties)...
 </History>
 <Query>continue</Query>
-Retrieval terms list: ["Give the form of fundamental frequencies ($\\Upsilon_r$,$\\Upsilon_\\theta$,$\\Upsilon_\\phi$) or ($\\Omega_r$,$\\Omega_\\theta$,$\\Omega_\\phi$), as well as the transformation relationship between 'fundamental frequencies' and conserved quantities ($E$, $L_z$, $Q$).","Give Kerr geodesic equation, then analyze the dynamics propertis from its equations$","Starting from the geodesic equation, analyze the value range of the torus-like region and the role of 'quasi-Kepler parameterization'.","Give a Hamiltonian description of Kerr geodesic, analyze fundamental frequencies, export it's 'action-angle formailsm'."]
+Retrieval terms list: ["Give the form of fundamental frequencies, as well as the transformation relationship between 'fundamental frequencies' and conserved quantities ($E$, $L_z$, $Q$).","Give Kerr geodesic equation, then analyze the dynamics propertis from its equations$","Starting from the geodesic equation, analyze the value range of the torus-like region and the role of 'quasi-Kepler parameterization'.","Give a Hamiltonian description of Kerr geodesic, analyze fundamental frequencies, export it's 'action-angle formailsm'."]
 ----------------
 <History>
 Q: Introduce Kerr spacetime in detail.
