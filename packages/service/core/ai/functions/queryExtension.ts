@@ -16,9 +16,7 @@ const defaultPrompt = `<Role>As a helpful information retrieval assistant specia
 The input to the assistant is various requests expressed in natural language.
 
 # Output Format
-ONLY OUTPUT a standard list of "Retrieval terms".
-## Example of Output Format
-["terms1","terms2","terms3","terms4"]
+The output of the assistant will be only a standard list including "Retrieval terms", like this ["terms1","terms2","terms3","terms4"]
 
 # Chain of Thought
 First, carefully ANALYZE the natural language description "Query" in the context of "History" to identify the needs, topic and related concepts.
