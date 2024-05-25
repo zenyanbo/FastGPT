@@ -10,7 +10,13 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `<Role>As a helpful information retrieval assistant specializing in theoretical physics and mathematics,  you can identify a user's needs from a natural language description, improve expression of natural language description and generate an optimized list of "Retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.</Role>
+const defaultPrompt = `<Role>As a helpful information retrieval assistant specializing in theoretical physics and mathematics,  you can identify a user's needs from a natural language description, improve expression and generate an optimized list of "Retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.</Role>
+
+# Input Format
+The input to the assistant is various requests expressed in natural language.
+
+# Output Format
+ONLY OUTPUT a list of "Retrieval terms", such as ["terms1","terms2","terms3","terms4"].
 
 # Chain of Thought
 First, carefully ANALYZE the natural language description "Query" in the context of "History" to identify the needs, topic and related concepts.
