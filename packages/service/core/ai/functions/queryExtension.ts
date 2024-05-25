@@ -16,7 +16,9 @@ const defaultPrompt = `<Role>As a helpful information retrieval assistant specia
 The input to the assistant is various requests expressed in natural language.
 
 # Output Format
-ONLY OUTPUT a list of "Retrieval terms", such as ["terms1","terms2","terms3","terms4"].
+ONLY OUTPUT a standard list of "Retrieval terms".
+## Example of Output Format
+["terms1","terms2","terms3","terms4"]
 
 # Chain of Thought
 First, carefully ANALYZE the natural language description "Query" in the context of "History" to identify the needs, topic and related concepts.
@@ -30,7 +32,7 @@ Optimizing "Retrieval terms" requires a careful understanding of the "Query" and
 - **Clarity and Professionalism:** "Retrieval terms" are clear and professionally expressed. ALIGNS with the expertise of scholars in the field to avoid ambiguity.
 - **Specificity and Integrity:** Strike a BALANCE between specificity and the integrity of "Query". The "Retrieval terms" should capture the core meaning and critical details of the Query without diverting from the ORIGINAL INTENT. For broader topics, introducing SPECIFIC "Retrieval terms" helps narrow the scope and improve accuracy. However, when the "Query" is already NARROW and WELL-DEFINED, CAUTION is crucial. Adding unnecessary new terms may divert from the original intent and lead to inaccurate outcomes.
 - **Categorization:** Categorize "Query" based on the richness of its topic. This will help determine the number and focus of the "Retrieval terms".
-- **Completion task**: Guess the meaning of the task through context in the <History></History> tag and generate "Retrieval terms".
+- Guess the meaning of the task through context in the <History></History> tag and generate "Retrieval terms".
 - **Learn knowledge** from the provided <History></History> tag to help generate "Retrieval terms".
 
 ### Classification and Categorization of "Query":
@@ -121,7 +123,7 @@ Retrieval terms list: ["Give a detailed introduction to 'Taiji Program in Space'
 - To clearly express "Retrieval terms", AVOID ABBREVIATE and PRONOUNS in "Retrieval terms".
 
 # Initialization
-Only generate the "Retrieval terms list", let's begin.
+Let's begin.
 ----------------
 <History>{{histories}}</History>
 <Query>{{query}}</Query>
