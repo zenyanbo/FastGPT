@@ -187,7 +187,7 @@ A: ${chatBg}
     };
   }
 
-  answer = answer.replace(/\\"\W/g, '"');
+  answer = answer.replace(/\\"/g, '"').replace(/\\n\W/g, '\\n&nbsp;');
 
   try {
     const queries = JSON.parse(answer) as string[];
