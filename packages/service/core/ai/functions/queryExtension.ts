@@ -10,6 +10,20 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
+function escapeExceptLatex(str: string): string {
+  // Define LaTeX symbols that should not be escaped
+  const latexSymbols = ['\\', '{', '}', '$', '&', '%', '#', '_', '^', '~'];
+  // Create a set for quick lookup
+  const latexSymbolsSet = new Set(latexSymbols);
+  // Escape all characters except for LaTeX symbols
+  return str.split('').map(char => {
+    if (latexSymbolsSet.has(char)) {
+      return char;
+    }
+    return char.replace(/[\W]/g, '\\$&'); // Escape non-word characters
+  }).join('');
+}
+
 const defaultPrompt = `<Role>As a helpful information retrieval assistant specializing in theoretical physics and mathematics,  you can identify a user's needs from a natural language description, improve expression and generate an optimized list of "Retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.</Role>
 
 # Input Format
@@ -187,13 +201,13 @@ A: ${chatBg}
     };
   }
 
-  answer = answer.replace(/\\"/g, '"').replace(/\\n\W/g, '\\n&nbsp;');
+  answer = answer.replace(/\\"/g, '"');
 
   try {
     const queries = JSON.parse(answer) as string[];
 
     return {
-      rawQuery: query,
+      rawQuery: escapeExceptLatex(query),
       extensionQueries: Array.isArray(queries) ? queries : [],
       model,
       tokens: countGptMessagesTokens(messages)
