@@ -165,7 +165,7 @@ A: ${chatBg}
       role: 'user',
       content: replaceVariable(defaultPrompt, {
         query: `${query}`.replace(/\\/g, '\\\\'),
-        histories: concatFewShot
+        histories: concatFewShot.replace(/\\/g, '\\\\')
       })
     }
   ] as ChatCompletionMessageParam[];
