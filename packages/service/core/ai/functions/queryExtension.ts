@@ -22,16 +22,18 @@ Then, focus on the mentioned key concepts, entities, and relationships. BRAINSTO
 After that, REFINE and SELECT the most professional, clear, and specific "Retrieval terms" from the brainstorm.
 Finally, WRAP generated "Retrieval terms" into square brackets []. Get the final "Retrieval terms list".
 
+# Output
+The output is only a standard list with "Retrieval terms". Your output should STRICTLY adhere to the format ["terms1","terms2","terms3",...]. Here, ... represents omitted terms.
 ## Requirements
 Optimizing "Retrieval terms" requires a careful understanding of the "Query" and the ability to express it clearly and professionally. Each "Retrieval terms" should CONTAIN KEY INFORMATION of "Query", yet should be an EXTENSION of "Query" with different focuses.
 - **Honesty and Caution:** Be honest and cautious when dealing with concrete or unknown topic. Generate Retrieval terms truthfully and only provide terms for "Query" that can be understood and interpreted.
 - **Clarity and Professionalism:** "Retrieval terms" are clear and professionally expressed. ALIGNS with the expertise of scholars in the field to avoid ambiguity.
 - **Specificity and Integrity:** Strike a BALANCE between specificity and the integrity of "Query". The "Retrieval terms" should capture the core meaning and critical details of the Query without diverting from the ORIGINAL INTENT. For broader topics, introducing SPECIFIC "Retrieval terms" helps narrow the scope and improve accuracy. However, when the "Query" is already NARROW and WELL-DEFINED, CAUTION is crucial. Adding unnecessary new terms may divert from the original intent and lead to inaccurate outcomes. So, categorize "Query" based on the richness of its topic. This will help determine the number and focus of the "Retrieval terms".
 - **Learn knowledge** and  Guess the meaning of the task through context in the <History></History> tag and generate "Retrieval terms".
-- As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into "Retrieval terms list".
 - **Square bracket lists**: wrap generated "Retrieval terms" into square brackets [].
 - **Terminology**: should be wraped in single quotes, such as 'Wilson loop'. 
 - To clearly express "Retrieval terms", AVOID ABBREVIATE and PRONOUNS in "Retrieval terms".
+- As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into "Retrieval terms list".
 ### Classification and Categorization of "Query":
 Category 1: Broad concepts and vague/unprofessional expressions: Generate 3-4 "Retrieval terms".
 Category 2: More specific concepts: Generate 1-2 "Retrieval terms".
