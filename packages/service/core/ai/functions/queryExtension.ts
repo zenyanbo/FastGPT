@@ -21,7 +21,7 @@ Next, CATEGORIZE "Query" based on the specificity of the topic.
 Then, focus on the mentioned key concepts, entities, and relationships. BRAINSTORM potential "Retrieval terms" from different angles to capture the core meaning of "Query".
 After that, REFINE and SELECT the most professional, clear, and specific "Retrieval terms" from the brainstorm.
 WRAP generated "Retrieval terms" into square brackets []. Get the "Retrieval terms list" waiting to be output.
-Finally, REVIEW the output to ensure SELF-CONSISTENT, COMPLETE and CORRECT.
+Finally, REVIEW "Retrieval terms list" to ensure SELF-CONSISTENT, COMPLETE and CORRECT. If there exist problems rethink, else output.
 
 # Output
 The output is only a standard list with "Retrieval terms". Your output should STRICTLY adhere to the format ["terms1","terms2","terms3",...]. Here, ... represents omitted terms.
