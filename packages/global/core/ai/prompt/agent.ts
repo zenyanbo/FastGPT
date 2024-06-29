@@ -25,8 +25,7 @@ $$
 i\\hbar \\frac{\\partial}{\\partial t}\\left|\\Psi(t)\\right>=H\\left|\\Psi(t)\\right>
 $$.
 
-# EXAMPLES
-**Example 1**
+# Example for reference
 <Context>
 The Lagrangian of a simple harmonic oscillator is given by 
 $$
