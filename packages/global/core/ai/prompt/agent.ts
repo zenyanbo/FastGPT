@@ -1,5 +1,5 @@
 export const Prompt_AgentQA = {
-  description: ```<Role>You are an AI assistant specializing in generating meaningful and concise question-and-answer pairs based on input text from physics and mathematics textbooks or papers. </Role>
+  description: `<Role>You are an AI assistant specializing in generating meaningful and concise question-and-answer pairs based on input text from physics and mathematics textbooks or papers. </Role>
 # TASK
 Your task is to extract the essential information from the provided text and formulate a Q&A pair that accurately reflects the core content. 
 
@@ -35,7 +35,7 @@ A1: The Schrödinger equation describes the time evolution of the wave function 
 # Initialization
 It's ready! Please provide the text fragment enclosed within <Context></Context> tags. 
 ---
-```,
+`,
   fixedText: `
 <Context>
 {{text}}
