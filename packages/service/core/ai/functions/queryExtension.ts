@@ -36,7 +36,7 @@ Optimizing "Retrieval terms" requires a careful understanding of the "Query" and
 - To clearly express "Retrieval terms", AVOID ABBREVIATE and PRONOUNS in "Retrieval terms".
 - As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into "Retrieval terms list".
 ### Classification and Categorization of "Query":
-Category 1: Broad concepts and vague/unprofessional expressions: Generate 3-4 "Retrieval terms".
+Category 1: Broad concepts and vague/unprofessional expressions: Generate 3-6 "Retrieval terms".
 Category 2: More specific concepts: Generate 1-2 "Retrieval terms".
 Category 3: Very specific concepts or clear requirements: Generate 0-1 "Retrieval terms".
 Category 4: Unfamiliar concepts: Generate 0 "Retrieval terms".
@@ -61,6 +61,14 @@ A: Ok, Let's discuss the Kerr spacetime and its symetry, Kerr space have two Kil
 </History>
 <Query>给出在这个时空背景下的测地线的介绍，不允许抄袭。</Query>
 Retrieval terms list: ["Introduce Kerr geodesic from 'constants of motion' associated with 'Killing vector/tensor', and 'seperable Kerr geodesic equation', as well as its analytical solutions.","Give a comprehensive description of orbital dynamics and properties of 'bound Kerr geodesic', such as 'Mino/Boyer-Lindquist frequecy'.","For periodic and quasi-periodic systems, give 'action-angle formailsm' of bound Kerr geodesic."]
+----------------
+<History></History>
+<Query>Give a comprehensive introduction to quantum mechanics.</Query>
+Retrieval terms list: ["Introduce the different formalisms in quantum mechanics, such as wave mechanics, matrix mechanics, and path integrals.","Illustrate common symbols, fundamental concepts, core formulas and important theorems and their proofs of quantum mechanics. For example, Hilbert space, Hermitian operators, observables, collapse, entangled states, Schrödinger equation, different representations, Dirac notation, Ehrenfest theorem, Uncertainty principle, etc.","Introducing the mathematical structure/framework of quantum mechanics. Such as the assumptions (postulates) and axioms of quantum mechanics.","Give an outline or table of contents for a quantum mechanics textbook."，"Provide some toy models and simple cases in quantum mechanics, including free particles, oscillators, two-level systems, one-dimensional infinite potential wells, hydrogen atoms, etc.","Describe the historical development and latest progress of quantum mechanics. What are thebig, open, and tight problems in quantum mechanics?"]
+----------------
+<History></History>
+<Query>What is general relativity? Please explain it in the course form.</Query>
+Retrieval terms list: ["Explain the fundamental principles of quantum mechanics, including its core notation, essential concepts, and key theorems along with their proofs. For example, the metric, the Riemann curvature tensor, the Einstein field equations, the geodesic equations, no-hair theorem, singularity theorems and so on.","how to understand the mathematical framework of general relativity from the perspective of differential geometry.","Give an outline or table of contents for a general relativity textbook."，"Important examples in general relativity include: Schwarzschild solution, Kerr case, FLRW model, linearized gravitational waves, etc.","Give the historical development and recent advances of general relativity. What are the unresolved problems and challenges in general relativity? For example: quantum gravity, black hole information paradox, singularity problem, etc."]
 
 ## Category 2
 ----------------
