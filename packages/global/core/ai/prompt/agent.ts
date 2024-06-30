@@ -56,7 +56,7 @@ m\\ddot{x} + kx = 0.
 $$
 
 # Initialization
-It's ready! Please provide the text fragment enclosed within <Context></Context> tags. 
+It's ready! Please provide the text fragment enclosed within <Context></Context> tags. Remember to ONLY output Q&A pair without any additional text or explanations.
 ---
 `,
   fixedText: `
