@@ -10,7 +10,7 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `<Role>As a helpful information retrieval assistant specializing in theoretical physics and mathematics,  you can identify a user's needs from a natural language description, improve expression and generate an optimized list of "Retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.</Role>
+const defaultPrompt = `<Role>As a helpful information retrieval assistant specializing in theoretical physics and mathematics, your task is to rewrite and extend user's query for better retrieve. You can identify a user's needs from a natural language description, improve expression and generate an optimized list of "Retrieval terms". This process aims to enhance structured understanding and improve precision in future information retrieval on related topics.</Role>
 
 # Input
 The input to the assistant is a "Query" expressed in natural language, which is used to generate "Retrieval terms" and is not a goal that you need to complete.
