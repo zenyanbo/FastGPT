@@ -10,8 +10,8 @@ import {
   useTheme,
   Grid
 } from '@chakra-ui/react';
-import Avatar from '@fastgpt/web/components/common/Avatar';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import Avatar from '@/components/Avatar';
+import MyTooltip from '@/components/MyTooltip';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { DatasetTypeEnum } from '@fastgpt/global/core/dataset/constants';
@@ -19,7 +19,6 @@ import { useTranslation } from 'next-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { getDatasets, putDatasetById, getDatasetPaths } from '@/web/core/dataset/api';
 import { useRequest } from '@fastgpt/web/hooks/useRequest';
-import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 
 const MoveModal = ({
   onClose,
@@ -36,16 +35,13 @@ const MoveModal = ({
   const [parentId, setParentId] = useState<string>('');
 
   const { data } = useQuery(['getDatasets', parentId], () => {
-    return Promise.all([
-      getDatasets({ parentId, type: DatasetTypeEnum.folder }),
-      getDatasetPaths(parentId)
-    ]);
+    return Promise.all([getDatasets({ parentId, type: 'folder' }), getDatasetPaths(parentId)]);
   });
   const paths = useMemo(
     () => [
       {
         parentId: '',
-        parentName: t('common:core.dataset.My Dataset')
+        parentName: t('core.dataset.My Dataset')
       },
       ...(data?.[1] || [])
     ],
@@ -59,7 +55,7 @@ const MoveModal = ({
   const { mutate, isLoading } = useRequest({
     mutationFn: () => putDatasetById({ id: moveDataId, parentId }),
     onSuccess,
-    errorToast: t('common:dataset.Move Failed')
+    errorToast: t('dataset.Move Failed')
   });
 
   return (
@@ -71,7 +67,7 @@ const MoveModal = ({
       title={
         <>
           {!!parentId ? (
-            <Flex flex={1} userSelect={'none'} fontSize={['sm', 'md']} fontWeight={'normal'}>
+            <Flex flex={1} userSelect={'none'} fontSize={['sm', 'lg']} fontWeight={'normal'}>
               {paths.map((item, i) => (
                 <Flex key={item.parentId} mr={2} alignItems={'center'}>
                   <Box
@@ -99,7 +95,7 @@ const MoveModal = ({
               ))}
             </Flex>
           ) : (
-            <Box>{t('common:core.dataset.My Dataset')}</Box>
+            <Box>{t('core.dataset.My Dataset')}</Box>
           )}
         </>
       }
@@ -124,8 +120,8 @@ const MoveModal = ({
                     key={item._id}
                     label={
                       item.type === DatasetTypeEnum.dataset
-                        ? t('common:dataset.Select Dataset')
-                        : t('common:dataset.Select Folder')
+                        ? t('dataset.Select Dataset')
+                        : t('dataset.Select Folder')
                     }
                   >
                     <Card
@@ -147,14 +143,14 @@ const MoveModal = ({
                           className="textEllipsis"
                           ml={3}
                           fontWeight={'bold'}
-                          fontSize={['md', 'md']}
+                          fontSize={['md', 'lg', 'xl']}
                         >
                           {item.name}
                         </Box>
                       </Flex>
                       <Flex justifyContent={'flex-end'} alignItems={'center'} fontSize={'sm'}>
                         {item.type === DatasetTypeEnum.folder ? (
-                          <Box color={'myGray.500'}>{t('common:Folder')}</Box>
+                          <Box color={'myGray.500'}>{t('Folder')}</Box>
                         ) : (
                           <>
                             <MyIcon mr={1} name="kbTest" w={'12px'} />
@@ -169,13 +165,18 @@ const MoveModal = ({
             )}
           </Grid>
           {folderList.length === 0 && (
-            <EmptyTip text={t('common:common.folder.No Folder')}></EmptyTip>
+            <Flex mt={5} flexDirection={'column'} alignItems={'center'}>
+              <MyIcon name="empty" w={'48px'} h={'48px'} color={'transparent'} />
+              <Box mt={2} color={'myGray.500'}>
+                {t('common.folder.No Folder')}
+              </Box>
+            </Flex>
           )}
         </ModalBody>
 
         <ModalFooter>
           <Button isLoading={isLoading} onClick={mutate}>
-            {t('common:dataset.Confirm move the folder')}
+            {t('dataset.Confirm move the folder')}
           </Button>
         </ModalFooter>
       </Flex>

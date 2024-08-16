@@ -7,6 +7,7 @@ import { getErrText } from '@fastgpt/global/common/error/utils';
 import { useTranslation } from 'next-i18next';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { BillTypeEnum } from '@fastgpt/global/support/wallet/bill/constants';
+
 import QRCodePayModal, { type QRPayProps } from '@/components/support/wallet/QRCodePayModal';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { EXTRA_PLAN_CARD_ROUTE } from '@/web/support/wallet/sub/constants';
@@ -26,6 +27,7 @@ const PayModal = ({
   const [inputVal, setInputVal] = useState<number | undefined>(defaultValue);
   const [loading, setLoading] = useState(false);
   const [qrPayData, setQRPayData] = useState<QRPayProps>();
+
   const handleClickPay = useCallback(async () => {
     if (!inputVal || inputVal <= 0 || isNaN(+inputVal)) return;
     setLoading(true);
@@ -56,12 +58,7 @@ const PayModal = ({
   }, [subPlans?.standard]);
 
   return (
-    <MyModal
-      isOpen={true}
-      onClose={onClose}
-      title={t('common:user.Pay')}
-      iconSrc="/imgs/modal/pay.svg"
-    >
+    <MyModal isOpen={true} onClose={onClose} title={t('user.Pay')} iconSrc="/imgs/modal/pay.svg">
       <ModalBody px={0} display={'flex'} flexDirection={'column'}>
         <Box px={6} fontSize={'sm'} mb={2} py={2} maxW={'400px'}>
           该余额仅用于自动续费标准套餐。如需购买额外套餐，可
@@ -77,7 +74,7 @@ const PayModal = ({
               variant={item === inputVal ? 'solid' : 'outline'}
               onClick={() => setInputVal(item)}
             >
-              {t('common:pay.yuan', { amount: item })}
+              {item}元
             </Button>
           ))}
         </Grid>
@@ -86,7 +83,7 @@ const PayModal = ({
             value={inputVal}
             type={'number'}
             step={1}
-            placeholder={t('common:pay.other')}
+            placeholder={'其他金额，请取整数'}
             onChange={(e) => {
               setInputVal(Math.floor(+e.target.value));
             }}
@@ -96,7 +93,7 @@ const PayModal = ({
 
       <ModalFooter>
         <Button variant={'whiteBase'} onClick={onClose}>
-          {t('common:common.Close')}
+          {t('common.Close')}
         </Button>
         <Button
           ml={3}
@@ -104,7 +101,7 @@ const PayModal = ({
           isDisabled={!inputVal || inputVal === 0}
           onClick={handleClickPay}
         >
-          {t('common:pay.get_pay_QR')}
+          获取充值二维码
         </Button>
       </ModalFooter>
 

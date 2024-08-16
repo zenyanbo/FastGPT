@@ -1,47 +1,44 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { jsonRes } from '@fastgpt/service/common/response';
+import { connectToDatabase } from '@/service/mongo';
 import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import type { PagingData } from '@/types';
 import { AppLogsListItemType } from '@/types/app';
 import { Types } from '@fastgpt/service/common/mongo';
 import { addDays } from 'date-fns';
 import type { GetAppChatLogsParams } from '@/global/core/api/appReq.d';
-import { authApp } from '@fastgpt/service/support/permission/app/auth';
+import { authApp } from '@fastgpt/service/support/permission/auth/app';
 import { ChatItemCollectionName } from '@fastgpt/service/core/chat/chatItemSchema';
-import { NextAPI } from '@/service/middleware/entry';
-import { WritePermissionVal } from '@fastgpt/global/support/permission/constant';
-import { readFromSecondary } from '@fastgpt/service/common/mongo/utils';
 
-async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-): Promise<PagingData<AppLogsListItemType>> {
-  const {
-    pageNum = 1,
-    pageSize = 20,
-    appId,
-    dateStart = addDays(new Date(), -7),
-    dateEnd = new Date()
-  } = req.body as GetAppChatLogsParams;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    await connectToDatabase();
+    const {
+      pageNum = 1,
+      pageSize = 20,
+      appId,
+      dateStart = addDays(new Date(), -7),
+      dateEnd = new Date()
+    } = req.body as GetAppChatLogsParams;
 
-  if (!appId) {
-    throw new Error('缺少参数');
-  }
-
-  // 凭证校验
-  const { teamId } = await authApp({ req, authToken: true, appId, per: WritePermissionVal });
-
-  const where = {
-    teamId: new Types.ObjectId(teamId),
-    appId: new Types.ObjectId(appId),
-    updateTime: {
-      $gte: new Date(dateStart),
-      $lte: new Date(dateEnd)
+    if (!appId) {
+      throw new Error('缺少参数');
     }
-  };
 
-  const [data, total] = await Promise.all([
-    MongoChat.aggregate(
-      [
+    // 凭证校验
+    const { teamId } = await authApp({ req, authToken: true, appId, per: 'w' });
+
+    const where = {
+      teamId: new Types.ObjectId(teamId),
+      appId: new Types.ObjectId(appId),
+      updateTime: {
+        $gte: new Date(dateStart),
+        $lte: new Date(dateEnd)
+      }
+    };
+
+    const [data, total] = await Promise.all([
+      MongoChat.aggregate([
         { $match: where },
         {
           $sort: {
@@ -134,20 +131,22 @@ async function handler(
             markCount: 1
           }
         }
-      ],
-      {
-        ...readFromSecondary
+      ]),
+      MongoChat.countDocuments(where)
+    ]);
+
+    jsonRes<PagingData<AppLogsListItemType>>(res, {
+      data: {
+        pageNum,
+        pageSize,
+        data,
+        total
       }
-    ),
-    MongoChat.countDocuments(where, { ...readFromSecondary })
-  ]);
-
-  return {
-    pageNum,
-    pageSize,
-    data,
-    total
-  };
+    });
+  } catch (error) {
+    jsonRes(res, {
+      code: 500,
+      error
+    });
+  }
 }
-
-export default NextAPI(handler);

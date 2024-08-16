@@ -1,18 +1,17 @@
-import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import { ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
 import type {
   DispatchNodeResultType,
-  RuntimeNodeItemType
-} from '@fastgpt/global/core/workflow/runtime/type';
+  RunningModuleItemType
+} from '@fastgpt/global/core/module/runtime/type';
 import { ModelTypeEnum, getLLMModel } from '../../../../ai/model';
-import { filterToolNodeIdByEdges, getHistories } from '../../utils';
+import { getHistories } from '../../utils';
 import { runToolWithToolChoice } from './toolChoice';
-import { DispatchToolModuleProps, ToolNodeItemType } from './type.d';
-import { ChatItemType, UserChatItemValueItemType } from '@fastgpt/global/core/chat/type';
+import { DispatchToolModuleProps, ToolModuleItemType } from './type.d';
+import { ChatItemType } from '@fastgpt/global/core/chat/type';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import {
   GPTMessages2Chats,
-  chatValue2RuntimePrompt,
   chats2GPTMessages,
   getSystemPrompt,
   runtimePrompt2ChatsValue
@@ -22,53 +21,15 @@ import { getHistoryPreview } from '@fastgpt/global/core/chat/utils';
 import { runToolWithFunctionCall } from './functionCall';
 import { runToolWithPromptCall } from './promptCall';
 import { replaceVariable } from '@fastgpt/global/common/string/tools';
-import { getMultiplePrompt, Prompt_Tool_Call } from './constants';
-import { filterToolResponseToPreview } from './utils';
+import { Prompt_Tool_Call } from './constants';
 
-type Response = DispatchNodeResultType<{
-  [NodeOutputKeyEnum.answerText]: string;
-}>;
-
-/* 
-  Tool call， auth add file prompt to question。
-  Guide the LLM to call tool.
-*/
-export const toolCallMessagesAdapt = ({
-  userInput
-}: {
-  userInput: UserChatItemValueItemType[];
-}) => {
-  const files = userInput.filter((item) => item.type === 'file');
-
-  if (files.length > 0) {
-    return userInput.map((item) => {
-      if (item.type === 'text') {
-        const filesCount = files.filter((file) => file.file?.type === 'file').length;
-        const imgCount = files.filter((file) => file.file?.type === 'image').length;
-        const text = item.text?.content || '';
-
-        return {
-          ...item,
-          text: {
-            content: getMultiplePrompt({ fileCount: filesCount, imgCount, question: text })
-          }
-        };
-      }
-
-      return item;
-    });
-  }
-
-  return userInput;
-};
+type Response = DispatchNodeResultType<{}>;
 
 export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<Response> => {
   const {
-    node: { nodeId, name },
-    runtimeNodes,
-    runtimeEdges,
+    module: { name, outputs },
+    runtimeModules,
     histories,
-    query,
     params: { model, systemPrompt, userChatInput, history = 6 }
   } = props;
 
@@ -77,49 +38,41 @@ export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<
 
   /* get tool params */
 
-  const toolNodeIds = filterToolNodeIdByEdges({ nodeId, edges: runtimeEdges });
+  // get tool output targets
+  const toolOutput = outputs.find((output) => output.key === ModuleOutputKeyEnum.selectedTools);
+
+  if (!toolOutput) {
+    return Promise.reject('No tool output found');
+  }
+
+  const targets = toolOutput.targets;
 
   // Gets the module to which the tool is connected
-  const toolNodes = toolNodeIds
-    .map((nodeId) => {
-      const tool = runtimeNodes.find((item) => item.nodeId === nodeId);
+  const toolModules = targets
+    .map((item) => {
+      const tool = runtimeModules.find((module) => module.moduleId === item.moduleId);
       return tool;
     })
     .filter(Boolean)
-    .map<ToolNodeItemType>((tool) => {
+    .map<ToolModuleItemType>((tool) => {
       const toolParams = tool?.inputs.filter((input) => !!input.toolDescription) || [];
       return {
-        ...(tool as RuntimeNodeItemType),
+        ...(tool as RunningModuleItemType),
         toolParams
       };
     });
 
   const messages: ChatItemType[] = [
     ...getSystemPrompt(systemPrompt),
-    // Add file input prompt to histories
-    ...chatHistories.map((item) => {
-      if (item.obj === ChatRoleEnum.Human) {
-        return {
-          ...item,
-          value: toolCallMessagesAdapt({
-            userInput: item.value
-          })
-        };
-      }
-      return item;
-    }),
+    ...chatHistories,
     {
       obj: ChatRoleEnum.Human,
-      value: toolCallMessagesAdapt({
-        userInput: runtimePrompt2ChatsValue({
-          text: userChatInput,
-          files: chatValue2RuntimePrompt(query).files
-        })
+      value: runtimePrompt2ChatsValue({
+        text: userChatInput,
+        files: []
       })
     }
   ];
-
-  // console.log(JSON.stringify(messages, null, 2));
 
   const {
     dispatchFlowResponse, // tool flow response
@@ -132,7 +85,7 @@ export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<
     if (toolModel.toolChoice) {
       return runToolWithToolChoice({
         ...props,
-        toolNodes,
+        toolModules,
         toolModel,
         messages: adaptMessages
       });
@@ -140,34 +93,24 @@ export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<
     if (toolModel.functionCall) {
       return runToolWithFunctionCall({
         ...props,
-        toolNodes,
+        toolModules,
         toolModel,
         messages: adaptMessages
       });
     }
 
     const lastMessage = adaptMessages[adaptMessages.length - 1];
-    if (typeof lastMessage.content === 'string') {
-      lastMessage.content = replaceVariable(Prompt_Tool_Call, {
-        question: lastMessage.content
-      });
-    } else if (Array.isArray(lastMessage.content)) {
-      // array, replace last element
-      const lastText = lastMessage.content[lastMessage.content.length - 1];
-      if (lastText.type === 'text') {
-        lastMessage.content = replaceVariable(Prompt_Tool_Call, {
-          question: lastText.text
-        });
-      } else {
-        return Promise.reject('Prompt call invalid input');
-      }
-    } else {
-      return Promise.reject('Prompt call invalid input');
+    if (typeof lastMessage.content !== 'string') {
+      return Promise.reject('暂时只支持纯文本');
     }
+
+    lastMessage.content = replaceVariable(Prompt_Tool_Call, {
+      question: userChatInput
+    });
 
     return runToolWithPromptCall({
       ...props,
-      toolNodes,
+      toolModules,
       toolModel,
       messages: adaptMessages
     });
@@ -191,20 +134,14 @@ export const dispatchRunTools = async (props: DispatchToolModuleProps): Promise<
     }, 0);
   const flatUsages = dispatchFlowResponse.map((item) => item.flowUsages).flat();
 
-  const previewAssistantResponses = filterToolResponseToPreview(assistantResponses);
-
   return {
-    [NodeOutputKeyEnum.answerText]: previewAssistantResponses
-      .filter((item) => item.text?.content)
-      .map((item) => item.text?.content || '')
-      .join(''),
-    [DispatchNodeResponseKeyEnum.assistantResponses]: previewAssistantResponses,
+    [DispatchNodeResponseKeyEnum.assistantResponses]: assistantResponses,
     [DispatchNodeResponseKeyEnum.nodeResponse]: {
       totalPoints: totalPointsUsage,
       toolCallTokens: totalTokens,
       model: modelName,
       query: userChatInput,
-      historyPreview: getHistoryPreview(GPTMessages2Chats(completeMessages, false), 10000),
+      historyPreview: getHistoryPreview(GPTMessages2Chats(completeMessages, false)),
       toolDetail: childToolResponse
     },
     [DispatchNodeResponseKeyEnum.nodeDispatchUsages]: [

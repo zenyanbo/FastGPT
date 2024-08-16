@@ -2,20 +2,15 @@ import { ErrType } from '../errorCode';
 
 /* dataset: 501000 */
 export enum DatasetErrEnum {
-  unExist = 'unExistDataset',
   unAuthDataset = 'unAuthDataset',
   unCreateCollection = 'unCreateCollection',
   unAuthDatasetCollection = 'unAuthDatasetCollection',
   unAuthDatasetData = 'unAuthDatasetData',
   unAuthDatasetFile = 'unAuthDatasetFile',
-  unLinkCollection = 'unLinkCollection',
-  invalidVectorModelOrQAModel = 'invalidVectorModelOrQAModel'
+
+  unLinkCollection = 'unLinkCollection'
 }
 const datasetErr = [
-  {
-    statusText: DatasetErrEnum.unExist,
-    message: 'core.dataset.error.unExistDataset'
-  },
   {
     statusText: DatasetErrEnum.unAuthDataset,
     message: 'core.dataset.error.unAuthDataset'
@@ -39,10 +34,6 @@ const datasetErr = [
   {
     statusText: DatasetErrEnum.unLinkCollection,
     message: 'core.dataset.error.unLinkCollection'
-  },
-  {
-    statusText: DatasetErrEnum.invalidVectorModelOrQAModel,
-    message: 'core.dataset.error.invalidVectorModelOrQAModel'
   }
 ];
 export default datasetErr.reduce((acc, cur, index) => {

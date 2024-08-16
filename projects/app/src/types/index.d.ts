@@ -7,7 +7,7 @@ import {
   VectorModelItemType,
   WhisperModelType
 } from '@fastgpt/global/core/ai/model.d';
-import { TrackEventName } from '@/web/common/system/constants';
+import { TrackEventName } from '@/constants/common';
 import { SubPlanType } from '@fastgpt/global/support/wallet/sub/type';
 
 export type PagingData<T> = {
@@ -20,6 +20,8 @@ export type PagingData<T> = {
 export type RequestPaging = { pageNum: number; pageSize: number; [key]: any };
 
 declare global {
+  var systemInitd: boolean;
+
   var qaQueueLen: number;
   var vectorQueueLen: number;
 
@@ -29,7 +31,7 @@ declare global {
     grecaptcha: any;
     QRCode: any;
     umami?: {
-      track: (event: TrackEventName, data: any) => void;
+      track: (event: `${TrackEventName}`, data: any) => void;
     };
   }
 }

@@ -1,8 +1,10 @@
-import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/constants';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import type { ChatHistoryItemResType } from '@fastgpt/global/core/chat/type.d';
-import type { StartChatFnProps } from '@/components/core/chat/ChatContainer/type';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import type { StartChatFnProps } from '@/components/ChatBox/type.d';
+import { getToken } from '@/web/support/user/auth';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+import dayjs from 'dayjs';
 import {
   // refer to https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web
   EventStreamContentType,
@@ -10,7 +12,6 @@ import {
 } from '@fortaine/fetch-event-source';
 import { TeamErrEnum } from '@fastgpt/global/common/error/code/team';
 import { useSystemStore } from '../system/useSystemStore';
-import { formatTime2YMDHMW } from '@fastgpt/global/common/string/time';
 
 type StreamFetchProps = {
   url?: string;
@@ -18,7 +19,7 @@ type StreamFetchProps = {
   onMessage: StartChatFnProps['generatingMessage'];
   abortCtrl: AbortController;
 };
-export type StreamResponseType = {
+type StreamResponseType = {
   responseText: string;
   [DispatchNodeResponseKeyEnum.nodeResponse]: ChatHistoryItemResType[];
 };
@@ -68,7 +69,7 @@ export const streamFetch = ({
       });
     };
 
-    const isAnswerEvent = (event: SseResponseEventEnum) =>
+    const isAnswerEvent = (event: `${SseResponseEventEnum}`) =>
       event === SseResponseEventEnum.answer || event === SseResponseEventEnum.fastAnswer;
     // animate response to make it looks smooth
     function animateResponseText() {
@@ -108,12 +109,13 @@ export const streamFetch = ({
     try {
       // auto complete variables
       const variables = data?.variables || {};
-      variables.cTime = formatTime2YMDHMW();
+      variables.cTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
       const requestData = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          token: getToken()
         },
         signal: abortCtrl.signal,
         body: JSON.stringify({
@@ -196,16 +198,6 @@ export const streamFetch = ({
             });
           } else if (event === SseResponseEventEnum.flowResponses && Array.isArray(parseJson)) {
             responseData = parseJson;
-          } else if (event === SseResponseEventEnum.updateVariables) {
-            onMessage({
-              event,
-              variables: parseJson
-            });
-          } else if (event === SseResponseEventEnum.interactive) {
-            responseQueue.push({
-              event,
-              ...parseJson
-            });
           } else if (event === SseResponseEventEnum.error) {
             if (parseJson.statusText === TeamErrEnum.aiPointsNotEnough) {
               useSystemStore.getState().setIsNotSufficientModal(true);

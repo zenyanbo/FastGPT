@@ -60,4 +60,4 @@ const ImportantInform = ({
   );
 };
 
-export default React.memo(ImportantInform);
+export default ImportantInform;

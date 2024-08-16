@@ -3,7 +3,7 @@ import { getFileIcon } from '../../common/file/icon';
 import { strIsLink } from '../../common/string/tools';
 
 export function getCollectionIcon(
-  type: DatasetCollectionTypeEnum = DatasetCollectionTypeEnum.file,
+  type: `${DatasetCollectionTypeEnum}` = DatasetCollectionTypeEnum.file,
   name = ''
 ) {
   if (type === DatasetCollectionTypeEnum.folder) {
@@ -24,15 +24,13 @@ export function getSourceNameIcon({
   sourceName: string;
   sourceId?: string;
 }) {
-  try {
-    const fileIcon = getFileIcon(decodeURIComponent(sourceName.replace(/%/g, '%25')), '');
-    if (fileIcon) {
-      return fileIcon;
-    }
-    if (strIsLink(sourceId)) {
-      return 'common/linkBlue';
-    }
-  } catch (error) {}
+  if (strIsLink(sourceId)) {
+    return 'common/linkBlue';
+  }
+  const fileIcon = getFileIcon(sourceName, '');
+  if (fileIcon) {
+    return fileIcon;
+  }
 
   return 'file/fill/manual';
 }
@@ -48,7 +46,7 @@ export function getDefaultIndex(props?: { q?: string; a?: string; dataId?: strin
   };
 }
 
-export const predictDataLimitLength = (mode: TrainingModeEnum, data: any[]) => {
+export const predictDataLimitLength = (mode: `${TrainingModeEnum}`, data: any[]) => {
   if (mode === TrainingModeEnum.qa) return data.length * 20;
   if (mode === TrainingModeEnum.auto) return data.length * 5;
   return data.length;

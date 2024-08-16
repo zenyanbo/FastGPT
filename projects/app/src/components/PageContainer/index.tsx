@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme, type BoxProps } from '@chakra-ui/react';
-import MyBox from '@fastgpt/web/components/common/MyBox';
+import MyBox from '../common/MyBox';
 
 const PageContainer = ({
   children,
@@ -20,7 +20,6 @@ const PageContainer = ({
         overflow={'overlay'}
         bg={'myGray.25'}
         borderRadius={[0, '16px']}
-        overflowX={'hidden'}
         {...insertProps}
       >
         {children}

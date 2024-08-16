@@ -2,15 +2,12 @@ import { UploadImgProps } from '@fastgpt/global/common/file/api';
 import { imageBaseUrl } from '@fastgpt/global/common/file/image/constants';
 import { MongoImage } from './schema';
 import { ClientSession } from '../../../common/mongo';
-import { guessBase64ImageType } from '../utils';
-import { readFromSecondary } from '../../mongo/utils';
 
-export function getMongoImgUrl(id: string, extension: string) {
-  return `${imageBaseUrl}${id}.${extension}`;
+export function getMongoImgUrl(id: string) {
+  return `${imageBaseUrl}${id}`;
 }
 
 export const maxImgSize = 1024 * 1024 * 12;
-const base64MimeRegex = /data:image\/([^\)]+);base64/;
 export async function uploadMongoImg({
   type,
   base64Img,
@@ -25,37 +22,27 @@ export async function uploadMongoImg({
     return Promise.reject('Image too large');
   }
 
-  const [base64Mime, base64Data] = base64Img.split(',');
-  const mime = `image/${base64Mime.match(base64MimeRegex)?.[1] ?? 'image/jpeg'}`;
+  const base64Data = base64Img.split(',')[1];
   const binary = Buffer.from(base64Data, 'base64');
-  const extension = mime.split('/')[1];
 
   const { _id } = await MongoImage.create({
     type,
     teamId,
     binary,
     expiredTime,
-    metadata: Object.assign({ mime }, metadata),
+    metadata,
     shareId
   });
 
-  return getMongoImgUrl(String(_id), extension);
+  return getMongoImgUrl(String(_id));
 }
 
 export async function readMongoImg({ id }: { id: string }) {
-  const formatId = id.replace(/\.[^/.]+$/, '');
-
-  const data = await MongoImage.findById(formatId, undefined, {
-    ...readFromSecondary
-  });
+  const data = await MongoImage.findById(id);
   if (!data) {
     return Promise.reject('Image not found');
   }
-
-  return {
-    binary: data.binary,
-    mime: data.metadata?.mime ?? guessBase64ImageType(data.binary.toString('base64'))
-  };
+  return data?.binary;
 }
 
 export async function delImgByRelatedId({

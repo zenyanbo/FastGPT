@@ -56,22 +56,15 @@ export const chats2GPTMessages = ({
               text: item.text?.content || ''
             };
           }
-          if (item.type === ChatItemValueTypeEnum.file) {
-            if (item.file?.type === ChatFileTypeEnum.image) {
-              return {
-                type: 'image_url',
-                image_url: {
-                  url: item.file?.url || ''
-                }
-              };
-            } else if (item.file?.type === ChatFileTypeEnum.file) {
-              return {
-                type: 'file_url',
-                name: item.file?.name || '',
+          if (item.type === 'file' && item.file?.type === ChatFileTypeEnum.image) {
+            return {
+              type: 'image_url',
+              image_url: {
                 url: item.file?.url || ''
-              };
-            }
+              }
+            };
           }
+          return;
         })
         .filter(Boolean) as ChatCompletionContentPart[];
 
@@ -124,13 +117,6 @@ export const chats2GPTMessages = ({
             role: ChatCompletionRequestMessageRoleEnum.Assistant,
             content: value.text.content
           });
-        } else if (value.type === ChatItemValueTypeEnum.interactive) {
-          results = results.concat({
-            dataId,
-            role: ChatCompletionRequestMessageRoleEnum.Assistant,
-            interactive: value.interactive,
-            content: ''
-          });
         }
       });
     }
@@ -180,25 +166,16 @@ export const GPTMessages2Chats = (
             } else if (item.type === 'image_url') {
               value.push({
                 //@ts-ignore
-                type: ChatItemValueTypeEnum.file,
+                type: 'file',
                 file: {
                   type: ChatFileTypeEnum.image,
                   name: '',
                   url: item.image_url.url
                 }
               });
-            } else if (item.type === 'file_url') {
-              value.push({
-                // @ts-ignore
-                type: ChatItemValueTypeEnum.file,
-                file: {
-                  type: ChatFileTypeEnum.file,
-                  name: item.name,
-                  url: item.url
-                }
-              });
             }
           });
+          // @ts-ignore
         }
       } else if (
         obj === ChatRoleEnum.AI &&
@@ -261,12 +238,6 @@ export const GPTMessages2Chats = (
               ]
             });
           }
-        } else if (item.interactive) {
-          value.push({
-            //@ts-ignore
-            type: ChatItemValueTypeEnum.interactive,
-            interactive: item.interactive
-          });
         }
       }
 

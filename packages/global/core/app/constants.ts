@@ -1,40 +1,20 @@
-import { AppTTSConfigType, AppFileSelectConfigType, AppWhisperConfigType } from './type';
+import { AppWhisperConfigType } from './type';
 
 export enum AppTypeEnum {
-  folder = 'folder',
   simple = 'simple',
-  workflow = 'advanced',
-  plugin = 'plugin',
-  httpPlugin = 'httpPlugin'
+  advanced = 'advanced'
 }
-
-export const AppFolderTypeList = [AppTypeEnum.folder, AppTypeEnum.httpPlugin];
-
-export const defaultTTSConfig: AppTTSConfigType = { type: 'web' };
+export const AppTypeMap = {
+  [AppTypeEnum.simple]: {
+    label: 'simple'
+  },
+  [AppTypeEnum.advanced]: {
+    label: 'advanced'
+  }
+};
 
 export const defaultWhisperConfig: AppWhisperConfigType = {
   open: false,
   autoSend: false,
   autoTTSResponse: false
 };
-
-export const defaultChatInputGuideConfig = {
-  open: false,
-  textList: [],
-  customUrl: ''
-};
-
-export const defaultAppSelectFileConfig: AppFileSelectConfigType = {
-  canSelectFile: false,
-  canSelectImg: false,
-  maxFiles: 10
-};
-
-export enum AppTemplateTypeEnum {
-  recommendation = 'recommendation',
-  writing = 'writing',
-  imageGeneration = 'image-generation',
-  webSearch = 'web-search',
-  roleplay = 'roleplay',
-  officeServices = 'office-services'
-}

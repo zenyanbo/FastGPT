@@ -1,22 +1,16 @@
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/runtime/type';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
 import {
-  NodeInputKeyEnum,
-  NodeOutputKeyEnum,
-  WorkflowIOValueTypeEnum
-} from '@fastgpt/global/core/workflow/constants';
-import {
-  DispatchNodeResponseKeyEnum,
-  SseResponseEventEnum
-} from '@fastgpt/global/core/workflow/runtime/constants';
+  DYNAMIC_INPUT_KEY,
+  ModuleInputKeyEnum,
+  ModuleOutputKeyEnum
+} from '@fastgpt/global/core/module/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
 import axios from 'axios';
-import { formatHttpError, valueTypeFormat } from '../utils';
+import { valueTypeFormat } from '../utils';
 import { SERVICE_LOCAL_HOST } from '../../../../common/system/tools';
 import { addLog } from '../../../../common/system/log';
-import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
 import { getErrText } from '@fastgpt/global/common/error/utils';
-import { responseWrite } from '../../../../common/response';
-import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
-import { getSystemPluginCb } from '../../../../../plugins/register';
 
 type PropsArrType = {
   key: string;
@@ -24,17 +18,17 @@ type PropsArrType = {
   value: string;
 };
 type HttpRequestProps = ModuleDispatchProps<{
-  [NodeInputKeyEnum.abandon_httpUrl]: string;
-  [NodeInputKeyEnum.httpMethod]: string;
-  [NodeInputKeyEnum.httpReqUrl]: string;
-  [NodeInputKeyEnum.httpHeaders]: PropsArrType[];
-  [NodeInputKeyEnum.httpParams]: PropsArrType[];
-  [NodeInputKeyEnum.httpJsonBody]: string;
-  [NodeInputKeyEnum.addInputParam]: Record<string, any>;
+  [ModuleInputKeyEnum.abandon_httpUrl]: string;
+  [ModuleInputKeyEnum.httpMethod]: string;
+  [ModuleInputKeyEnum.httpReqUrl]: string;
+  [ModuleInputKeyEnum.httpHeaders]: PropsArrType[];
+  [ModuleInputKeyEnum.httpParams]: PropsArrType[];
+  [ModuleInputKeyEnum.httpJsonBody]: string;
+  [DYNAMIC_INPUT_KEY]: Record<string, any>;
   [key: string]: any;
 }>;
 type HttpResponse = DispatchNodeResultType<{
-  [NodeOutputKeyEnum.error]?: object;
+  [ModuleOutputKeyEnum.failed]?: boolean;
   [key: string]: any;
 }>;
 
@@ -42,14 +36,11 @@ const UNDEFINED_SIGN = 'UNDEFINED_SIGN';
 
 export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<HttpResponse> => {
   let {
-    res,
-    detail,
-    app: { _id: appId },
+    appId,
     chatId,
-    stream,
     responseChatItemId,
     variables,
-    node: { outputs },
+    module: { outputs },
     histories,
     params: {
       system_httpMethod: httpMethod = 'POST',
@@ -57,7 +48,7 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
       system_httpHeader: httpHeader,
       system_httpParams: httpParams = [],
       system_httpJsonBody: httpJsonBody,
-      [NodeInputKeyEnum.addInputParam]: dynamicInput,
+      [DYNAMIC_INPUT_KEY]: dynamicInput,
       ...body
     }
   } = props;
@@ -66,34 +57,25 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
     return Promise.reject('Http url is empty');
   }
 
-  const systemVariables = {
+  const concatVariables = {
     appId,
     chatId,
     responseChatItemId,
-    histories: histories?.slice(-10) || []
-  };
-  const concatVariables = {
     ...variables,
-    ...body,
-    // ...dynamicInput,
-    ...systemVariables
+    histories: histories.slice(-10),
+    ...body
   };
 
-  const allVariables = {
-    [NodeInputKeyEnum.addInputParam]: concatVariables,
-    ...concatVariables
-  };
-
-  httpReqUrl = replaceVariable(httpReqUrl, allVariables);
+  httpReqUrl = replaceVariable(httpReqUrl, concatVariables);
   // parse header
   const headers = await (() => {
     try {
       if (!httpHeader || httpHeader.length === 0) return {};
       // array
       return httpHeader.reduce((acc: Record<string, string>, item) => {
-        const key = replaceVariable(item.key, allVariables);
-        const value = replaceVariable(item.value, allVariables);
-        acc[key] = valueTypeFormat(value, WorkflowIOValueTypeEnum.string);
+        const key = replaceVariable(item.key, concatVariables);
+        const value = replaceVariable(item.value, concatVariables);
+        acc[key] = valueTypeFormat(value, 'string');
         return acc;
       }, {});
     } catch (error) {
@@ -101,27 +83,18 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
     }
   })();
   const params = httpParams.reduce((acc: Record<string, string>, item) => {
-    const key = replaceVariable(item.key, allVariables);
-    const value = replaceVariable(item.value, allVariables);
-    acc[key] = valueTypeFormat(value, WorkflowIOValueTypeEnum.string);
+    const key = replaceVariable(item.key, concatVariables);
+    const value = replaceVariable(item.value, concatVariables);
+    acc[key] = valueTypeFormat(value, 'string');
     return acc;
   }, {});
-
   const requestBody = await (() => {
-    if (!httpJsonBody) return {};
+    if (!httpJsonBody) return { [DYNAMIC_INPUT_KEY]: dynamicInput };
+    httpJsonBody = replaceVariable(httpJsonBody, concatVariables);
     try {
-      // Replace all variables in the string body
-      httpJsonBody = replaceVariable(httpJsonBody, allVariables);
-
-      // Text body, return directly
-      if (headers['Content-Type']?.includes('text/plain')) {
-        return httpJsonBody?.replaceAll(UNDEFINED_SIGN, 'null');
-      }
-
-      // Json body, parse and return
       const jsonParse = JSON.parse(httpJsonBody);
       const removeSignJson = removeUndefinedSign(jsonParse);
-      return removeSignJson;
+      return { [DYNAMIC_INPUT_KEY]: dynamicInput, ...removeSignJson };
     } catch (error) {
       console.log(error);
       return Promise.reject(`Invalid JSON body: ${httpJsonBody}`);
@@ -129,23 +102,13 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
   })();
 
   try {
-    const { formatResponse, rawResponse } = await (async () => {
-      const systemPluginCb = await getSystemPluginCb();
-      if (systemPluginCb[httpReqUrl]) {
-        const pluginResult = await systemPluginCb[httpReqUrl](requestBody);
-        return {
-          formatResponse: pluginResult,
-          rawResponse: pluginResult
-        };
-      }
-      return fetchData({
-        method: httpMethod,
-        url: httpReqUrl,
-        headers,
-        body: requestBody,
-        params
-      });
-    })();
+    const { formatResponse, rawResponse } = await fetchData({
+      method: httpMethod,
+      url: httpReqUrl,
+      headers,
+      body: requestBody,
+      params
+    });
 
     // format output value type
     const results: Record<string, any> = {};
@@ -153,16 +116,6 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
       const output = outputs.find((item) => item.key === key);
       if (!output) continue;
       results[key] = valueTypeFormat(formatResponse[key], output.valueType);
-    }
-
-    if (stream && typeof formatResponse[NodeOutputKeyEnum.answerText] === 'string') {
-      responseWrite({
-        res,
-        event: detail ? SseResponseEventEnum.fastAnswer : undefined,
-        data: textAdaptGptResponse({
-          text: formatResponse[NodeOutputKeyEnum.answerText]
-        })
-      });
     }
 
     return {
@@ -173,23 +126,22 @@ export const dispatchHttp468Request = async (props: HttpRequestProps): Promise<H
         headers: Object.keys(headers).length > 0 ? headers : undefined,
         httpResult: rawResponse
       },
-      [DispatchNodeResponseKeyEnum.toolResponses]:
-        Object.keys(results).length > 0 ? results : rawResponse,
-      [NodeOutputKeyEnum.httpRawResponse]: rawResponse,
+      [DispatchNodeResponseKeyEnum.toolResponses]: results,
+      [ModuleOutputKeyEnum.httpRawResponse]: rawResponse,
       ...results
     };
   } catch (error) {
     addLog.error('Http request error', error);
-
     return {
-      [NodeOutputKeyEnum.error]: formatHttpError(error),
+      [ModuleOutputKeyEnum.failed]: true,
       [DispatchNodeResponseKeyEnum.nodeResponse]: {
+        totalPoints: 0,
         params: Object.keys(params).length > 0 ? params : undefined,
         body: Object.keys(requestBody).length > 0 ? requestBody : undefined,
         headers: Object.keys(headers).length > 0 ? headers : undefined,
         httpResult: { error: formatHttpError(error) }
       },
-      [NodeOutputKeyEnum.httpRawResponse]: getErrText(error)
+      [ModuleOutputKeyEnum.httpRawResponse]: getErrText(error)
     };
   }
 };
@@ -204,9 +156,9 @@ async function fetchData({
   method: string;
   url: string;
   headers: Record<string, any>;
-  body: Record<string, any> | string;
+  body: Record<string, any>;
   params: Record<string, any>;
-}) {
+}): Promise<Record<string, any>> {
   const { data: response } = await axios({
     method,
     baseURL: `http://${SERVICE_LOCAL_HOST}`,
@@ -301,14 +253,14 @@ async function fetchData({
 function replaceVariable(text: string, obj: Record<string, any>) {
   for (const [key, value] of Object.entries(obj)) {
     if (value === undefined) {
-      text = text.replace(new RegExp(`{{(${key})}}`, 'g'), UNDEFINED_SIGN);
+      text = text.replace(new RegExp(`{{${key}}}`, 'g'), UNDEFINED_SIGN);
     } else {
       const replacement = JSON.stringify(value);
       const unquotedReplacement =
         replacement.startsWith('"') && replacement.endsWith('"')
           ? replacement.slice(1, -1)
           : replacement;
-      text = text.replace(new RegExp(`{{(${key})}}`, 'g'), unquotedReplacement);
+      text = text.replace(new RegExp(`{{${key}}}`, 'g'), unquotedReplacement);
     }
   }
   return text || '';
@@ -331,4 +283,15 @@ function removeUndefinedSign(obj: Record<string, any>) {
     }
   }
   return obj;
+}
+function formatHttpError(error: any) {
+  return {
+    message: error?.message,
+    name: error?.name,
+    method: error?.config?.method,
+    baseURL: error?.config?.baseURL,
+    url: error?.config?.url,
+    code: error?.code,
+    status: error?.status
+  };
 }

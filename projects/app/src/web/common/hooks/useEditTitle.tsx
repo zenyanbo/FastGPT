@@ -3,7 +3,6 @@ import { ModalFooter, ModalBody, Input, useDisclosure, Button, Box } from '@chak
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useTranslation } from 'next-i18next';
-import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 
 export const useEditTitle = ({
   title,
@@ -71,52 +70,46 @@ export const useEditTitle = ({
     } catch (err) {
       onErrorCb.current?.(err);
     }
-  }, [canEmpty, onClose, toast, valueRule]);
+  }, [canEmpty, onClose]);
 
   // eslint-disable-next-line react/display-name
   const EditModal = useCallback(
     ({
       maxLength = 30,
       iconSrc = 'modal/edit',
-      closeBtnText = t('common:common.Close')
+      closeBtnText = t('common.Close')
     }: {
       maxLength?: number;
       iconSrc?: string;
       closeBtnText?: string;
-    }) => {
-      const { runAsync, loading } = useRequest2(onclickConfirm);
+    }) => (
+      <MyModal isOpen={isOpen} onClose={onClose} iconSrc={iconSrc} title={title} maxW={'500px'}>
+        <ModalBody>
+          {!!tip && (
+            <Box mb={2} color={'myGray.500'} fontSize={'sm'}>
+              {tip}
+            </Box>
+          )}
 
-      return (
-        <MyModal isOpen={isOpen} onClose={onClose} iconSrc={iconSrc} title={title} maxW={'500px'}>
-          <ModalBody>
-            {!!tip && (
-              <Box mb={2} color={'myGray.500'} fontSize={'sm'}>
-                {tip}
-              </Box>
-            )}
-
-            <Input
-              ref={inputRef}
-              defaultValue={defaultValue.current}
-              placeholder={placeholder}
-              autoFocus
-              maxLength={maxLength}
-            />
-          </ModalBody>
-          <ModalFooter>
-            {!!closeBtnText && (
-              <Button mr={3} variant={'whiteBase'} onClick={onClose}>
-                {closeBtnText}
-              </Button>
-            )}
-            <Button onClick={runAsync} isLoading={loading}>
-              {t('common:common.Confirm')}
+          <Input
+            ref={inputRef}
+            defaultValue={defaultValue.current}
+            placeholder={placeholder}
+            autoFocus
+            maxLength={maxLength}
+          />
+        </ModalBody>
+        <ModalFooter>
+          {!!closeBtnText && (
+            <Button mr={3} variant={'whiteBase'} onClick={onClose}>
+              {closeBtnText}
             </Button>
-          </ModalFooter>
-        </MyModal>
-      );
-    },
-    [isOpen, onClose, onclickConfirm, placeholder, t, tip, title]
+          )}
+          <Button onClick={onclickConfirm}>{t('common.Confirm')}</Button>
+        </ModalFooter>
+      </MyModal>
+    ),
+    [isOpen, onClose, onclickConfirm, placeholder, tip, title]
   );
 
   return {

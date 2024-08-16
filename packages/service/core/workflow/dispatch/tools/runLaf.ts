@@ -1,19 +1,23 @@
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/runtime/type';
-import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import {
+  DYNAMIC_INPUT_KEY,
+  ModuleInputKeyEnum,
+  ModuleOutputKeyEnum
+} from '@fastgpt/global/core/module/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
 import axios from 'axios';
 import { valueTypeFormat } from '../utils';
 import { SERVICE_LOCAL_HOST } from '../../../../common/system/tools';
 import { addLog } from '../../../../common/system/log';
-import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
 
 type LafRequestProps = ModuleDispatchProps<{
-  [NodeInputKeyEnum.httpReqUrl]: string;
-  [NodeInputKeyEnum.addInputParam]: Record<string, any>;
+  [ModuleInputKeyEnum.httpReqUrl]: string;
+  [DYNAMIC_INPUT_KEY]: Record<string, any>;
   [key: string]: any;
 }>;
 type LafResponse = DispatchNodeResultType<{
-  [NodeOutputKeyEnum.failed]?: boolean;
+  [ModuleOutputKeyEnum.failed]?: boolean;
   [key: string]: any;
 }>;
 
@@ -21,17 +25,13 @@ const UNDEFINED_SIGN = 'UNDEFINED_SIGN';
 
 export const dispatchLafRequest = async (props: LafRequestProps): Promise<LafResponse> => {
   let {
-    app: { _id: appId },
+    appId,
     chatId,
     responseChatItemId,
     variables,
-    node: { outputs },
+    module: { outputs },
     histories,
-    params: {
-      system_httpReqUrl: httpReqUrl,
-      [NodeInputKeyEnum.addInputParam]: dynamicInput,
-      ...body
-    }
+    params: { system_httpReqUrl: httpReqUrl, [DYNAMIC_INPUT_KEY]: dynamicInput, ...body }
   } = props;
 
   if (!httpReqUrl) {
@@ -39,13 +39,11 @@ export const dispatchLafRequest = async (props: LafRequestProps): Promise<LafRes
   }
 
   const concatVariables = {
-    ...variables,
-    ...body,
-    ...dynamicInput,
     appId,
     chatId,
     responseChatItemId,
-    histories: histories?.slice(-10) || []
+    ...variables,
+    ...body
   };
 
   httpReqUrl = replaceVariable(httpReqUrl, concatVariables);
@@ -55,7 +53,7 @@ export const dispatchLafRequest = async (props: LafRequestProps): Promise<LafRes
       appId,
       chatId,
       responseChatItemId,
-      histories: histories?.slice(0, 10)
+      histories: histories.slice(0, 10)
     },
     variables,
     ...dynamicInput,
@@ -85,13 +83,13 @@ export const dispatchLafRequest = async (props: LafRequestProps): Promise<LafRes
         httpResult: rawResponse
       },
       [DispatchNodeResponseKeyEnum.toolResponses]: rawResponse,
-      [NodeOutputKeyEnum.httpRawResponse]: rawResponse,
+      [ModuleOutputKeyEnum.httpRawResponse]: rawResponse,
       ...results
     };
   } catch (error) {
     addLog.error('Http request error', error);
     return {
-      [NodeOutputKeyEnum.failed]: true,
+      [ModuleOutputKeyEnum.failed]: true,
       [DispatchNodeResponseKeyEnum.nodeResponse]: {
         totalPoints: 0,
         body: Object.keys(requestBody).length > 0 ? requestBody : undefined,

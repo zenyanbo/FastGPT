@@ -1,61 +1,40 @@
-import type { FlowNodeTemplateType, StoreNodeItemType } from '../workflow/type/node';
+import type { FlowNodeTemplateType, ModuleItemType } from '../module/type.d';
+
 import { AppTypeEnum } from './constants';
 import { PermissionTypeEnum } from '../../support/permission/constant';
-import { NodeInputKeyEnum, VariableInputEnum } from '../workflow/constants';
-import { SelectedDatasetType } from '../workflow/api';
+import type { DatasetModuleProps } from '../module/node/type.d';
+import { VariableInputEnum } from '../module/constants';
+import { SelectedDatasetType } from '../module/api';
 import { DatasetSearchModeEnum } from '../dataset/constants';
 import { TeamTagSchema as TeamTagsSchemaType } from '@fastgpt/global/support/user/team/type.d';
-import { StoreEdgeItemType } from '../workflow/type/edge';
-import { PermissionSchemaType, PermissionValueType } from '../../support/permission/type';
-import { AppPermission } from '../../support/permission/app/controller';
-import { ParentIdType } from '../../common/parentFolder/type';
-
-export type AppSchema = {
+export interface AppSchema {
   _id: string;
-  parentId?: ParentIdType;
+  userId: string;
   teamId: string;
   tmbId: string;
-  type: AppTypeEnum;
-  version?: 'v1' | 'v2';
-
   name: string;
+  type: `${AppTypeEnum}`;
   avatar: string;
   intro: string;
-
-  updateTime: Date;
-
-  modules: StoreNodeItemType[];
-  edges: StoreEdgeItemType[];
-  pluginData?: {
-    nodeVersion?: string;
-    pluginUniId?: string; // plugin unique id(plugin name)
-    apiSchemaStr?: string; // api schema string
-    customHeaders?: string;
-  };
-
-  // App system config
-  chatConfig: AppChatConfigType;
-  scheduledTriggerConfig?: AppScheduledTriggerConfigType | null;
-  scheduledTriggerNextTime?: Date;
-
+  updateTime: number;
+  modules: ModuleItemType[];
+  permission: `${PermissionTypeEnum}`;
   inited?: boolean;
   teamTags: string[];
-} & PermissionSchemaType;
+}
 
 export type AppListItemType = {
   _id: string;
-  tmbId: string;
   name: string;
   avatar: string;
   intro: string;
-  type: AppTypeEnum;
-  updateTime: Date;
-  pluginData?: AppSchema['pluginData'];
-  permission: AppPermission;
-} & PermissionSchemaType;
+  isOwner: boolean;
+  permission: `${PermissionTypeEnum}`;
+};
 
 export type AppDetailType = AppSchema & {
-  permission: AppPermission;
+  isOwner: boolean;
+  canWrite: boolean;
 };
 
 export type AppSimpleEditFormType = {
@@ -79,29 +58,31 @@ export type AppSimpleEditFormType = {
     datasetSearchExtensionBg?: string;
   };
   selectedTools: FlowNodeTemplateType[];
-  chatConfig: AppChatConfigType;
+  userGuide: {
+    welcomeText: string;
+    variables: {
+      id: string;
+      key: string;
+      label: string;
+      type: `${VariableInputEnum}`;
+      required: boolean;
+      maxLen: number;
+      enums: {
+        value: string;
+      }[];
+    }[];
+    questionGuide: boolean;
+    tts: {
+      type: 'none' | 'web' | 'model';
+      model?: string | undefined;
+      voice?: string | undefined;
+      speed?: number | undefined;
+    };
+    whisper: AppWhisperConfigType;
+  };
 };
 
-/* app chat config type */
-export type AppChatConfigType = {
-  welcomeText?: string;
-  variables?: VariableItemType[];
-  questionGuide?: boolean;
-  ttsConfig?: AppTTSConfigType;
-  whisperConfig?: AppWhisperConfigType;
-  scheduledTriggerConfig?: AppScheduledTriggerConfigType;
-  chatInputGuide?: ChatInputGuideConfigType;
-  fileSelectConfig?: AppFileSelectConfigType;
-};
-export type SettingAIDataType = {
-  model: string;
-  temperature: number;
-  maxToken: number;
-  isResponseAnswerText?: boolean;
-  maxHistories?: number;
-  [NodeInputKeyEnum.aiChatVision]?: boolean; // Is open vision mode
-};
-
+/* app function config */
 // variable
 export type VariableItemType = {
   id: string;
@@ -124,21 +105,4 @@ export type AppWhisperConfigType = {
   open: boolean;
   autoSend: boolean;
   autoTTSResponse: boolean;
-};
-// question guide text
-export type ChatInputGuideConfigType = {
-  open: boolean;
-  customUrl: string;
-};
-// interval timer
-export type AppScheduledTriggerConfigType = {
-  cronString: string;
-  timezone: string;
-  defaultPrompt: string;
-};
-// File
-export type AppFileSelectConfigType = {
-  canSelectFile: boolean;
-  canSelectImg: boolean;
-  maxFiles: number;
 };

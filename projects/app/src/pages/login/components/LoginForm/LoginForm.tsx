@@ -1,7 +1,7 @@
 import React, { useState, Dispatch, useCallback } from 'react';
 import { FormControl, Flex, Input, Button, Box, Link } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { LoginPageTypeEnum } from '@/web/support/user/login/constants';
+import { LoginPageTypeEnum } from '@/constants/user';
 import { postLogin } from '@/web/support/user/api';
 import type { ResLogin } from '@/global/support/api/userRes';
 import { useToast } from '@fastgpt/web/hooks/useToast';
@@ -43,30 +43,30 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
           })
         );
         toast({
-          title: t('user:login.success'),
+          title: '登录成功',
           status: 'success'
         });
       } catch (error: any) {
         toast({
-          title: error.message || t('user:login.error'),
+          title: error.message || '登录异常',
           status: 'error'
         });
       }
       setRequesting(false);
     },
-    [loginSuccess, t, toast]
+    [loginSuccess, toast]
   );
 
   const isCommunityVersion = feConfigs?.show_register === false && !feConfigs?.isPlus;
 
   const loginOptions = [
-    feConfigs?.show_phoneLogin ? t('common:support.user.login.Phone number') : '',
-    feConfigs?.show_emailLogin ? t('common:support.user.login.Email') : '',
-    t('common:support.user.login.Username')
+    feConfigs?.show_phoneLogin ? t('support.user.login.Phone number') : '',
+    feConfigs?.show_emailLogin ? t('support.user.login.Email') : '',
+    t('support.user.login.Username')
   ].filter(Boolean);
 
   const placeholder = isCommunityVersion
-    ? t('common:support.user.login.Root login')
+    ? t('support.user.login.Root login')
     : loginOptions.join('/');
 
   return (
@@ -94,36 +94,36 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
             type={'password'}
             placeholder={
               isCommunityVersion
-                ? t('common:support.user.login.Root password placeholder')
-                : t('common:support.user.login.Password')
+                ? t('support.user.login.Root password placeholder')
+                : t('support.user.login.Password')
             }
             {...register('password', {
               required: true,
               maxLength: {
                 value: 60,
-                message: t('user:login.password_condition')
+                message: '密码最多 60 位'
               }
             })}
           ></Input>
         </FormControl>
         {feConfigs?.docUrl && (
           <Flex alignItems={'center'} mt={7} fontSize={'sm'}>
-            {t('common:support.user.login.Policy tip')}
+            {t('support.user.login.Policy tip')}
             <Link
               ml={1}
               href={getDocPath('/docs/agreement/terms/')}
               target={'_blank'}
               color={'primary.500'}
             >
-              {t('common:support.user.login.Terms')}
+              {t('support.user.login.Terms')}
             </Link>
-            <Box mx={1}>{t('common:support.user.login.And')}</Box>
+            <Box mx={1}>{t('support.user.login.And')}</Box>
             <Link
               href={getDocPath('/docs/agreement/privacy/')}
               target={'_blank'}
               color={'primary.500'}
             >
-              {t('common:support.user.login.Privacy')}
+              {t('support.user.login.Privacy')}
             </Link>
           </Flex>
         )}
@@ -132,12 +132,12 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
           type="submit"
           my={6}
           w={'100%'}
-          size={['md', 'md']}
+          size={['md', 'lg']}
           colorScheme="blue"
           isLoading={requesting}
           onClick={handleSubmit(onclickLogin)}
         >
-          {t('common:Login')}
+          {t('home.Login')}
         </Button>
 
         {feConfigs?.show_register && (
@@ -149,7 +149,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
                 onClick={() => setPageType('forgetPassword')}
                 fontSize="sm"
               >
-                {t('common:support.user.login.Forget Password')}
+                {t('support.user.login.Forget Password')}
               </Box>
               <Box mx={3} h={'16px'} w={'1.5px'} bg={'myGray.250'}></Box>
               <Box
@@ -158,7 +158,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
                 onClick={() => setPageType('register')}
                 fontSize="sm"
               >
-                {t('common:support.user.login.Register')}
+                {t('support.user.login.Register')}
               </Box>
             </Flex>
           </>

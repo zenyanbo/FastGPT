@@ -49,13 +49,11 @@ const DateRangePicker = ({
         py={1}
         borderRadius={'sm'}
         cursor={'pointer'}
-        bg={'myGray.100'}
+        bg={'myWhite.600'}
         fontSize={'sm'}
         onClick={() => setShowSelected(true)}
       >
-        <Box color={'myGray.600'} fontWeight={'400'}>
-          {formatSelected}
-        </Box>
+        <Box>{formatSelected}</Box>
         <MyIcon ml={2} name={'date'} w={'16px'} color={'myGray.600'} />
       </Flex>
       {showSelected && (
@@ -103,7 +101,7 @@ const DateRangePicker = ({
                   mr={2}
                   onClick={() => setShowSelected(false)}
                 >
-                  {t('common:common.Close')}
+                  {t('common.Close')}
                 </Button>
                 <Button
                   size={'sm'}
@@ -112,7 +110,7 @@ const DateRangePicker = ({
                     setShowSelected(false);
                   }}
                 >
-                  {t('common:common.Confirm')}
+                  {t('common.Confirm')}
                 </Button>
               </Flex>
             }

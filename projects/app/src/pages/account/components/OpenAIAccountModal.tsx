@@ -25,7 +25,7 @@ const OpenAIAccountModal = ({
     onSuccess(res) {
       onClose();
     },
-    errorToast: t('common:user.Set OpenAI Account Failed')
+    errorToast: t('user.Set OpenAI Account Failed')
   });
 
   return (
@@ -33,11 +33,13 @@ const OpenAIAccountModal = ({
       isOpen
       onClose={onClose}
       iconSrc="common/openai"
-      title={t('common:user.OpenAI Account Setting')}
+      title={t('user.OpenAI Account Setting')}
     >
       <ModalBody>
         <Box fontSize={'sm'} color={'myGray.500'}>
-          {t('common:info.open_api_notice')}
+          可以填写 OpenAI/OneAPI
+          的相关秘钥。如果你填写了该内容，在线上平台使用【AI对话】、【问题分类】和【内容提取】将会走你填写的Key，不会计费。请注意你的
+          Key 是否有访问对应模型的权限。GPT模型可以选择 FastAI。
         </Box>
         <Flex alignItems={'center'} mt={5}>
           <Box flex={'0 0 65px'}>API Key:</Box>
@@ -48,16 +50,16 @@ const OpenAIAccountModal = ({
           <Input
             flex={1}
             {...register('baseUrl')}
-            placeholder={t('common:info.open_api_placeholder')}
+            placeholder={'请求地址，默认为 openai 官方。可填中转地址，未自动补全 "v1"'}
           ></Input>
         </Flex>
       </ModalBody>
       <ModalFooter>
         <Button mr={3} variant={'whiteBase'} onClick={onClose}>
-          {t('common:common.Cancel')}
+          取消
         </Button>
         <Button isLoading={isLoading} onClick={handleSubmit((data) => onSubmit(data))}>
-          {t('common:common.Confirm')}
+          确认
         </Button>
       </ModalFooter>
     </MyModal>

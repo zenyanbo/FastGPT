@@ -10,19 +10,14 @@ const CommunityModal = ({ onClose }: { onClose: () => void }) => {
   const { feConfigs } = useSystemStore();
 
   return (
-    <MyModal
-      isOpen={true}
-      onClose={onClose}
-      iconSrc="modal/concat"
-      title={t('common:system.Concat us')}
-    >
+    <MyModal isOpen={true} onClose={onClose} iconSrc="modal/concat" title={t('home.Community')}>
       <ModalBody textAlign={'center'}>
         <Markdown source={feConfigs?.concatMd || ''} />
       </ModalBody>
 
       <ModalFooter>
         <Button variant={'whiteBase'} onClick={onClose}>
-          {t('common:common.Close')}
+          关闭
         </Button>
       </ModalFooter>
     </MyModal>

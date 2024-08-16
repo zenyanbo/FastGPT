@@ -1,10 +1,9 @@
-import type { DecoratorNode, Klass, LexicalEditor, LexicalNode } from 'lexical';
+import type { Klass, LexicalEditor, LexicalNode } from 'lexical';
 import type { EntityMatch } from '@lexical/text';
 import { $createTextNode, $getRoot, $isTextNode, TextNode } from 'lexical';
 import { useCallback } from 'react';
-import { VariableLabelNode } from './plugins/VariableLabelPlugin/node';
 
-export function registerLexicalTextEntity<T extends TextNode | VariableLabelNode>(
+export function registerLexicalTextEntity<T extends TextNode>(
   editor: LexicalEditor,
   getMatch: (text: string) => null | EntityMatch,
   targetNode: Klass<T>,
@@ -14,7 +13,7 @@ export function registerLexicalTextEntity<T extends TextNode | VariableLabelNode
     return node instanceof targetNode;
   };
 
-  const replaceWithSimpleText = (node: TextNode | VariableLabelNode): void => {
+  const replaceWithSimpleText = (node: TextNode): void => {
     const textNode = $createTextNode(node.getTextContent());
     textNode.setFormat(node.getFormat());
     node.replace(textNode);
@@ -137,7 +136,7 @@ export function registerLexicalTextEntity<T extends TextNode | VariableLabelNode
       return;
     }
 
-    if (text.length > match.end && $isTextNode(node)) {
+    if (text.length > match.end) {
       // This will split out the rest of the text as simple text
       node.splitText(match.end);
 
@@ -164,7 +163,7 @@ export function registerLexicalTextEntity<T extends TextNode | VariableLabelNode
   };
 
   const removePlainTextTransform = editor.registerNodeTransform(TextNode, textNodeTransform);
-  const removeReverseNodeTransform = editor.registerNodeTransform<any>(
+  const removeReverseNodeTransform = editor.registerNodeTransform<T>(
     targetNode,
     reverseNodeTransform
   );
@@ -172,9 +171,8 @@ export function registerLexicalTextEntity<T extends TextNode | VariableLabelNode
   return [removePlainTextTransform, removeReverseNodeTransform];
 }
 
-export function textToEditorState(text = '') {
-  const paragraph = typeof text === 'string' ? text?.split('\n') : [''];
-
+export function textToEditorState(text: string = '') {
+  const paragraph = text?.split('\n');
   return JSON.stringify({
     root: {
       children: paragraph.map((p) => {
@@ -218,8 +216,6 @@ export function editorStateToText(editor: LexicalEditor) {
 `);
       } else if (child.text) {
         paragraphText.push(child.text);
-      } else if (child.type === 'variableLabel') {
-        paragraphText.push(child.variableKey);
       }
     });
     editorStateTextString.push(paragraphText.join(''));

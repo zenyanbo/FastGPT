@@ -1,77 +1,57 @@
 import dayjs from 'dayjs';
-import chalk from 'chalk';
-import { LogLevelEnum } from './log/constant';
-import { connectionMongo } from '../mongo/index';
-import { getMongoLog } from './log/schema';
-
-const logMap = {
-  [LogLevelEnum.debug]: {
-    levelLog: chalk.green('[Debug]')
-  },
-  [LogLevelEnum.info]: {
-    levelLog: chalk.blue('[Info]')
-  },
-  [LogLevelEnum.warn]: {
-    levelLog: chalk.yellow('[Warn]')
-  },
-  [LogLevelEnum.error]: {
-    levelLog: chalk.red('[Error]')
-  }
-};
-const envLogLevelMap: Record<string, number> = {
-  debug: LogLevelEnum.debug,
-  info: LogLevelEnum.info,
-  warn: LogLevelEnum.warn,
-  error: LogLevelEnum.error
-};
-
-const { LOG_LEVEL, STORE_LOG_LEVEL } = (() => {
-  const LOG_LEVEL = (process.env.LOG_LEVEL || 'info').toLocaleLowerCase();
-  const STORE_LOG_LEVEL = (process.env.STORE_LOG_LEVEL || '').toLocaleLowerCase();
-
-  return {
-    LOG_LEVEL: envLogLevelMap[LOG_LEVEL] ?? LogLevelEnum.info,
-    STORE_LOG_LEVEL: envLogLevelMap[STORE_LOG_LEVEL] ?? 99
-  };
-})();
 
 /* add logger */
 export const addLog = {
-  log(level: LogLevelEnum, msg: string, obj: Record<string, any> = {}) {
-    if (level < LOG_LEVEL) return;
-
+  log(level: 'info' | 'warn' | 'error', msg: string, obj: Record<string, any> = {}) {
     const stringifyObj = JSON.stringify(obj);
     const isEmpty = Object.keys(obj).length === 0;
 
     console.log(
-      `${logMap[level].levelLog} ${dayjs().format('YYYY-MM-DD HH:mm:ss')} ${msg} ${
-        level !== LogLevelEnum.error && !isEmpty ? stringifyObj : ''
+      `[${level.toLocaleUpperCase()}] ${dayjs().format('YYYY-MM-DD HH:mm:ss')} ${msg} ${
+        level !== 'error' && !isEmpty ? stringifyObj : ''
       }`
     );
 
-    level === LogLevelEnum.error && console.error(obj);
+    level === 'error' && console.error(obj);
 
-    // store
-    if (level >= STORE_LOG_LEVEL && connectionMongo.connection.readyState === 1) {
-      // store log
-      getMongoLog().create({
-        text: msg,
-        level,
-        metadata: obj
+    const lokiUrl = process.env.LOKI_LOG_URL as string;
+    if (!lokiUrl) return;
+
+    try {
+      fetch(lokiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          streams: [
+            {
+              stream: {
+                level
+              },
+              values: [
+                [
+                  `${Date.now() * 1000000}`,
+                  JSON.stringify({
+                    message: msg,
+                    ...obj
+                  })
+                ]
+              ]
+            }
+          ]
+        })
       });
-    }
-  },
-  debug(msg: string, obj?: Record<string, any>) {
-    this.log(LogLevelEnum.debug, msg, obj);
+    } catch (error) {}
   },
   info(msg: string, obj?: Record<string, any>) {
-    this.log(LogLevelEnum.info, msg, obj);
+    this.log('info', msg, obj);
   },
   warn(msg: string, obj?: Record<string, any>) {
-    this.log(LogLevelEnum.warn, msg, obj);
+    this.log('warn', msg, obj);
   },
   error(msg: string, error?: any) {
-    this.log(LogLevelEnum.error, msg, {
+    this.log('error', msg, {
       message: error?.message || error,
       stack: error?.stack,
       ...(error?.config && {

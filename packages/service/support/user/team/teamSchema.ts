@@ -1,9 +1,8 @@
-import { connectionMongo, getMongoModel } from '../../../common/mongo';
-const { Schema } = connectionMongo;
+import { connectionMongo, type Model } from '../../../common/mongo';
+const { Schema, model, models } = connectionMongo;
 import { TeamSchema as TeamType } from '@fastgpt/global/support/user/team/type.d';
 import { userCollectionName } from '../../user/schema';
 import { TeamCollectionName } from '@fastgpt/global/support/user/team/constant';
-import { TeamDefaultPermissionVal } from '@fastgpt/global/support/permission/user/constant';
 
 const TeamSchema = new Schema({
   name: {
@@ -13,10 +12,6 @@ const TeamSchema = new Schema({
   ownerId: {
     type: Schema.Types.ObjectId,
     ref: userCollectionName
-  },
-  defaultPermission: {
-    type: Number,
-    default: TeamDefaultPermissionVal
   },
   avatar: {
     type: String,
@@ -51,10 +46,6 @@ const TeamSchema = new Schema({
     pat: {
       type: String
     }
-  },
-  notificationAccount: {
-    type: String,
-    required: false
   }
 });
 
@@ -65,4 +56,5 @@ try {
   console.log(error);
 }
 
-export const MongoTeam = getMongoModel<TeamType>(TeamCollectionName, TeamSchema);
+export const MongoTeam: Model<TeamType> =
+  models[TeamCollectionName] || model(TeamCollectionName, TeamSchema);

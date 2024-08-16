@@ -1,7 +1,7 @@
-import type { AppChatConfigType, AppTTSConfigType } from '@fastgpt/global/core/app/type.d';
+import type { AppTTSConfigType } from '@fastgpt/global/core/app/type.d';
+import { ModuleItemType } from '../module/type';
 import { AdminFbkType, ChatItemType } from '@fastgpt/global/core/chat/type';
 import type { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat.d';
-import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 
 export type GetChatSpeechProps = {
   ttsConfig: AppTTSConfigType;
@@ -30,18 +30,16 @@ export type InitChatResponse = {
   chatId?: string;
   appId: string;
   userAvatar?: string;
-  title?: string;
+  title: string;
   variables: Record<string, any>;
   history: ChatItemType[];
   app: {
-    chatConfig?: AppChatConfigType;
+    userGuideModule?: ModuleItemType;
     chatModels?: string[];
     name: string;
     avatar: string;
     intro: string;
     canUse?: boolean;
-    type: `${AppTypeEnum}`;
-    pluginInputs: FlowNodeInputItemType[];
   };
 };
 
@@ -53,7 +51,6 @@ export type GetHistoriesProps = OutLinkChatAuthProps & {
 export type UpdateHistoryProps = OutLinkChatAuthProps & {
   appId: string;
   chatId: string;
-  title?: string;
   customTitle?: string;
   top?: boolean;
 };

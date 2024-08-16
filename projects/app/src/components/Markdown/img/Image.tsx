@@ -1,40 +1,76 @@
-import React, { useState } from 'react';
-import { ImageProps, Skeleton } from '@chakra-ui/react';
-import MyPhotoView from '@fastgpt/web/components/common/Image/PhotoView';
-import { useBoolean } from 'ahooks';
+import React, { WheelEventHandler, useState } from 'react';
+import {
+  Box,
+  Image,
+  Modal,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  Skeleton,
+  useDisclosure
+} from '@chakra-ui/react';
 
-const MdImage = ({ src, ...props }: { src?: string } & ImageProps) => {
-  const [isLoaded, { setTrue }] = useBoolean(false);
+const MdImage = ({ src }: { src?: string }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [succeed, setSucceed] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [scale, setScale] = useState(1);
 
-  const [renderSrc, setRenderSrc] = useState(src);
+  const handleWheel: WheelEventHandler<HTMLImageElement> = (e) => {
+    setScale((prevScale) => {
+      const newScale = prevScale + e.deltaY * 0.5 * -0.01;
+      if (newScale < 0.5) return 0.5;
+      if (newScale > 10) return 10;
+      return newScale;
+    });
+  };
 
   return (
-    <Skeleton isLoaded={isLoaded}>
-      <MyPhotoView
+    <>
+      <Image
         borderRadius={'md'}
-        src={renderSrc}
+        src={src}
         alt={''}
         fallbackSrc={'/imgs/errImg.png'}
         fallbackStrategy={'onError'}
+        cursor={succeed ? 'pointer' : 'default'}
         loading="lazy"
         objectFit={'contain'}
         referrerPolicy="no-referrer"
         minW={'120px'}
         minH={'120px'}
-        maxH={'500px'}
         my={1}
-        mx={'auto'}
         onLoad={() => {
-          setTrue();
+          setIsLoading(false);
+          setSucceed(true);
         }}
-        onError={() => {
-          setRenderSrc('/imgs/errImg.png');
-          setTrue();
+        onError={() => setIsLoading(false)}
+        onClick={() => {
+          if (!succeed) return;
+          onOpen();
         }}
-        {...props}
       />
-    </Skeleton>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent boxShadow={'none'} maxW={'auto'} w="auto" bg={'transparent'}>
+          <Image
+            transform={`scale(${scale})`}
+            borderRadius={'md'}
+            src={src}
+            alt={''}
+            w={'100%'}
+            maxH={'80vh'}
+            referrerPolicy="no-referrer"
+            fallbackSrc={'/imgs/errImg.png'}
+            fallbackStrategy={'onError'}
+            objectFit={'contain'}
+            onWheel={handleWheel}
+          />
+        </ModalContent>
+        <ModalCloseButton bg={'myWhite.500'} zIndex={999999} />
+      </Modal>
+    </>
   );
 };
 
-export default MdImage;
+export default React.memo(MdImage);

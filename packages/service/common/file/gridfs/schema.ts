@@ -1,17 +1,15 @@
-import { connectionMongo, getMongoModel, type Model } from '../../mongo';
-const { Schema } = connectionMongo;
+import { connectionMongo, type Model } from '../../mongo';
+const { Schema, model, models } = connectionMongo;
 
-const DatasetFileSchema = new Schema({});
-const ChatFileSchema = new Schema({});
+const FileSchema = new Schema({});
 
 try {
-  DatasetFileSchema.index({ uploadDate: -1 });
-
-  ChatFileSchema.index({ uploadDate: -1 });
-  ChatFileSchema.index({ 'metadata.chatId': 1 });
+  FileSchema.index({ 'metadata.teamId': 1 });
+  FileSchema.index({ 'metadata.uploadDate': -1 });
 } catch (error) {
   console.log(error);
 }
 
-export const MongoDatasetFileSchema = getMongoModel('dataset.files', DatasetFileSchema);
-export const MongoChatFileSchema = getMongoModel('chat.files', ChatFileSchema);
+export const MongoFileSchema = models['dataset.files'] || model('dataset.files', FileSchema);
+
+MongoFileSchema.syncIndexes();

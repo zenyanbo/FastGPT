@@ -1,4 +1,4 @@
-import { TeamTmbItemType, TeamMemberWithTeamSchema } from '@fastgpt/global/support/user/team/type';
+import { TeamItemType, TeamMemberWithTeamSchema } from '@fastgpt/global/support/user/team/type';
 import { ClientSession, Types } from '../../../common/mongo';
 import {
   TeamMemberRoleEnum,
@@ -7,22 +7,12 @@ import {
 } from '@fastgpt/global/support/user/team/constant';
 import { MongoTeamMember } from './teamMemberSchema';
 import { MongoTeam } from './teamSchema';
-import { UpdateTeamProps } from '@fastgpt/global/support/user/team/controller';
-import { getResourcePermission } from '../../permission/controller';
-import { PerResourceTypeEnum } from '@fastgpt/global/support/permission/constant';
-import { TeamPermission } from '@fastgpt/global/support/permission/user/controller';
 
-async function getTeamMember(match: Record<string, any>): Promise<TeamTmbItemType> {
+async function getTeamMember(match: Record<string, any>): Promise<TeamItemType> {
   const tmb = (await MongoTeamMember.findOne(match).populate('teamId')) as TeamMemberWithTeamSchema;
   if (!tmb) {
     return Promise.reject('member not exist');
   }
-
-  const tmbPer = await getResourcePermission({
-    resourceType: PerResourceTypeEnum.team,
-    teamId: tmb.teamId._id,
-    tmbId: tmb._id
-  });
 
   return {
     userId: String(tmb.userId),
@@ -36,12 +26,8 @@ async function getTeamMember(match: Record<string, any>): Promise<TeamTmbItemTyp
     role: tmb.role,
     status: tmb.status,
     defaultTeam: tmb.defaultTeam,
-    lafAccount: tmb.teamId.lafAccount,
-    permission: new TeamPermission({
-      per: tmbPer?.permission ?? tmb.teamId.defaultPermission,
-      isOwner: tmb.role === TeamMemberRoleEnum.owner
-    }),
-    notificationAccount: tmb.teamId.notificationAccount
+    canWrite: tmb.role !== TeamMemberRoleEnum.visitor,
+    lafAccount: tmb.teamId.lafAccount
   };
 }
 
@@ -120,19 +106,4 @@ export async function createDefaultTeam({
       }
     });
   }
-}
-
-export async function updateTeam({
-  teamId,
-  name,
-  avatar,
-  teamDomain,
-  lafAccount
-}: UpdateTeamProps & { teamId: string }) {
-  await MongoTeam.findByIdAndUpdate(teamId, {
-    name,
-    avatar,
-    teamDomain,
-    lafAccount
-  });
 }

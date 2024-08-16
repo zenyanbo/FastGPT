@@ -1,30 +1,38 @@
 import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
-import RemarkMath from 'remark-math'; // Math syntax
-import RemarkBreaks from 'remark-breaks'; // Line break
-import RehypeKatex from 'rehype-katex'; // Math render
-import RemarkGfm from 'remark-gfm'; // Special markdown syntax
-import RehypeExternalLinks from 'rehype-external-links';
+import RemarkMath from 'remark-math';
+import RemarkBreaks from 'remark-breaks';
+import RehypeKatex from 'rehype-katex';
+import RemarkGfm from 'remark-gfm';
 
 import styles from './index.module.scss';
 import dynamic from 'next/dynamic';
 
 import { Link, Button } from '@chakra-ui/react';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import MyTooltip from '../MyTooltip';
 import { useTranslation } from 'next-i18next';
 import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
 import MyIcon from '@fastgpt/web/components/common/Icon';
+import { getFileAndOpen } from '@/web/core/dataset/utils';
 import { MARKDOWN_QUOTE_SIGN } from '@fastgpt/global/core/chat/constants';
-import { CodeClassNameEnum } from './utils';
 
-const CodeLight = dynamic(() => import('./CodeLight'), { ssr: false });
-const MermaidCodeBlock = dynamic(() => import('./img/MermaidCodeBlock'), { ssr: false });
-const MdImage = dynamic(() => import('./img/Image'), { ssr: false });
-const EChartsCodeBlock = dynamic(() => import('./img/EChartsCodeBlock'), { ssr: false });
+const CodeLight = dynamic(() => import('./CodeLight'));
+const MermaidCodeBlock = dynamic(() => import('./img/MermaidCodeBlock'));
+const MdImage = dynamic(() => import('./img/Image'));
+const EChartsCodeBlock = dynamic(() => import('./img/EChartsCodeBlock'));
 
-const ChatGuide = dynamic(() => import('./chat/Guide'), { ssr: false });
-const QuestionGuide = dynamic(() => import('./chat/QuestionGuide'), { ssr: false });
+const ChatGuide = dynamic(() => import('./chat/Guide'));
+const QuestionGuide = dynamic(() => import('./chat/QuestionGuide'));
+
+export enum CodeClassName {
+  guide = 'guide',
+  questionGuide = 'questionGuide',
+  mermaid = 'mermaid',
+  echarts = 'echarts',
+  quote = 'quote',
+  files = 'files'
+}
 
 const Markdown = ({
   source = '',
@@ -36,7 +44,7 @@ const Markdown = ({
   const components = useMemo<any>(
     () => ({
       img: Image,
-      pre: RewritePre,
+      pre: 'div',
       p: (pProps: any) => <p {...pProps} dir="auto" />,
       code: Code,
       a: A
@@ -49,17 +57,15 @@ const Markdown = ({
     .replace(/(http[s]?:\/\/[^\s，。]+)([。，])/g, '$1 $2')
     .replace(/\n*(\[QUOTE SIGN\]\(.*\))/g, '$1');
 
-    return formatSource;
-  }, [source]);
-
   return (
     <ReactMarkdown
       className={`markdown ${styles.markdown}
       ${showAnimation ? `${formatSource ? styles.waitingAnimation : styles.animation}` : ''}
     `}
       remarkPlugins={[RemarkMath, [RemarkGfm, { singleTilde: false }], RemarkBreaks]}
-      rehypePlugins={[RehypeKatex, [RehypeExternalLinks, { target: '_blank' }]]}
+      rehypePlugins={[RehypeKatex]}
       components={components}
+      linkTarget={'_blank'}
     >
       {formatSource}
     </ReactMarkdown>
@@ -68,37 +74,39 @@ const Markdown = ({
 
 export default React.memo(Markdown);
 
-/* Custom dom */
 const Code = React.memo(function Code(e: any) {
-  const { className, codeBlock, children } = e;
+  const { inline, className, children } = e;
+
   const match = /language-(\w+)/.exec(className || '');
   const codeType = match?.[1];
 
   const strChildren = String(children);
 
   const Component = useMemo(() => {
-    if (codeType === CodeClassNameEnum.mermaid) {
+    if (codeType === CodeClassName.mermaid) {
       return <MermaidCodeBlock code={strChildren} />;
     }
-    if (codeType === CodeClassNameEnum.guide) {
+
+    if (codeType === CodeClassName.guide) {
       return <ChatGuide text={strChildren} />;
     }
-    if (codeType === CodeClassNameEnum.questionGuide) {
+    if (codeType === CodeClassName.questionGuide) {
       return <QuestionGuide text={strChildren} />;
     }
-    if (codeType === CodeClassNameEnum.echarts) {
+    if (codeType === CodeClassName.echarts) {
       return <EChartsCodeBlock code={strChildren} />;
     }
 
     return (
-      <CodeLight className={className} codeBlock={codeBlock} match={match}>
+      <CodeLight className={className} inline={inline} match={match}>
         {children}
       </CodeLight>
     );
-  }, [codeType, className, codeBlock, match, children, strChildren]);
+  }, [codeType, className, inline, match, children, strChildren]);
 
   return Component;
 });
+
 const Image = React.memo(function Image({ src }: { src?: string }) {
   return <MdImage src={src} />;
 });
@@ -110,7 +118,7 @@ const A = React.memo(function A({ children, ...props }: any) {
     const text = useMemo(() => String(children), [children]);
 
     return (
-      <MyTooltip label={t('common:core.chat.markdown.Quick Question')}>
+      <MyTooltip label={t('core.chat.markdown.Quick Question')}>
         <Button
           variant={'whitePrimary'}
           size={'xs'}
@@ -124,7 +132,7 @@ const A = React.memo(function A({ children, ...props }: any) {
     );
   }
 
-  // quote link(未使用)
+  // quote link
   if (children?.length === 1 && typeof children?.[0] === 'string') {
     const text = String(children);
     if (text === MARKDOWN_QUOTE_SIGN && props.href) {
@@ -139,7 +147,7 @@ const A = React.memo(function A({ children, ...props }: any) {
             _hover={{
               color: 'primary.700'
             }}
-            // onClick={() => getCollectionSourceAndOpen(props.href)}
+            onClick={() => getFileAndOpen(props.href)}
           />
         </MyTooltip>
       );
@@ -148,15 +156,3 @@ const A = React.memo(function A({ children, ...props }: any) {
 
   return <Link {...props}>{children}</Link>;
 });
-
-function RewritePre({ children }: any) {
-  const modifiedChildren = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      // @ts-ignore
-      return React.cloneElement(child, { codeBlock: true });
-    }
-    return child;
-  });
-
-  return <>{modifiedChildren}</>;
-}

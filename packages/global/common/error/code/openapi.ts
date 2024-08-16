@@ -1,27 +1,20 @@
 import { ErrType } from '../errorCode';
-import { i18nT } from '../../../../web/i18n/utils';
+
 /* dataset: 506000 */
 export enum OpenApiErrEnum {
-  unExist = 'openapiUnExist',
-  unAuth = 'openapiUnAuth',
-  exceedLimit = 'openapiExceedLimit'
+  unExist = 'unExist',
+  unAuth = 'unAuth'
 }
-
 const errList = [
   {
     statusText: OpenApiErrEnum.unExist,
-    message: i18nT('common:code_error.openapi_error.api_key_not_exist')
+    message: 'Api Key 不存在'
   },
   {
     statusText: OpenApiErrEnum.unAuth,
-    message: i18nT('common:code_error.openapi_error.un_auth')
-  },
-  {
-    statusText: OpenApiErrEnum.exceedLimit,
-    message: i18nT('common:code_error.openapi_error.exceed_limit')
+    message: '无权操作该 Api Key'
   }
 ];
-
 export default errList.reduce((acc, cur, index) => {
   return {
     ...acc,

@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ImportSourceItemType } from '@/web/core/dataset/type.d';
+import { ImportDataComponentProps, ImportSourceItemType } from '@/web/core/dataset/type.d';
 import { Box, Button } from '@chakra-ui/react';
 import FileSelector from '../components/FileSelector';
 import { useTranslation } from 'next-i18next';
+import { useImportStore } from '../Provider';
 
 import dynamic from 'next/dynamic';
 import Loading from '@fastgpt/web/components/common/MyLoading';
 import { RenderUploadFiles } from '../components/RenderFiles';
-import { useContextSelector } from 'use-context-selector';
-import { DatasetImportContext } from '../Context';
 
 const DataProcess = dynamic(() => import('../commonProgress/DataProcess'), {
   loading: () => <Loading fixed={false} />
@@ -17,13 +16,11 @@ const Upload = dynamic(() => import('../commonProgress/Upload'));
 
 const fileType = '.txt, .docx, .csv, .xlsx, .pdf, .md, .html, .pptx';
 
-const FileLocal = () => {
-  const activeStep = useContextSelector(DatasetImportContext, (v) => v.activeStep);
-
+const FileLocal = ({ activeStep, goToNext }: ImportDataComponentProps) => {
   return (
     <>
-      {activeStep === 0 && <SelectFile />}
-      {activeStep === 1 && <DataProcess showPreviewChunks />}
+      {activeStep === 0 && <SelectFile goToNext={goToNext} />}
+      {activeStep === 1 && <DataProcess showPreviewChunks goToNext={goToNext} />}
       {activeStep === 2 && <Upload />}
     </>
   );
@@ -31,9 +28,9 @@ const FileLocal = () => {
 
 export default React.memo(FileLocal);
 
-const SelectFile = React.memo(function SelectFile() {
+const SelectFile = React.memo(function SelectFile({ goToNext }: { goToNext: () => void }) {
   const { t } = useTranslation();
-  const { goToNext, sources, setSources } = useContextSelector(DatasetImportContext, (v) => v);
+  const { sources, setSources } = useImportStore();
   const [selectFiles, setSelectFiles] = useState<ImportSourceItemType[]>(
     sources.map((source) => ({
       isUploading: false,
@@ -49,7 +46,7 @@ const SelectFile = React.memo(function SelectFile() {
 
   const onclickNext = useCallback(() => {
     // filter uploaded files
-    setSelectFiles((state) => state.filter((item) => item.dbFileId));
+    setSelectFiles((state) => state.filter((item) => (item.uploadedFileRate || 0) >= 100));
     goToNext();
   }, [goToNext]);
 
@@ -71,7 +68,7 @@ const SelectFile = React.memo(function SelectFile() {
           {selectFiles.length > 0
             ? `${t('core.dataset.import.Total files', { total: selectFiles.length })} | `
             : ''}
-          {t('common:common.Next Step')}
+          {t('common.Next Step')}
         </Button>
       </Box>
     </Box>

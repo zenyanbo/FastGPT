@@ -1,27 +1,25 @@
 import { ErrType } from '../errorCode';
-import { i18nT } from '../../../../web/i18n/utils';
-/* dataset: 508000 */
-export enum PluginErrEnum {
-  unExist = 'pluginUnExist',
-  unAuth = 'pluginUnAuth'
-}
 
+/* dataset: 507000 */
+export enum PluginErrEnum {
+  unExist = 'unExist',
+  unAuth = 'unAuth'
+}
 const errList = [
   {
     statusText: PluginErrEnum.unExist,
-    message: i18nT('common:code_error.plugin_error.not_exist')
+    message: '插件不存在'
   },
   {
     statusText: PluginErrEnum.unAuth,
-    message: i18nT('common:code_error.plugin_error.un_auth')
+    message: '无权操作该插件'
   }
 ];
-
 export default errList.reduce((acc, cur, index) => {
   return {
     ...acc,
     [cur.statusText]: {
-      code: 508000 + index,
+      code: 507000 + index,
       statusText: cur.statusText,
       message: cur.message,
       data: null

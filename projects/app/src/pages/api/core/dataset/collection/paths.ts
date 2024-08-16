@@ -1,51 +1,34 @@
-import type { NextApiRequest } from 'next';
-import { authDatasetCollection } from '@fastgpt/service/support/permission/dataset/auth';
-import { ReadPermissionVal } from '@fastgpt/global/support/permission/constant';
-import { ParentTreePathItemType } from '@fastgpt/global/common/parentFolder/type';
-import { MongoDatasetCollection } from '@fastgpt/service/core/dataset/collection/schema';
-import { NextAPI } from '@/service/middleware/entry';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { jsonRes } from '@fastgpt/service/common/response';
+import { connectToDatabase } from '@/service/mongo';
+import type { ParentTreePathItemType } from '@fastgpt/global/common/parentFolder/type.d';
+import { getDatasetCollectionPaths } from '@fastgpt/service/core/dataset/collection/utils';
+import { authDatasetCollection } from '@fastgpt/service/support/permission/auth/dataset';
 
-async function handler(req: NextApiRequest) {
-  const { parentId } = req.query as { parentId: string };
+export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+  try {
+    await connectToDatabase();
 
-  if (!parentId) {
-    return [];
-  }
+    const { parentId } = req.query as { parentId: string };
 
-  await authDatasetCollection({
-    req,
-    authToken: true,
-    collectionId: parentId,
-    per: ReadPermissionVal
-  });
-
-  const paths = await getDatasetCollectionPaths({
-    parentId
-  });
-
-  return paths;
-}
-
-export default NextAPI(handler);
-
-export async function getDatasetCollectionPaths({
-  parentId = ''
-}: {
-  parentId?: string;
-}): Promise<ParentTreePathItemType[]> {
-  async function find(parentId?: string): Promise<ParentTreePathItemType[]> {
     if (!parentId) {
-      return [];
+      return jsonRes(res, {
+        data: []
+      });
     }
-    const parent = await MongoDatasetCollection.findOne({ _id: parentId }, 'name parentId');
 
-    if (!parent) return [];
+    await authDatasetCollection({ req, authToken: true, collectionId: parentId, per: 'r' });
+    const paths = await getDatasetCollectionPaths({
+      parentId
+    });
 
-    const paths = await find(parent.parentId);
-    paths.push({ parentId, parentName: parent.name });
-
-    return paths;
+    jsonRes<ParentTreePathItemType[]>(res, {
+      data: paths
+    });
+  } catch (err) {
+    jsonRes(res, {
+      code: 500,
+      error: err
+    });
   }
-
-  return find(parentId);
 }

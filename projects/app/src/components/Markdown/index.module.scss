@@ -105,16 +105,16 @@
   font-size: inherit;
 }
 .markdown h1 {
-  font-size: var(--chakra-fontSizes-2xl);
+  font-size: 28px;
 }
 .markdown h2 {
-  font-size: var(--chakra-fontSizes-xl);
+  font-size: 24px;
 }
 .markdown h3 {
-  font-size: var(--chakra-fontSizes-lg);
+  font-size: 18px;
 }
 .markdown h4 {
-  font-size: var(--chakra-fontSizes-md);
+  font-size: 16px;
 }
 .markdown h5 {
   font-size: 14px;
@@ -336,18 +336,16 @@
 }
 .markdown pre code,
 .markdown pre tt {
-  background-color: transparent !important;
+  background-color: transparent;
   border: medium none;
 }
 .markdown hr {
   margin: 10px 0;
-  border-color: var(--chakra-colors-gray-300);
 }
 .markdown {
   tab-size: 4;
   word-spacing: normal;
   width: 100%;
-  font-size: var(--chakra-fontSizes-sm);
 
   * {
     word-break: break-word;
@@ -360,12 +358,13 @@
     margin: 0;
     border: none;
     border-radius: 0;
-    background-color: var(--chakra-colors-gray-900) !important;
+    background-color: #292b33 !important;
     overflow-x: auto;
     color: #fff;
   }
 
   pre code {
+    background-color: #292b33 !important;
     width: 100%;
   }
 

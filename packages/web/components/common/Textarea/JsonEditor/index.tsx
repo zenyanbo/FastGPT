@@ -22,9 +22,6 @@ type Props = Omit<BoxProps, 'resize' | 'onChange'> & {
   onChange?: (e: string) => void;
   variables?: EditorVariablePickerType[];
   defaultHeight?: number;
-  placeholder?: string;
-  isDisabled?: boolean;
-  isInvalid?: boolean;
 };
 
 const options = {
@@ -57,8 +54,6 @@ const JSONEditor = ({
   variables = [],
   placeholder,
   defaultHeight = 100,
-  isDisabled = false,
-  isInvalid = false,
   ...props
 }: Props) => {
   const { toast } = useToast();
@@ -80,6 +75,7 @@ const JSONEditor = ({
         const lineContent = model.getLineContent(position.lineNumber);
 
         if (context.triggerCharacter) {
+          console.log(context.triggerCharacter);
           triggerChar.current = context.triggerCharacter;
         }
         const word = model.getWordUntilPosition(position);
@@ -177,7 +173,7 @@ const JSONEditor = ({
     } catch (error) {
       toast({
         status: 'warning',
-        title: t('common:common.jsonEditor.Parse error')
+        title: t('common.jsonEditor.Parse error')
       });
     }
   }, [value]);
@@ -212,9 +208,9 @@ const JSONEditor = ({
 
   return (
     <Box
-      borderWidth={isInvalid ? '2px' : '1px'}
+      borderWidth={'1px'}
       borderRadius={'md'}
-      borderColor={isInvalid ? 'red.500' : 'myGray.200'}
+      borderColor={'myGray.200'}
       py={2}
       height={height}
       position={'relative'}

@@ -37,7 +37,7 @@ export async function findDatasetAndAllChildren({
     return datasets;
   };
   const [dataset, childDatasets] = await Promise.all([
-    MongoDataset.findById(datasetId).lean(),
+    MongoDataset.findById(datasetId),
     find(datasetId)
   ]);
 
@@ -82,18 +82,17 @@ export async function delDatasetRelevantData({
       teamId,
       datasetId: { $in: datasetIds }
     },
-    '_id teamId datasetId fileId metadata'
+    '_id teamId fileId metadata'
   ).lean();
+
+  // image and file
+  await delCollectionRelatedSource({ collections, session });
 
   // delete training data
   await MongoDatasetTraining.deleteMany({
     teamId,
     datasetId: { $in: datasetIds }
   });
-
-  // image and file
-  await delCollectionRelatedSource({ collections, session });
-
   // delete dataset.datas
   await MongoDatasetData.deleteMany({ teamId, datasetId: { $in: datasetIds } }, { session });
 

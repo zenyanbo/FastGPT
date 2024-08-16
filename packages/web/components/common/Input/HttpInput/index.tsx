@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { $getRoot, EditorState, type LexicalEditor } from 'lexical';
-import { useCallback } from 'react';
+import { useCallback, useTransition } from 'react';
 import { editorStateToText } from '../../Textarea/PromptEditor/utils';
 import { EditorVariablePickerType } from '../../Textarea/PromptEditor/type';
 import Editor from './Editor';
@@ -30,15 +30,21 @@ const HttpInput = ({
 }) => {
   const [currentValue, setCurrentValue] = React.useState(value);
 
+  const [, startSts] = useTransition();
+
   const onChangeInput = useCallback((editorState: EditorState, editor: LexicalEditor) => {
     const text = editorStateToText(editor).replaceAll('}}{{', '}} {{');
-    setCurrentValue(text);
     onChange?.(text);
   }, []);
   const onBlurInput = useCallback((editor: LexicalEditor) => {
-    const text = editorStateToText(editor).replaceAll('}}{{', '}} {{');
-    onBlur?.(text);
+    startSts(() => {
+      const text = editorStateToText(editor).replaceAll('}}{{', '}} {{');
+      onBlur?.(text);
+    });
   }, []);
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
 
   return (
     <>

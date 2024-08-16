@@ -63,7 +63,6 @@ const instance = axios.create({
     'Cache-Control': 'no-cache'
   }
 });
-export const serverRequestBaseUrl = `http://${SERVICE_LOCAL_HOST}`;
 
 /* 请求拦截 */
 instance.interceptors.request.use(requestStart, (err) => Promise.reject(err));
@@ -80,7 +79,7 @@ export function request(url: string, data: any, config: ConfigType, method: Meth
 
   return instance
     .request({
-      baseURL: serverRequestBaseUrl,
+      baseURL: `http://${SERVICE_LOCAL_HOST}`,
       url,
       method,
       data: ['POST', 'PUT'].includes(method) ? data : null,

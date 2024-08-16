@@ -1,24 +1,22 @@
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import MyTooltip from '@/components/MyTooltip';
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, ModalBody, useDisclosure, Image } from '@chakra-ui/react';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
-import { TTSTypeEnum } from '@/web/core/app/constants';
+import { TTSTypeEnum } from '@/constants/app';
 import type { AppTTSConfigType } from '@fastgpt/global/core/app/type.d';
 import { useAudioPlay } from '@/web/common/utils/voice';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import MySlider from '@/components/Slider';
 import MySelect from '@fastgpt/web/components/common/MySelect';
-import { defaultTTSConfig } from '@fastgpt/global/core/app/constants';
-import ChatFunctionTip from './Tip';
-import FormLabel from '@fastgpt/web/components/common/MyBox/FormLabel';
 
 const TTSSelect = ({
-  value = defaultTTSConfig,
+  value,
   onChange
 }: {
-  value?: AppTTSConfigType;
+  value: AppTTSConfigType;
   onChange: (e: AppTTSConfigType) => void;
 }) => {
   const { t } = useTranslation();
@@ -27,8 +25,8 @@ const TTSSelect = ({
 
   const list = useMemo(
     () => [
-      { label: t('common:core.app.tts.Close'), value: TTSTypeEnum.none },
-      { label: t('common:core.app.tts.Web'), value: TTSTypeEnum.web },
+      { label: t('core.app.tts.Close'), value: TTSTypeEnum.none },
+      { label: t('core.app.tts.Web'), value: TTSTypeEnum.web },
       ...audioSpeechModelList.map((item) => item?.voices || []).flat()
     ],
     [audioSpeechModelList, t]
@@ -44,7 +42,7 @@ const TTSSelect = ({
     return value.voice;
   }, [value]);
   const formLabel = useMemo(
-    () => list.find((item) => item.value === formatValue)?.label || t('common:common.UnKnow'),
+    () => list.find((item) => item.value === formatValue)?.label || t('common.UnKnow'),
     [formatValue, list, t]
   );
 
@@ -82,14 +80,17 @@ const TTSSelect = ({
   return (
     <Flex alignItems={'center'}>
       <MyIcon name={'core/app/simpleMode/tts'} mr={2} w={'20px'} />
-      <FormLabel>{t('common:core.app.TTS')}</FormLabel>
-      <ChatFunctionTip type={'tts'} />
+      <Box>{t('core.app.TTS')}</Box>
+      <MyTooltip label={t('core.app.TTS Tip')} forceShow>
+        <QuestionOutlineIcon display={['none', 'inline']} ml={1} />
+      </MyTooltip>
       <Box flex={1} />
-      <MyTooltip label={t('common:core.app.Select TTS')}>
+      <MyTooltip label={t('core.app.Select TTS')}>
         <Button
           variant={'transparentBase'}
           iconSpacing={1}
           size={'sm'}
+          fontSize={'md'}
           mr={'-5px'}
           onClick={onOpen}
         >
@@ -97,19 +98,23 @@ const TTSSelect = ({
         </Button>
       </MyTooltip>
       <MyModal
-        iconSrc="core/app/simpleMode/tts"
-        title={t('common:core.app.TTS')}
+        title={
+          <>
+            <MyIcon name={'core/app/simpleMode/tts'} mr={2} w={'20px'} />
+            {t('core.app.TTS')}
+          </>
+        }
         isOpen={isOpen}
         onClose={onCloseTTSModal}
         w={'500px'}
       >
         <ModalBody px={[5, 16]} py={[4, 8]}>
           <Flex justifyContent={'space-between'} alignItems={'center'}>
-            <FormLabel>{t('common:core.app.tts.Speech model')}</FormLabel>
+            {t('core.app.tts.Speech model')}
             <MySelect w={'220px'} value={formatValue} list={list} onchange={onclickChange} />
           </Flex>
           <Flex mt={8} justifyContent={'space-between'}>
-            <FormLabel>{t('common:core.app.tts.Speech speed')}</FormLabel>
+            {t('core.app.tts.Speech speed')}
             <MySlider
               markList={[
                 { label: '0.3', value: 0.3 },
@@ -141,7 +146,7 @@ const TTSSelect = ({
                     leftIcon={<MyIcon name={'core/chat/stopSpeech'} w={'16px'} />}
                     onClick={cancelAudio}
                   >
-                    {t('common:core.chat.tts.Stop Speech')}
+                    {t('core.chat.tts.Stop Speech')}
                   </Button>
                 </Flex>
               ) : (
@@ -150,11 +155,11 @@ const TTSSelect = ({
                   leftIcon={<MyIcon name={'core/app/headphones'} w={'16px'} />}
                   onClick={() => {
                     playAudioByText({
-                      text: t('common:core.app.tts.Test Listen Text')
+                      text: t('core.app.tts.Test Listen Text')
                     });
                   }}
                 >
-                  {t('common:core.app.tts.Test Listen')}
+                  {t('core.app.tts.Test Listen')}
                 </Button>
               )}
             </Flex>

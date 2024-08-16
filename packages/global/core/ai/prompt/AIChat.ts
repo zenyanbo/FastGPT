@@ -121,10 +121,3 @@ $$
   Question: """{{question}}"""`
   }  
 ];
-
-// Document quote prompt
-export const Prompt_DocumentQuote = `将 <Quote></Quote> 中的内容作为你的知识:
-<Quote>
-{{quote}}
-</Quote>
-`;

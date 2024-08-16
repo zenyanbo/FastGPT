@@ -1,4 +1,4 @@
-import { connectionMongo, getMongoModel, type Model } from '../../common/mongo';
+import { connectionMongo, type Model } from '../../common/mongo';
 const { Schema, model, models } = connectionMongo;
 import type { OpenApiSchema } from '@fastgpt/global/support/openapi/type';
 import {
@@ -64,4 +64,6 @@ try {
   console.log(error);
 }
 
-export const MongoOpenApi = getMongoModel<OpenApiSchema>('openapi', OpenApiSchema);
+export const MongoOpenApi: Model<OpenApiSchema> =
+  models['openapi'] || model('openapi', OpenApiSchema);
+MongoOpenApi.syncIndexes();

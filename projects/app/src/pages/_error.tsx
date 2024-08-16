@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { serviceSideProps } from '@/web/common/utils/i18n';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { Box } from '@chakra-ui/react';
-import { TrackEventName } from '@/web/common/system/constants';
 
 function Error() {
   const router = useRouter();
@@ -11,7 +10,7 @@ function Error() {
 
   useEffect(() => {
     setTimeout(() => {
-      window.umami?.track(TrackEventName.pageError, {
+      window.umami?.track('pageError', {
         userAgent: navigator.userAgent,
         platform: navigator.platform,
         appName: navigator.appName,

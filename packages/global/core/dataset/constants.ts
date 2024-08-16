@@ -2,29 +2,23 @@
 export enum DatasetTypeEnum {
   folder = 'folder',
   dataset = 'dataset',
-  websiteDataset = 'websiteDataset', // depp link
-  externalFile = 'externalFile'
+  websiteDataset = 'websiteDataset' // depp link
 }
 export const DatasetTypeMap = {
   [DatasetTypeEnum.folder]: {
     icon: 'common/folderFill',
-    label: 'folder_dataset',
+    label: 'core.dataset.Folder Dataset',
     collectionLabel: 'common.Folder'
   },
   [DatasetTypeEnum.dataset]: {
     icon: 'core/dataset/commonDataset',
-    label: 'common_dataset',
+    label: 'core.dataset.Common Dataset',
     collectionLabel: 'common.File'
   },
   [DatasetTypeEnum.websiteDataset]: {
     icon: 'core/dataset/websiteDataset',
-    label: 'website_dataset',
+    label: 'core.dataset.Website Dataset',
     collectionLabel: 'common.Website'
-  },
-  [DatasetTypeEnum.externalFile]: {
-    icon: 'core/dataset/externalDataset',
-    label: 'external_file',
-    collectionLabel: 'common.File'
   }
 };
 
@@ -44,11 +38,9 @@ export const DatasetStatusMap = {
 /* ------------ collection -------------- */
 export enum DatasetCollectionTypeEnum {
   folder = 'folder',
-  virtual = 'virtual',
-
   file = 'file',
   link = 'link', // one link
-  externalFile = 'externalFile'
+  virtual = 'virtual'
 }
 export const DatasetCollectionTypeMap = {
   [DatasetCollectionTypeEnum.folder]: {
@@ -56,9 +48,6 @@ export const DatasetCollectionTypeMap = {
   },
   [DatasetCollectionTypeEnum.file]: {
     name: 'core.dataset.file'
-  },
-  [DatasetCollectionTypeEnum.externalFile]: {
-    name: 'core.dataset.externalFile'
   },
   [DatasetCollectionTypeEnum.link]: {
     name: 'core.dataset.link'
@@ -88,8 +77,7 @@ export enum ImportDataSourceEnum {
   fileLocal = 'fileLocal',
   fileLink = 'fileLink',
   fileCustom = 'fileCustom',
-  csvTable = 'csvTable',
-  externalFile = 'externalFile'
+  csvTable = 'csvTable'
 }
 
 export enum TrainingModeEnum {
@@ -175,10 +163,3 @@ export const SearchScoreTypeMap = {
 
 export const CustomCollectionIcon = 'common/linkBlue';
 export const LinkCollectionIcon = 'common/linkBlue';
-
-/* source prefix */
-export enum DatasetSourceReadTypeEnum {
-  fileLocal = 'fileLocal',
-  link = 'link',
-  externalFile = 'externalFile'
-}

@@ -2,7 +2,7 @@ import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { IconButton, Flex, Box, Input } from '@chakra-ui/react';
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { useMutation } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+
 import { throttle } from 'lodash';
 import { useToast } from './useToast';
 import { getErrText } from '@fastgpt/global/common/error/utils';
@@ -34,7 +34,6 @@ export function usePagination<T = any>({
   elementRef?: React.RefObject<HTMLDivElement>;
 }) {
   const { toast } = useToast();
-  const { t } = useTranslation();
   const [pageNum, setPageNum] = useState(1);
   const pageNumRef = useRef(pageNum);
   pageNumRef.current = pageNum;
@@ -64,7 +63,7 @@ export function usePagination<T = any>({
         onChange && onChange(num);
       } catch (error: any) {
         toast({
-          title: getErrText(error, t('common:core.chat.error.data_error')),
+          title: getErrText(error, '获取数据异常'),
           status: 'error'
         });
         console.log(error);
@@ -139,9 +138,9 @@ export function usePagination<T = any>({
   const ScrollData = useCallback(
     ({ children, ...props }: { children: React.ReactNode }) => {
       const loadText = useMemo(() => {
-        if (isLoading) return t('common:common.is_requesting');
-        if (total <= data.length) return t('common:common.request_end');
-        return t('common:common.request_more');
+        if (isLoading) return '请求中……';
+        if (total <= data.length) return '已加载全部';
+        return '点击加载更多';
       }, []);
 
       return (
@@ -152,9 +151,9 @@ export function usePagination<T = any>({
             fontSize={'xs'}
             color={'blackAlpha.500'}
             textAlign={'center'}
-            cursor={loadText === t('common:common.request_more') ? 'pointer' : 'default'}
+            cursor={loadText === '点击加载更多' ? 'pointer' : 'default'}
             onClick={() => {
-              if (loadText !== t('common:common.request_more')) return;
+              if (loadText !== '点击加载更多') return;
               mutate(pageNum + 1);
             }}
           >

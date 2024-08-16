@@ -1,4 +1,4 @@
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/runtime/type';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
 
 export type PluginInputProps = ModuleDispatchProps<{
   [key: string]: any;

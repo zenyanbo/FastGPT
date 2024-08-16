@@ -19,15 +19,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getPromotionInitData, getPromotionRecords } from '@/web/support/activity/promotion/api';
 import { useUserStore } from '@/web/support/user/useUserStore';
 
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import MyTooltip from '@/components/MyTooltip';
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { useCopyData } from '@/web/common/hooks/useCopyData';
 import type { PromotionRecordType } from '@/global/support/api/userRes.d';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import dayjs from 'dayjs';
 import { usePagination } from '@fastgpt/web/hooks/usePagination';
 import { useLoading } from '@fastgpt/web/hooks/useLoading';
-import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
-import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 
 const Promotion = () => {
   const { t } = useTranslation();
@@ -56,7 +55,7 @@ const Promotion = () => {
     p: [4, 5],
     border: theme.borders.base,
     textAlign: 'center',
-    fontSize: ['md', 'lg'],
+    fontSize: ['md', 'xl'],
     borderRadius: 'md'
   };
   const titleStyles: BoxProps = {
@@ -69,24 +68,28 @@ const Promotion = () => {
     <Flex flexDirection={'column'} py={[0, 5]} px={5} h={'100%'} position={'relative'}>
       <Grid gridTemplateColumns={['1fr 1fr', 'repeat(2,1fr)', 'repeat(4,1fr)']} gridGap={5}>
         <Box {...statisticsStyles}>
-          <Box>{t('common:user.Amount of inviter')}</Box>
+          <Box>{t('user.Amount of inviter')}</Box>
           <Box {...titleStyles}>{invitedAmount}</Box>
         </Box>
         <Box {...statisticsStyles}>
-          <Box>{t('common:user.Amount of earnings')}</Box>
+          <Box>{t('user.Amount of earnings')}</Box>
           <Box {...titleStyles}>{earningsAmount}</Box>
         </Box>
         <Box {...statisticsStyles}>
           <Flex alignItems={'center'} justifyContent={'center'}>
-            <Box>{t('common:user.Promotion Rate')}</Box>
-            <QuestionTip ml={1} label={t('common:user.Promotion rate tip')}></QuestionTip>
+            <Box>{t('user.Promotion Rate')}</Box>
+            <MyTooltip label={t('user.Promotion rate tip')}>
+              <QuestionOutlineIcon ml={1} />
+            </MyTooltip>
           </Flex>
           <Box {...titleStyles}>{userInfo?.promotionRate || 15}%</Box>
         </Box>
         <Box {...statisticsStyles}>
           <Flex alignItems={'center'} justifyContent={'center'}>
-            <Box>{t('common:user.Invite Url')}</Box>
-            <QuestionTip ml={1} label={t('common:user.Invite url tip')}></QuestionTip>
+            <Box>{t('user.Invite Url')}</Box>
+            <MyTooltip label={t('user.Invite url tip')}>
+              <QuestionOutlineIcon ml={1} />
+            </MyTooltip>
           </Flex>
           <Button
             mt={4}
@@ -96,7 +99,7 @@ const Promotion = () => {
               copyData(`${location.origin}/?hiId=${userInfo?._id}`);
             }}
           >
-            {t('common:user.Copy invite url')}
+            {t('user.Copy invite url')}
           </Button>
         </Box>
       </Grid>
@@ -105,9 +108,9 @@ const Promotion = () => {
           <Table>
             <Thead>
               <Tr>
-                <Th>{t('common:user.Time')}</Th>
-                <Th>{t('common:user.type')}</Th>
-                <Th>{t('common:pay.amount')}</Th>
+                <Th>时间</Th>
+                <Th>类型</Th>
+                <Th>金额(￥)</Th>
               </Tr>
             </Thead>
             <Tbody fontSize={'sm'}>
@@ -116,7 +119,7 @@ const Promotion = () => {
                   <Td>
                     {item.createTime ? dayjs(item.createTime).format('YYYY/MM/DD HH:mm:ss') : '-'}
                   </Td>
-                  <Td>{t(`user.promotion.${item.type}` as any)}</Td>
+                  <Td>{t(`user.promotion.${item.type}`)}</Td>
                   <Td>{item.amount}</Td>
                 </Tr>
               ))}
@@ -125,7 +128,12 @@ const Promotion = () => {
         </TableContainer>
 
         {!isLoading && promotionRecords.length === 0 && (
-          <EmptyTip text={t('common:user.no_invite_records')}></EmptyTip>
+          <Flex mt={'10vh'} flexDirection={'column'} alignItems={'center'}>
+            <MyIcon name="empty" w={'48px'} h={'48px'} color={'transparent'} />
+            <Box mt={2} color={'myGray.500'}>
+              无邀请记录~
+            </Box>
+          </Flex>
         )}
         {total > pageSize && (
           <Flex mt={4} justifyContent={'flex-end'}>

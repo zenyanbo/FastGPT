@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jsonRes } from '@fastgpt/service/common/response';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
+import { withNextCors } from '@fastgpt/service/common/middle/cors';
 import { pushGenerateVectorUsage } from '@/service/support/wallet/usage/push';
 import { connectToDatabase } from '@/service/mongo';
 import { getVectorsByText } from '@fastgpt/service/core/ai/embedding';
@@ -18,7 +19,7 @@ type Props = {
   type: `${EmbeddingTypeEnm}`;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default withNextCors(async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
     let { input, model, billId, type } = req.body as Props;
     await connectToDatabase();
@@ -79,4 +80,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       error: err
     });
   }
-}
+});

@@ -1,27 +1,39 @@
-import type { NextApiRequest } from 'next';
+/* 
+    Create one dataset collection
+*/
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { jsonRes } from '@fastgpt/service/common/response';
+import { connectToDatabase } from '@/service/mongo';
 import type { CreateDatasetCollectionParams } from '@fastgpt/global/core/dataset/api.d';
-import { authDataset } from '@fastgpt/service/support/permission/dataset/auth';
+import { authDataset } from '@fastgpt/service/support/permission/auth/dataset';
 import { createOneCollection } from '@fastgpt/service/core/dataset/collection/controller';
-import { NextAPI } from '@/service/middleware/entry';
-import { WritePermissionVal } from '@fastgpt/global/support/permission/constant';
 
-async function handler(req: NextApiRequest) {
-  const body = req.body as CreateDatasetCollectionParams;
+export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+  try {
+    await connectToDatabase();
+    const body = req.body as CreateDatasetCollectionParams;
 
-  const { teamId, tmbId } = await authDataset({
-    req,
-    authToken: true,
-    authApiKey: true,
-    datasetId: body.datasetId,
-    per: WritePermissionVal
-  });
+    const { teamId, tmbId } = await authDataset({
+      req,
+      authToken: true,
+      authApiKey: true,
+      datasetId: body.datasetId,
+      per: 'w'
+    });
 
-  const { _id } = await createOneCollection({
-    ...body,
-    teamId,
-    tmbId
-  });
-  return _id;
+    const { _id } = await createOneCollection({
+      ...body,
+      teamId,
+      tmbId
+    });
+
+    jsonRes(res, {
+      data: _id
+    });
+  } catch (err) {
+    jsonRes(res, {
+      code: 500,
+      error: err
+    });
+  }
 }
-
-export default NextAPI(handler);
