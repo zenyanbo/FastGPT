@@ -9,14 +9,13 @@ import {
   TextareaProps,
   useDisclosure
 } from '@chakra-ui/react';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import MyTooltip from '@/components/MyTooltip';
 import { useTranslation } from 'next-i18next';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 
 type Props = TextareaProps & {
   title?: string;
-  iconSrc?: string;
   // variables: string[];
 };
 
@@ -25,11 +24,7 @@ const MyTextarea = React.forwardRef<HTMLTextAreaElement, Props>(function MyTexta
   const TextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { t } = useTranslation();
-  const {
-    title = t('common:core.app.edit.Prompt Editor'),
-    iconSrc = 'modal/edit',
-    ...childProps
-  } = props;
+  const { title = t('core.app.edit.Prompt Editor'), ...childProps } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -37,7 +32,7 @@ const MyTextarea = React.forwardRef<HTMLTextAreaElement, Props>(function MyTexta
     <>
       <Editor textareaRef={TextareaRef} {...childProps} onOpenModal={onOpen} />
       {isOpen && (
-        <MyModal iconSrc={iconSrc} title={title} isOpen onClose={onClose}>
+        <MyModal iconSrc="/imgs/modal/edit.svg" title={title} isOpen onClose={onClose}>
           <ModalBody>
             <Editor
               textareaRef={ModalTextareaRef}
@@ -57,7 +52,7 @@ const MyTextarea = React.forwardRef<HTMLTextAreaElement, Props>(function MyTexta
                 onClose();
               }}
             >
-              {t('common:common.Confirm')}
+              {t('common.Confirm')}
             </Button>
           </ModalFooter>
         </MyModal>
@@ -90,7 +85,7 @@ const Editor = React.memo(function Editor({
           cursor={'pointer'}
           onClick={onOpenModal}
         >
-          <MyTooltip label={t('common:common.ui.textarea.Magnifying')}>
+          <MyTooltip label={t('common.ui.textarea.Magnifying')}>
             <MyIcon name={'common/fullScreenLight'} w={'14px'} color={'myGray.600'} />
           </MyTooltip>
         </Box>

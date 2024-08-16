@@ -13,36 +13,36 @@ export enum MongoImageTypeEnum {
 }
 export const mongoImageTypeMap = {
   [MongoImageTypeEnum.systemAvatar]: {
-    label: 'appAvatar',
+    label: 'common.file.type.appAvatar',
     unique: true
   },
   [MongoImageTypeEnum.appAvatar]: {
-    label: 'appAvatar',
+    label: 'common.file.type.appAvatar',
     unique: true
   },
   [MongoImageTypeEnum.pluginAvatar]: {
-    label: 'pluginAvatar',
+    label: 'common.file.type.pluginAvatar',
     unique: true
   },
   [MongoImageTypeEnum.datasetAvatar]: {
-    label: 'datasetAvatar',
+    label: 'common.file.type.datasetAvatar',
     unique: true
   },
   [MongoImageTypeEnum.userAvatar]: {
-    label: 'userAvatar',
+    label: 'common.file.type.userAvatar',
     unique: true
   },
   [MongoImageTypeEnum.teamAvatar]: {
-    label: 'teamAvatar',
+    label: 'common.file.type.teamAvatar',
     unique: true
   },
 
   [MongoImageTypeEnum.chatImage]: {
-    label: 'chatImage',
+    label: 'common.file.type.chatImage',
     unique: false
   },
   [MongoImageTypeEnum.collectionImage]: {
-    label: 'collectionImage',
+    label: 'common.file.type.collectionImage',
     unique: false
   }
 };
@@ -53,5 +53,4 @@ export const uniqueImageTypeList = Object.entries(mongoImageTypeMap)
 
 export const FolderIcon = 'file/fill/folder';
 export const FolderImgUrl = '/imgs/files/folder.svg';
-export const HttpPluginImgUrl = '/imgs/app/httpPluginFill.svg';
-export const HttpImgUrl = '/imgs/workflow/http.png';
+export const HttpImgUrl = '/imgs/module/http.png';

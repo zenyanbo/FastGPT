@@ -1,8 +1,9 @@
-import { simpleMarkdownText } from '@fastgpt/global/common/string/markdown';
-import { WorkerNameEnum, runWorker } from '../../worker/utils';
+export const getWorkerPath = (name: string) => {
+  // @ts-ignore
+  const isSubModule = !!global?.systemConfig;
 
-export const htmlToMarkdown = async (html?: string | null) => {
-  const md = await runWorker<string>(WorkerNameEnum.htmlStr2Md, { html: html || '' });
-
-  return simpleMarkdownText(md);
+  const isProd = process.env.NODE_ENV === 'production';
+  return isProd
+    ? `/app/worker/${name}.js`
+    : `../../${isSubModule ? 'FastGPT/' : ''}/worker/${name}.js`;
 };

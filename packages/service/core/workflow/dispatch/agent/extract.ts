@@ -1,18 +1,18 @@
 import { chats2GPTMessages } from '@fastgpt/global/core/chat/adapt';
-import { filterGPTMessageByMaxTokens, loadRequestMessages } from '../../../chat/utils';
+import { filterGPTMessageByMaxTokens } from '../../../chat/utils';
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
 import {
-  countMessagesTokens,
-  countGptMessagesTokens
-} from '../../../../common/string/tiktoken/index';
+  countGptMessagesTokens,
+  countMessagesTokens
+} from '@fastgpt/global/common/string/tiktoken';
 import { ChatItemValueTypeEnum, ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import { getAIApi } from '../../../ai/config';
-import type { ContextExtractAgentItemType } from '@fastgpt/global/core/workflow/template/system/contextExtract/type';
-import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/runtime/type';
+import type { ContextExtractAgentItemType } from '@fastgpt/global/core/module/type';
+import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
 import { Prompt_ExtractJson } from '@fastgpt/global/core/ai/prompt/agent';
-import { replaceVariable, sliceJsonStr } from '@fastgpt/global/common/string/tools';
+import { replaceVariable } from '@fastgpt/global/common/string/tools';
 import { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { getHistories } from '../utils';
 import { ModelTypeEnum, getLLMModel } from '../../../ai/model';
@@ -24,19 +24,20 @@ import {
   ChatCompletionTool
 } from '@fastgpt/global/core/ai/type';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
-import { DispatchNodeResultType } from '@fastgpt/global/core/workflow/runtime/type';
+import { DispatchNodeResultType } from '@fastgpt/global/core/module/runtime/type';
 import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 
 type Props = ModuleDispatchProps<{
-  [NodeInputKeyEnum.history]?: ChatItemType[];
-  [NodeInputKeyEnum.contextExtractInput]: string;
-  [NodeInputKeyEnum.extractKeys]: ContextExtractAgentItemType[];
-  [NodeInputKeyEnum.description]: string;
-  [NodeInputKeyEnum.aiModel]: string;
+  [ModuleInputKeyEnum.history]?: ChatItemType[];
+  [ModuleInputKeyEnum.contextExtractInput]: string;
+  [ModuleInputKeyEnum.extractKeys]: ContextExtractAgentItemType[];
+  [ModuleInputKeyEnum.description]: string;
+  [ModuleInputKeyEnum.aiModel]: string;
 }>;
 type Response = DispatchNodeResultType<{
-  [NodeOutputKeyEnum.success]: boolean;
-  [NodeOutputKeyEnum.contextExtractFields]: string;
+  [ModuleOutputKeyEnum.success]?: boolean;
+  [ModuleOutputKeyEnum.failed]?: boolean;
+  [ModuleOutputKeyEnum.contextExtractFields]: string;
 }>;
 
 type ActionProps = Props & { extractModel: LLMModelItemType };
@@ -46,7 +47,7 @@ const agentFunName = 'request_function';
 export async function dispatchContentExtract(props: Props): Promise<Response> {
   const {
     user,
-    node: { name },
+    module: { name },
     histories,
     params: { content, history = 6, model, description, extractKeys }
   } = props;
@@ -118,8 +119,9 @@ export async function dispatchContentExtract(props: Props): Promise<Response> {
   });
 
   return {
-    [NodeOutputKeyEnum.success]: success,
-    [NodeOutputKeyEnum.contextExtractFields]: JSON.stringify(arg),
+    [ModuleOutputKeyEnum.success]: success ? true : undefined,
+    [ModuleOutputKeyEnum.failed]: success ? undefined : true,
+    [ModuleOutputKeyEnum.contextExtractFields]: JSON.stringify(arg),
     ...arg,
     [DispatchNodeResponseKeyEnum.nodeResponse]: {
       totalPoints: user.openaiAccount?.key ? 0 : totalPoints,
@@ -141,7 +143,7 @@ export async function dispatchContentExtract(props: Props): Promise<Response> {
   };
 }
 
-const getFunctionCallSchema = async ({
+const getFunctionCallSchema = ({
   extractModel,
   histories,
   params: { content, extractKeys, description }
@@ -169,13 +171,9 @@ ${description ? `- ${description}` : ''}
     }
   ];
   const adaptMessages = chats2GPTMessages({ messages, reserveId: false });
-  const filterMessages = await filterGPTMessageByMaxTokens({
+  const filterMessages = filterGPTMessageByMaxTokens({
     messages: adaptMessages,
     maxTokens: extractModel.maxContext
-  });
-  const requestMessages = await loadRequestMessages({
-    messages: filterMessages,
-    useVision: false
   });
 
   const properties: Record<
@@ -187,7 +185,7 @@ ${description ? `- ${description}` : ''}
   > = {};
   extractKeys.forEach((item) => {
     properties[item.key] = {
-      type: item.valueType || 'string',
+      type: 'string',
       description: item.desc,
       ...(item.enum ? { enum: item.enum.split('\n') } : {})
     };
@@ -198,13 +196,12 @@ ${description ? `- ${description}` : ''}
     description: '需要执行的函数',
     parameters: {
       type: 'object',
-      properties,
-      required: []
+      properties
     }
   };
 
   return {
-    filterMessages: requestMessages,
+    filterMessages,
     agentFunction
   };
 };
@@ -212,7 +209,7 @@ ${description ? `- ${description}` : ''}
 const toolChoice = async (props: ActionProps) => {
   const { user, extractModel } = props;
 
-  const { filterMessages, agentFunction } = await getFunctionCallSchema(props);
+  const { filterMessages, agentFunction } = getFunctionCallSchema(props);
 
   const tools: ChatCompletionTool[] = [
     {
@@ -228,7 +225,7 @@ const toolChoice = async (props: ActionProps) => {
 
   const response = await ai.chat.completions.create({
     model: extractModel.model,
-    temperature: 0.01,
+    temperature: 0,
     messages: filterMessages,
     tools,
     tool_choice: { type: 'function', function: { name: agentFunName } }
@@ -255,7 +252,7 @@ const toolChoice = async (props: ActionProps) => {
     }
   ];
   return {
-    tokens: await countGptMessagesTokens(completeMessages, tools),
+    tokens: countGptMessagesTokens(completeMessages, tools),
     arg
   };
 };
@@ -263,7 +260,7 @@ const toolChoice = async (props: ActionProps) => {
 const functionCall = async (props: ActionProps) => {
   const { user, extractModel } = props;
 
-  const { agentFunction, filterMessages } = await getFunctionCallSchema(props);
+  const { agentFunction, filterMessages } = getFunctionCallSchema(props);
   const functions: ChatCompletionCreateParams.Function[] = [agentFunction];
 
   const ai = getAIApi({
@@ -273,7 +270,7 @@ const functionCall = async (props: ActionProps) => {
 
   const response = await ai.chat.completions.create({
     model: extractModel.model,
-    temperature: 0.01,
+    temperature: 0,
     messages: filterMessages,
     function_call: {
       name: agentFunName
@@ -293,7 +290,7 @@ const functionCall = async (props: ActionProps) => {
 
     return {
       arg,
-      tokens: await countGptMessagesTokens(completeMessages, undefined, functions)
+      tokens: countGptMessagesTokens(completeMessages, undefined, functions)
     };
   } catch (error) {
     console.log(response.choices?.[0]?.message);
@@ -323,16 +320,12 @@ const completions = async ({
             content: replaceVariable(extractModel.customExtractPrompt || Prompt_ExtractJson, {
               description,
               json: extractKeys
-                .map((item) => {
-                  const valueType = item.valueType || 'string';
-                  if (valueType !== 'string' && valueType !== 'number') {
-                    item.enum = undefined;
-                  }
-
-                  return `{"type":${item.valueType || 'string'}, "key":"${item.key}", "description":"${item.desc}" ${
-                    item.enum ? `, "enum":"[${item.enum.split('\n')}]"` : ''
-                  }}`;
-                })
+                .map(
+                  (item) =>
+                    `{"key":"${item.key}", "description":"${item.desc}"${
+                      item.enum ? `, "enum":"[${item.enum.split('\n')}]"` : ''
+                    }}`
+                )
                 .join('\n'),
               text: `${histories.map((item) => `${item.obj}:${chatValue2RuntimePrompt(item.value).text}`).join('\n')}
 Human: ${content}`
@@ -342,10 +335,6 @@ Human: ${content}`
       ]
     }
   ];
-  const requestMessages = await loadRequestMessages({
-    messages: chats2GPTMessages({ messages, reserveId: false }),
-    useVision: false
-  });
 
   const ai = getAIApi({
     userKey: user.openaiAccount,
@@ -354,34 +343,39 @@ Human: ${content}`
   const data = await ai.chat.completions.create({
     model: extractModel.model,
     temperature: 0.01,
-    messages: requestMessages,
+    messages: chats2GPTMessages({ messages, reserveId: false }),
     stream: false
   });
   const answer = data.choices?.[0].message?.content || '';
 
   // parse response
-  const jsonStr = sliceJsonStr(answer);
+  const start = answer.indexOf('{');
+  const end = answer.lastIndexOf('}');
 
-  if (!jsonStr) {
+  if (start === -1 || end === -1) {
     return {
       rawResponse: answer,
-      tokens: await countMessagesTokens(messages),
+      tokens: countMessagesTokens(messages),
       arg: {}
     };
   }
 
+  const jsonStr = answer
+    .substring(start, end + 1)
+    .replace(/(\\n|\\)/g, '')
+    .replace(/  /g, '');
+
   try {
     return {
       rawResponse: answer,
-      tokens: await countMessagesTokens(messages),
+      tokens: countMessagesTokens(messages),
       arg: json5.parse(jsonStr) as Record<string, any>
     };
   } catch (error) {
-    console.log('Extract error, ai answer:', answer);
     console.log(error);
     return {
       rawResponse: answer,
-      tokens: await countMessagesTokens(messages),
+      tokens: countMessagesTokens(messages),
       arg: {}
     };
   }

@@ -1,54 +1,41 @@
 /* 
     Read db file content and response 3000 words
 */
-import type { NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { jsonRes } from '@fastgpt/service/common/response';
+import { connectToDatabase } from '@/service/mongo';
+import { readFileContentFromMongo } from '@fastgpt/service/common/file/gridfs/controller';
 import { authFile } from '@fastgpt/service/support/permission/auth/file';
-import { NextAPI } from '@/service/middleware/entry';
-import { DatasetSourceReadTypeEnum } from '@fastgpt/global/core/dataset/constants';
-import { readDatasetSourceRawText } from '@fastgpt/service/core/dataset/read';
-import { ApiRequestProps } from '@fastgpt/service/type/next';
-import { authCert } from '@fastgpt/service/support/permission/auth/common';
-import { OwnerPermissionVal } from '@fastgpt/global/support/permission/constant';
+import { BucketNameEnum } from '@fastgpt/global/common/file/constants';
 
-export type PreviewContextProps = {
-  type: DatasetSourceReadTypeEnum;
-  sourceId: string;
-  isQAImport?: boolean;
-  selector?: string;
-};
+export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+  try {
+    await connectToDatabase();
+    const { fileId, csvFormat } = req.body as { fileId: string; csvFormat?: boolean };
 
-async function handler(req: ApiRequestProps<PreviewContextProps>, res: NextApiResponse<any>) {
-  const { type, sourceId, isQAImport, selector } = req.body;
-
-  if (!sourceId) {
-    throw new Error('fileId is empty');
-  }
-
-  const { teamId } = await (async () => {
-    if (type === DatasetSourceReadTypeEnum.fileLocal) {
-      return authFile({
-        req,
-        authToken: true,
-        authApiKey: true,
-        fileId: sourceId,
-        per: OwnerPermissionVal
-      });
+    if (!fileId) {
+      throw new Error('fileId is empty');
     }
-    return authCert({ req, authApiKey: true, authToken: true });
-  })();
 
-  const rawText = await readDatasetSourceRawText({
-    teamId,
-    type,
-    sourceId: sourceId,
-    isQAImport,
-    selector
-  });
+    const { teamId } = await authFile({ req, authToken: true, fileId });
 
-  return {
-    previewContent: rawText.slice(0, 3000),
-    totalLength: rawText.length
-  };
+    const { rawText } = await readFileContentFromMongo({
+      teamId,
+      bucketName: BucketNameEnum.dataset,
+      fileId,
+      csvFormat
+    });
+
+    jsonRes(res, {
+      data: {
+        previewContent: rawText.slice(0, 3000),
+        totalLength: rawText.length
+      }
+    });
+  } catch (error) {
+    jsonRes(res, {
+      code: 500,
+      error
+    });
+  }
 }
-
-export default NextAPI(handler);

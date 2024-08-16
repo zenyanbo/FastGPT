@@ -5,7 +5,7 @@ import React, { Dispatch, useMemo, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Box } from '@chakra-ui/react';
 import ParentPaths from '@/components/common/ParentPaths';
-import MyBox from '@fastgpt/web/components/common/MyBox';
+import MyBox from '@/components/common/MyBox';
 
 type PathItemType = {
   parentId: string;
@@ -33,7 +33,7 @@ const DatasetSelectContainer = ({
 
   return (
     <MyModal
-      iconSrc="/imgs/workflow/db.png"
+      iconSrc="/imgs/module/db.png"
       title={
         <Box fontWeight={'normal'}>
           <ParentPaths
@@ -41,7 +41,7 @@ const DatasetSelectContainer = ({
               parentId: path.parentId,
               parentName: path.parentName
             }))}
-            FirstPathDom={t('common:core.chat.Select dataset')}
+            FirstPathDom={t('core.chat.Select dataset')}
             onClick={(e) => {
               setParentId(e);
             }}

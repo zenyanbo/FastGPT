@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, memo, useCallback, useState, useMemo } from 'react';
 import { Box } from '@chakra-ui/react';
+// @ts-ignore
 import mermaid from 'mermaid';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 

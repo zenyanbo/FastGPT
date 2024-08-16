@@ -1,99 +1,24 @@
 import { getErrText } from '../error/utils';
 import { replaceRegChars } from './tools';
 
-export const CUSTOM_SPLIT_SIGN = '-----CUSTOM_SPLIT_SIGN-----';
-
-type SplitProps = {
+/**
+ * text split into chunks
+ * chunkLen - one chunk len. max: 3500
+ * overlapLen - The size of the before and after Text
+ * chunkLen > overlapLen
+ * markdown
+ */
+export const splitText2Chunks = (props: {
   text: string;
   chunkLen: number;
   overlapRatio?: number;
   customReg?: string[];
-};
-export type TextSplitProps = Omit<SplitProps, 'text' | 'chunkLen'> & {
-  chunkLen?: number;
-};
-
-type SplitResponse = {
+}): {
   chunks: string[];
   chars: number;
-};
-
-// 判断字符串是否为markdown的表格形式
-const strIsMdTable = (str: string) => {
-  // 检查是否包含表格分隔符 |
-  if (!str.includes('|')) {
-    return false;
-  }
-
-  const lines = str.split('\n');
-
-  // 检查表格是否至少有两行
-  if (lines.length < 2) {
-    return false;
-  }
-
-  // 检查表头行是否包含 |
-  const headerLine = lines[0].trim();
-  if (!headerLine.startsWith('|') || !headerLine.endsWith('|')) {
-    return false;
-  }
-
-  // 检查分隔行是否由 | 和 - 组成
-  const separatorLine = lines[1].trim();
-  const separatorRegex = /^(\|[\s:]*-+[\s:]*)+\|$/;
-  if (!separatorRegex.test(separatorLine)) {
-    return false;
-  }
-
-  // 检查数据行是否包含 |
-  for (let i = 2; i < lines.length; i++) {
-    const dataLine = lines[i].trim();
-    if (dataLine && (!dataLine.startsWith('|') || !dataLine.endsWith('|'))) {
-      return false;
-    }
-  }
-
-  return true;
-};
-const markdownTableSplit = (props: SplitProps): SplitResponse => {
-  let { text = '', chunkLen } = props;
-  const splitText2Lines = text.split('\n');
-  const header = splitText2Lines[0];
-  const headerSize = header.split('|').length - 2;
-
-  const mdSplitString = `| ${new Array(headerSize > 0 ? headerSize : 1)
-    .fill(0)
-    .map(() => '---')
-    .join(' | ')} |`;
-
-  const chunks: string[] = [];
-  let chunk = `${header}
-${mdSplitString}
-`;
-
-  for (let i = 2; i < splitText2Lines.length; i++) {
-    if (chunk.length + splitText2Lines[i].length > chunkLen * 1.2) {
-      chunks.push(chunk);
-      chunk = `${header}
-${mdSplitString}
-`;
-    }
-    chunk += `${splitText2Lines[i]}\n`;
-  }
-
-  if (chunk) {
-    chunks.push(chunk);
-  }
-
-  return {
-    chunks,
-    chars: chunks.reduce((sum, chunk) => sum + chunk.length, 0)
-  };
-};
-
-const commonSplit = (props: SplitProps): SplitResponse => {
+  overlapRatio?: number;
+} => {
   let { text = '', chunkLen, overlapRatio = 0.2, customReg = [] } = props;
-
   const splitMarker = 'SPLIT_HERE_SPLIT_HERE';
   const codeBlockMarker = 'CODE_BLOCK_LINE_MARKER';
   const overlapLen = Math.round(chunkLen * overlapRatio);
@@ -102,8 +27,6 @@ const commonSplit = (props: SplitProps): SplitResponse => {
   text = text.replace(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g, function (match) {
     return match.replace(/\n/g, codeBlockMarker);
   });
-  // replace invalid \n
-  text = text.replace(/(\r?\n|\r){3,}/g, '\n\n\n');
 
   // The larger maxLen is, the next sentence is less likely to trigger splitting
   const stepReges: { reg: RegExp; maxLen: number }[] = [
@@ -144,7 +67,7 @@ const commonSplit = (props: SplitProps): SplitResponse => {
       ];
     }
 
-    const isCustomStep = checkIsCustomStep(step);
+    const isCustomSteep = checkIsCustomStep(step);
     const isMarkdownSplit = checkIsMarkdownSplit(step);
     const independentChunk = checkIndependentChunk(step);
 
@@ -154,7 +77,7 @@ const commonSplit = (props: SplitProps): SplitResponse => {
       .replace(
         reg,
         (() => {
-          if (isCustomStep) return splitMarker;
+          if (isCustomSteep) return splitMarker;
           if (independentChunk) return `${splitMarker}$1`;
           return `$1${splitMarker}`;
         })()
@@ -329,30 +252,4 @@ const commonSplit = (props: SplitProps): SplitResponse => {
   } catch (err) {
     throw new Error(getErrText(err));
   }
-};
-
-/**
- * text split into chunks
- * chunkLen - one chunk len. max: 3500
- * overlapLen - The size of the before and after Text
- * chunkLen > overlapLen
- * markdown
- */
-export const splitText2Chunks = (props: SplitProps): SplitResponse => {
-  let { text = '' } = props;
-  const start = Date.now();
-  const splitWithCustomSign = text.split(CUSTOM_SPLIT_SIGN);
-
-  const splitResult = splitWithCustomSign.map((item) => {
-    if (strIsMdTable(item)) {
-      return markdownTableSplit(props);
-    }
-
-    return commonSplit(props);
-  });
-
-  return {
-    chunks: splitResult.map((item) => item.chunks).flat(),
-    chars: splitResult.reduce((sum, item) => sum + item.chars, 0)
-  };
 };

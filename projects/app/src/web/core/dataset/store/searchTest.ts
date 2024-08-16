@@ -15,7 +15,7 @@ export type SearchTestStoreItemType = {
   limit: number;
   usingReRank: boolean;
   similarity: number;
-  queryExtensionModel?: string;
+  usingQueryExtension: boolean;
 };
 
 type State = {
@@ -32,7 +32,7 @@ export const useSearchTestStore = create<State>()(
         datasetTestList: [],
         pushDatasetTestItem(data) {
           set((state) => {
-            state.datasetTestList = [data, ...state.datasetTestList].slice(0, 50);
+            state.datasetTestList = [data, ...state.datasetTestList].slice(0, 100);
           });
         },
         delDatasetTestItemById(id) {

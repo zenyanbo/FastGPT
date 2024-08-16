@@ -1,16 +1,16 @@
 import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
-import type { ModuleDispatchProps } from '@fastgpt/global/core/workflow/runtime/type';
-import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import type { ModuleDispatchProps } from '@fastgpt/global/core/module/type.d';
+import { ModuleInputKeyEnum, ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
 import { datasetSearchResultConcat } from '@fastgpt/global/core/dataset/search/utils';
-import { filterSearchResultsByMaxChars } from '../../utils';
+import { filterSearchResultsByMaxChars } from '@fastgpt/global/core/dataset/search/utils';
 
 type DatasetConcatProps = ModuleDispatchProps<
   {
-    [NodeInputKeyEnum.datasetMaxTokens]: number;
+    [ModuleInputKeyEnum.datasetMaxTokens]: number;
   } & { [key: string]: SearchDataResponseItemType[] }
 >;
 type DatasetConcatResponse = {
-  [NodeOutputKeyEnum.datasetQuoteQA]: SearchDataResponseItemType[];
+  [ModuleOutputKeyEnum.datasetQuoteQA]: SearchDataResponseItemType[];
 };
 
 export async function dispatchDatasetConcat(
@@ -30,6 +30,6 @@ export async function dispatchDatasetConcat(
   );
 
   return {
-    [NodeOutputKeyEnum.datasetQuoteQA]: await filterSearchResultsByMaxChars(rrfConcatResults, limit)
+    [ModuleOutputKeyEnum.datasetQuoteQA]: filterSearchResultsByMaxChars(rrfConcatResults, limit)
   };
 }

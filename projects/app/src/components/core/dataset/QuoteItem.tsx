@@ -5,9 +5,9 @@ import type { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/ty
 import NextLink from 'next/link';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import MyTooltip from '@/components/MyTooltip';
 import dynamic from 'next/dynamic';
-import MyBox from '@fastgpt/web/components/common/MyBox';
+import MyBox from '@/components/common/MyBox';
 import { SearchScoreTypeEnum, SearchScoreTypeMap } from '@fastgpt/global/core/dataset/constants';
 
 const InputDataModal = dynamic(() => import('@/pages/dataset/detail/components/InputDataModal'));
@@ -19,26 +19,26 @@ const scoreTheme: Record<
     color: string;
     bg: string;
     borderColor: string;
-    colorScheme: string;
+    colorSchema: string;
   }
 > = {
   '0': {
     color: '#6F5DD7',
     bg: '#F0EEFF',
     borderColor: '#D3CAFF',
-    colorScheme: 'purple'
+    colorSchema: 'purple'
   },
   '1': {
     color: '#9E53C1',
     bg: '#FAF1FF',
     borderColor: '#ECF',
-    colorScheme: 'pink'
+    colorSchema: 'pink'
   },
   '2': {
     color: '#0884DD',
     bg: '#F0FBFF',
     borderColor: '#BCE7FF',
-    colorScheme: 'blue'
+    colorSchema: 'blue'
   }
 };
 
@@ -112,7 +112,7 @@ const QuoteItem = ({
           {score?.primaryScore && (
             <>
               {canViewSource ? (
-                <MyTooltip label={t(SearchScoreTypeMap[score.primaryScore.type]?.desc as any)}>
+                <MyTooltip label={t(SearchScoreTypeMap[score.primaryScore.type]?.desc)}>
                   <Flex
                     px={'12px'}
                     py={'5px'}
@@ -132,7 +132,7 @@ const QuoteItem = ({
                       mx={2}
                     />
                     <Box>
-                      {t(SearchScoreTypeMap[score.primaryScore.type]?.label as any)}
+                      {t(SearchScoreTypeMap[score.primaryScore.type]?.label)}
                       {SearchScoreTypeMap[score.primaryScore.type]?.showScore
                         ? ` ${score.primaryScore.value.toFixed(4)}`
                         : ''}
@@ -159,7 +159,7 @@ const QuoteItem = ({
           )}
           {canViewSource &&
             score.secondaryScore.map((item, i) => (
-              <MyTooltip key={item.type} label={t(SearchScoreTypeMap[item.type]?.desc as any)}>
+              <MyTooltip key={item.type} label={t(SearchScoreTypeMap[item.type]?.desc)}>
                 <Box fontSize={'xs'}>
                   <Flex alignItems={'flex-start'} lineHeight={1.2} mb={1}>
                     <Box
@@ -172,7 +172,7 @@ const QuoteItem = ({
                       <Box transform={'scale(0.9)'}>#{item.index + 1}</Box>
                     </Box>
                     <Box transform={'scale(0.9)'}>
-                      {t(SearchScoreTypeMap[item.type]?.label as any)}: {item.value.toFixed(4)}
+                      {t(SearchScoreTypeMap[item.type]?.label)}: {item.value.toFixed(4)}
                     </Box>
                   </Flex>
                   <Box h={'4px'}>
@@ -183,9 +183,7 @@ const QuoteItem = ({
                         w={'100%'}
                         size="sm"
                         borderRadius={'20px'}
-                        {...(scoreTheme[i] && {
-                          colorScheme: scoreTheme[i].colorScheme
-                        })}
+                        colorScheme={scoreTheme[i]?.colorSchema}
                         bg="#E8EBF0"
                       />
                     )}
@@ -201,15 +199,8 @@ const QuoteItem = ({
         </Box>
 
         {canViewSource && (
-          <Flex
-            alignItems={'center'}
-            flexWrap={'wrap'}
-            mt={3}
-            gap={4}
-            color={'myGray.500'}
-            fontSize={'xs'}
-          >
-            <MyTooltip label={t('common:core.dataset.Quote Length')}>
+          <Flex alignItems={'center'} mt={3} gap={4} color={'myGray.500'} fontSize={'xs'}>
+            <MyTooltip label={t('core.dataset.Quote Length')}>
               <Flex alignItems={'center'}>
                 <MyIcon name="common/text/t" w={'14px'} mr={1} color={'myGray.500'} />
                 {quoteItem.q.length + (quoteItem.a?.length || 0)}
@@ -218,14 +209,13 @@ const QuoteItem = ({
             <RawSourceBox
               fontWeight={'bold'}
               color={'black'}
-              collectionId={quoteItem.collectionId}
               sourceName={quoteItem.sourceName}
               sourceId={quoteItem.sourceId}
               canView={canViewSource}
             />
             <Box flex={1} />
             {quoteItem.id && (
-              <MyTooltip label={t('common:core.dataset.data.Edit')}>
+              <MyTooltip label={t('core.dataset.data.Edit')}>
                 <Box
                   className="hover-data"
                   visibility={'hidden'}
@@ -261,7 +251,7 @@ const QuoteItem = ({
                 color={'primary.500'}
                 href={`/dataset/detail?datasetId=${quoteItem.datasetId}&currentTab=dataCard&collectionId=${quoteItem.collectionId}`}
               >
-                {t('common:core.dataset.Go Dataset')}
+                {t('core.dataset.Go Dataset')}
                 <MyIcon name={'common/rightArrowLight'} w={'10px'} />
               </Link>
             )}

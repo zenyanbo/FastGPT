@@ -14,9 +14,8 @@ import {
 import { ImportSourceItemType } from '@/web/core/dataset/type.d';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import MyTooltip from '@/components/MyTooltip';
 import dynamic from 'next/dynamic';
-import { useI18n } from '@/web/context/I18n';
 
 const PreviewRawText = dynamic(() => import('./PreviewRawText'));
 
@@ -30,7 +29,6 @@ export const RenderUploadFiles = ({
   showPreviewContent?: boolean;
 }) => {
   const { t } = useTranslation();
-  const { fileT } = useI18n();
   const [previewFile, setPreviewFile] = useState<ImportSourceItemType>();
 
   return files.length > 0 ? (
@@ -40,16 +38,16 @@ export const RenderUploadFiles = ({
           <Thead draggable={false}>
             <Tr bg={'myGray.100'} mb={2}>
               <Th borderLeftRadius={'md'} borderBottom={'none'} py={4}>
-                {fileT('file_name')}
+                {t('common.file.File Name')}
               </Th>
               <Th borderBottom={'none'} py={4}>
-                {t('common:core.dataset.import.Upload file progress')}
+                {t('core.dataset.import.Upload file progress')}
               </Th>
               <Th borderBottom={'none'} py={4}>
-                {fileT('file_size')}
+                {t('common.file.File Size')}
               </Th>
               <Th borderRightRadius={'md'} borderBottom={'none'} py={4}>
-                {t('common:common.Action')}
+                {t('common.Action')}
               </Th>
             </Tr>
           </Thead>
@@ -85,7 +83,7 @@ export const RenderUploadFiles = ({
                   {!item.isUploading && (
                     <Flex alignItems={'center'} gap={4}>
                       {showPreviewContent && (
-                        <MyTooltip label={t('common:core.dataset.import.Preview raw text')}>
+                        <MyTooltip label={t('core.dataset.import.Preview raw text')}>
                           <IconButton
                             variant={'whitePrimary'}
                             size={'sm'}

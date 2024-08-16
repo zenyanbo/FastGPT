@@ -22,10 +22,10 @@ const EditFolderModal = ({
     () =>
       isEdit
         ? {
-            title: t('common:dataset.Edit Folder')
+            title: t('dataset.Edit Folder')
           }
         : {
-            title: t('common:dataset.Create Folder')
+            title: t('dataset.Create Folder')
           },
     [isEdit, t]
   );
@@ -36,7 +36,7 @@ const EditFolderModal = ({
       if (!val) return Promise.resolve('');
       return editCallback(val);
     },
-    onSuccess: () => {
+    onSuccess: (res) => {
       onClose();
     }
   });
@@ -47,14 +47,14 @@ const EditFolderModal = ({
         <Input
           ref={inputRef}
           defaultValue={name}
-          placeholder={t('common:dataset.Folder Name') || ''}
+          placeholder={t('dataset.Folder Name') || ''}
           autoFocus
           maxLength={20}
         />
       </ModalBody>
       <ModalFooter>
         <Button isLoading={isLoading} onClick={onSave}>
-          {t('common:common.Confirm')}
+          {t('common.Confirm')}
         </Button>
       </ModalFooter>
     </MyModal>

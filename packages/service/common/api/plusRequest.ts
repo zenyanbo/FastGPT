@@ -1,9 +1,4 @@
-import axios, {
-  Method,
-  InternalAxiosRequestConfig,
-  AxiosResponse,
-  AxiosRequestConfig
-} from 'axios';
+import axios, { Method, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { FastGPTProUrl } from '../system/constants';
 
 interface ConfigType {
@@ -123,9 +118,3 @@ export function PUT<T = undefined>(url: string, data = {}, config: ConfigType = 
 export function DELETE<T = undefined>(url: string, data = {}, config: ConfigType = {}): Promise<T> {
   return request(url, data, config, 'DELETE');
 }
-
-export const plusRequest = (config: AxiosRequestConfig) =>
-  instance.request({
-    ...config,
-    baseURL: FastGPTProUrl
-  });

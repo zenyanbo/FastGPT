@@ -4,35 +4,30 @@ import type { GridProps } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import type { IconNameType } from '@fastgpt/web/components/common/Icon/type.d';
 
-export type Props<ValueType = string> = Omit<GridProps, 'onChange'> & {
-  list: { value: ValueType; label: string; icon: string }[];
-  value: ValueType;
+// @ts-ignore
+export interface Props extends GridProps {
+  list: { id: string; label: string; icon: string }[];
+  activeId: string;
   size?: 'sm' | 'md' | 'lg';
-  onChange: (value: ValueType) => void;
-};
+  onChange: (id: string) => void;
+}
 
-const SideTabs = <ValueType = string,>({
-  list,
-  size = 'md',
-  value,
-  onChange,
-  ...props
-}: Props<ValueType>) => {
+const SideTabs = ({ list, size = 'md', activeId, onChange, ...props }: Props) => {
   const sizeMap = useMemo(() => {
     switch (size) {
       case 'sm':
         return {
-          fontSize: 'xs',
+          fontSize: 'sm',
           inlineP: 1
         };
       case 'md':
         return {
-          fontSize: 'sm',
+          fontSize: 'md',
           inlineP: 2
         };
       case 'lg':
         return {
-          fontSize: 'md',
+          fontSize: 'lg',
           inlineP: 3
         };
     }
@@ -42,14 +37,14 @@ const SideTabs = <ValueType = string,>({
     <Box fontSize={sizeMap.fontSize} {...props}>
       {list.map((item) => (
         <Flex
-          key={item.value as string}
+          key={item.id}
           py={sizeMap.inlineP}
           borderRadius={'md'}
           px={3}
           mb={2}
           fontWeight={'medium'}
           alignItems={'center'}
-          {...(value === item.value
+          {...(activeId === item.id
             ? {
                 bg: ' primary.100 !important',
                 color: 'primary.600 ',
@@ -60,12 +55,11 @@ const SideTabs = <ValueType = string,>({
                 color: 'myGray.600'
               })}
           _hover={{
-            color: 'primary.600',
-            bg: 'myGray.100'
+            bg: 'myGray.05'
           }}
           onClick={() => {
-            if (value === item.value) return;
-            onChange(item.value);
+            if (activeId === item.id) return;
+            onChange(item.id);
           }}
         >
           <MyIcon mr={2} name={item.icon as IconNameType} w={'20px'} />
@@ -76,4 +70,4 @@ const SideTabs = <ValueType = string,>({
   );
 };
 
-export default SideTabs;
+export default React.memo(SideTabs);

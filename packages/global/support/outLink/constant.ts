@@ -1,8 +1,5 @@
-export enum PublishChannelEnum {
+export enum OutLinkTypeEnum {
   share = 'share',
   iframe = 'iframe',
-  apikey = 'apikey',
-  feishu = 'feishu',
-  wecom = 'wecom',
-  officialAccount = 'official_account'
+  apikey = 'apikey'
 }

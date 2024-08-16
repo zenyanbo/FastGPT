@@ -69,8 +69,8 @@ const Standard = ({
       refetchTeamSubPlan();
       router.reload();
     },
-    successToast: t('common:support.wallet.subscription.Standard update success'),
-    errorToast: t('common:support.wallet.subscription.Standard update fail')
+    successToast: t('support.wallet.subscription.Standard update success'),
+    errorToast: t('support.wallet.subscription.Standard update fail')
   });
 
   const { mutate: onclickPreCheckStandPlan, isLoading: isCheckingStandardPlan } = useRequest({
@@ -98,9 +98,9 @@ const Standard = ({
   return (
     <Flex flexDirection={'column'} alignItems={'center'} position={'relative'}>
       <Box fontWeight={'bold'} fontSize={['24px', '36px']}>
-        {t('common:support.wallet.subscription.Sub plan')}
+        {t('support.wallet.subscription.Sub plan')}
       </Box>
-      <Box mt={8} mb={10} color={'myGray.500'} fontSize={'md'}>
+      <Box mt={8} mb={10} color={'myGray.500'} fontSize={'lg'}>
         {t('support.wallet.subscription.Sub plan tip', {
           title: feConfigs?.systemTitle
         })}
@@ -108,13 +108,13 @@ const Standard = ({
       <Box>
         <RowTabs
           list={[
-            { label: t('common:support.wallet.subscription.mode.Month'), value: SubModeEnum.month },
+            { label: t('support.wallet.subscription.mode.Month'), value: SubModeEnum.month },
             {
               label: (
                 <Flex>
-                  {t('common:support.wallet.subscription.mode.Year')}
+                  {t('support.wallet.subscription.mode.Year')}
                   <Box color={selectSubMode === SubModeEnum.month ? 'red.600' : 'auto'}>
-                    ({t('common:support.wallet.subscription.mode.Year sale')})
+                    ({t('support.wallet.subscription.mode.Year sale')})
                   </Box>
                 </Flex>
               ),
@@ -156,14 +156,14 @@ const Standard = ({
                     borderColor: 'myGray.150'
                   })}
             >
-              <Box fontSize={'md'} fontWeight={'500'}>
-                {t(item.label as any)}
+              <Box fontSize={'lg'} fontWeight={'500'}>
+                {t(item.label)}
               </Box>
               <Box fontSize={['32px', '42px']} fontWeight={'bold'}>
                 ￥{item.price}
               </Box>
               <Box color={'myGray.500'} h={'40px'} fontSize={'xs'}>
-                {t(item.desc as any, { title: feConfigs?.systemTitle })}
+                {t(item.desc, { title: feConfigs?.systemTitle })}
               </Box>
               {(() => {
                 if (
@@ -172,7 +172,7 @@ const Standard = ({
                 ) {
                   return (
                     <Button isDisabled mt={4} mb={6} w={'100%'} variant={'solid'}>
-                      {t('common:support.wallet.subscription.Nonsupport')}
+                      {t('support.wallet.subscription.Nonsupport')}
                     </Button>
                   );
                 }
@@ -182,7 +182,7 @@ const Standard = ({
                 ) {
                   return (
                     <Button mt={4} mb={6} w={'100%'} variant={'whiteBase'} isDisabled>
-                      {t('common:support.wallet.subscription.Next plan')}
+                      {t('support.wallet.subscription.Next plan')}
                     </Button>
                   );
                 }
@@ -204,7 +204,7 @@ const Standard = ({
                         })
                       }
                     >
-                      {t('common:support.wallet.subscription.Current plan')}
+                      {t('support.wallet.subscription.Current plan')}
                     </Button>
                   );
                 }
@@ -223,7 +223,7 @@ const Standard = ({
                       })
                     }
                   >
-                    {t('common:support.wallet.subscription.Buy now')}
+                    {t('support.wallet.subscription.Buy now')}
                   </Button>
                 );
               })()}
@@ -309,7 +309,6 @@ const ConfirmPayModal = ({
   onConfirmPay
 }: ConfirmPayModalProps & { onClose: () => void; onConfirmPay: () => void }) => {
   const { t } = useTranslation();
-
   const [qrPayData, setQRPayData] = useState<QRPayProps>();
 
   const formatPayPrice = Math.ceil(formatStorePrice2Read(payPrice));
@@ -336,29 +335,21 @@ const ConfirmPayModal = ({
     <MyModal
       isOpen
       iconSrc="modal/confirmPay"
-      title={t('common:support.wallet.Confirm pay')}
+      title={t('support.wallet.Confirm pay')}
       onClose={onClose}
     >
       <ModalBody py={5} px={9}>
         <Flex>
-          <Box flex={'0 0 100px'}>{t('common:pay.new_package_price')}</Box>
-          <Box>{t('common:pay.yuan', { amount: formatStorePrice2Read(totalPrice) })}</Box>
+          <Box flex={'0 0 100px'}>新套餐价格</Box>
+          <Box>{formatStorePrice2Read(totalPrice)}元</Box>
         </Flex>
         <Flex mt={6}>
-          <Box flex={'0 0 100px'}>{t('common:pay.old_package_price')}</Box>
-          <Box>
-            {t('common:pay.yuan', {
-              amount: Math.floor(formatStorePrice2Read(totalPrice - payPrice))
-            })}
-          </Box>
+          <Box flex={'0 0 100px'}>旧套餐余额</Box>
+          <Box>{Math.floor(formatStorePrice2Read(totalPrice - payPrice))}元</Box>
         </Flex>
         <Flex mt={6}>
-          <Box flex={'0 0 100px'}>{t('common:pay.balance_notice')}</Box>
-          <Box>
-            {t('common:pay.yuan', {
-              amount: formatPayPrice
-            })}
-          </Box>
+          <Box flex={'0 0 100px'}>需支付</Box>
+          <Box>{formatPayPrice}元</Box>
         </Flex>
       </ModalBody>
       <ModalFooter
@@ -368,15 +359,13 @@ const ConfirmPayModal = ({
         justifyContent={'flex-start'}
         px={0}
       >
-        <Box>{t('common:pay.balance') + ': '}</Box>
+        <Box>账号余额: </Box>
         <Box ml={2} flex={1}>
-          {t('common:pay.yuan', {
-            amount: formatTeamBalance
-          })}
+          {formatTeamBalance}元
         </Box>
         {teamBalance >= payPrice ? (
           <Button size={'sm'} onClick={onConfirmPay}>
-            {t('common:pay.confirm_pay')}
+            确认支付
           </Button>
         ) : (
           <Button
@@ -386,7 +375,7 @@ const ConfirmPayModal = ({
               handleClickPay(Math.ceil(formatStorePrice2Read(payPrice - teamBalance)));
             }}
           >
-            {t('common:pay.to_recharge')}
+            余额不足，去充值
           </Button>
         )}
       </ModalFooter>

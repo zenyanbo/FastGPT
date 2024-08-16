@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Flex, Grid, Link } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
+
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 
 const Points = () => {
@@ -15,10 +16,10 @@ const Points = () => {
       position={'relative'}
     >
       <Box id="point-card" fontWeight={'bold'} fontSize={['24px', '36px']}>
-        {t('common:support.wallet.subscription.Ai points')}
+        {t('support.wallet.subscription.Ai points')}
       </Box>
       <Link href="https://tiktokenizer.vercel.app/" target="_blank">
-        {t('common:support.wallet.subscription.token_compute')}
+        点击查看在线 Tokens 计算器
       </Link>
       <Grid gap={6} mt={['30px', '40px']} w={'100%'}>
         <Box
@@ -35,20 +36,16 @@ const Points = () => {
             borderRightColor={'myGray.150'}
             py={4}
             px={6}
-            fontSize={'md'}
+            fontSize={'lg'}
             fontWeight={'bold'}
           >
-            {t('common:support.wallet.subscription.ai_model')}
+            AI语言模型
           </Box>
           <Box flex={4} textAlign={'center'}>
             {llmModelList?.map((item, i) => (
               <Flex key={item.model} py={4} bg={i % 2 !== 0 ? 'myGray.50' : ''}>
                 <Box flex={'1 0 0'}>{item.name}</Box>
-                <Box flex={'1 0 0'}>
-                  {item.charsPointsPrice +
-                    t('common:support.wallet.subscription.point') +
-                    ' / 1000 Tokens'}
-                </Box>
+                <Box flex={'1 0 0'}>{item.charsPointsPrice}积分 / 1000 Tokens</Box>
               </Flex>
             ))}
           </Box>
@@ -62,22 +59,18 @@ const Points = () => {
           overflow={'hidden'}
         >
           <Box flex={1} borderRightWidth={'1px'} borderRightColor={'myGray.150'} py={4} px={6}>
-            <Box fontSize={'md'} fontWeight={'bold'}>
-              {t('common:core.ai.model.Vector Model')}
+            <Box fontSize={'lg'} fontWeight={'bold'}>
+              索引模型
             </Box>
             <Box fontSize={'sm'} mt={1} color={'myGray.500'}>
-              {t('common:core.ai.model.doc_index_and_dialog')}
+              文档索引 & 对话索引
             </Box>
           </Box>
           <Box flex={4} textAlign={'center'}>
             {vectorModelList?.map((item, i) => (
               <Flex key={item.model} py={4} bg={i % 2 !== 0 ? 'myGray.50' : ''}>
                 <Box flex={'1 0 0'}>{item.name}</Box>
-                <Box flex={'1 0 0'}>
-                  {item.charsPointsPrice +
-                    t('common:support.wallet.subscription.point') +
-                    ' / 1000 Tokens'}
-                </Box>
+                <Box flex={'1 0 0'}>{item.charsPointsPrice}积分 / 1000 Tokens</Box>
               </Flex>
             ))}
           </Box>
@@ -91,20 +84,15 @@ const Points = () => {
           overflow={'hidden'}
         >
           <Box flex={1} borderRightWidth={'1px'} borderRightColor={'myGray.150'} py={4} px={6}>
-            <Box fontSize={'md'} fontWeight={'bold'}>
-              {t('common:core.app.TTS')}
+            <Box fontSize={'lg'} fontWeight={'bold'}>
+              语音播放
             </Box>
           </Box>
           <Box flex={4} textAlign={'center'}>
             {audioSpeechModelList?.map((item, i) => (
               <Flex key={item.model} py={4} bg={i % 2 !== 0 ? 'myGray.50' : ''}>
                 <Box flex={'1 0 0'}>{item.name}</Box>
-                <Box flex={'1 0 0'}>
-                  {item.charsPointsPrice +
-                    t('common:support.wallet.subscription.point') +
-                    ' / 1000' +
-                    t('common:unit.character')}
-                </Box>
+                <Box flex={'1 0 0'}>{item.charsPointsPrice}积分 / 1000字符</Box>
               </Flex>
             ))}
           </Box>
@@ -118,19 +106,14 @@ const Points = () => {
           overflow={'hidden'}
         >
           <Box flex={1} borderRightWidth={'1px'} borderRightColor={'myGray.150'} py={4} px={6}>
-            <Box fontSize={'md'} fontWeight={'bold'}>
-              {t('common:core.app.Whisper')}
+            <Box fontSize={'lg'} fontWeight={'bold'}>
+              语音输入
             </Box>
           </Box>
           <Box flex={4} textAlign={'center'} h={'100%'}>
             <Flex py={4}>
               <Box flex={'1 0 0'}>{whisperModel?.name}</Box>
-              <Box flex={'1 0 0'}>
-                {whisperModel?.charsPointsPrice +
-                  t('common:support.wallet.subscription.point') +
-                  ' / 1000' +
-                  t('common:unit.minute')}
-              </Box>
+              <Box flex={'1 0 0'}>{whisperModel?.charsPointsPrice}积分 / 分钟</Box>
             </Flex>
           </Box>
         </Box>

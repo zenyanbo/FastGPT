@@ -6,36 +6,32 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalContentProps,
-  Box
+  Box,
+  Image,
+  useMediaQuery
 } from '@chakra-ui/react';
-import MyBox from '../MyBox';
-import { useSystem } from '../../../hooks/useSystem';
-import Avatar from '../Avatar';
+import MyIcon from '../Icon';
 
 export interface MyModalProps extends ModalContentProps {
   iconSrc?: string;
   title?: any;
   isCentered?: boolean;
-  isLoading?: boolean;
-  isOpen?: boolean;
+  isOpen: boolean;
   onClose?: () => void;
-  closeOnOverlayClick?: boolean;
 }
 
 const MyModal = ({
-  isOpen = true,
+  isOpen,
   onClose,
   iconSrc,
   title,
   children,
   isCentered,
-  isLoading,
   w = 'auto',
   maxW = ['90vw', '600px'],
-  closeOnOverlayClick = true,
   ...props
 }: MyModalProps) => {
-  const { isPc } = useSystem();
+  const [isPc] = useMediaQuery('(min-width: 900px)');
 
   return (
     <Modal
@@ -43,8 +39,6 @@ const MyModal = ({
       onClose={() => onClose && onClose()}
       autoFocus={false}
       isCentered={isPc ? isCentered : true}
-      blockScrollOnMount={false}
-      closeOnOverlayClick={closeOnOverlayClick}
     >
       <ModalOverlay />
       <ModalContent
@@ -61,43 +55,37 @@ const MyModal = ({
           <ModalHeader
             display={'flex'}
             alignItems={'center'}
+            fontWeight={500}
             background={'#FBFBFC'}
             borderBottom={'1px solid #F4F6F8'}
             roundedTop={'lg'}
             py={'10px'}
-            fontSize={'md'}
-            fontWeight={'bold'}
           >
             {iconSrc && (
               <>
-                <Avatar
-                  objectFit={'contain'}
-                  alt=""
-                  src={iconSrc}
-                  w={'1.5rem'}
-                  borderRadius={'md'}
-                />
+                {iconSrc.startsWith('/') ? (
+                  <Image mr={3} objectFit={'contain'} alt="" src={iconSrc} w={'20px'} />
+                ) : (
+                  <MyIcon mr={3} name={iconSrc as any} w={'20px'} />
+                )}
               </>
             )}
-            <Box ml={3} color={'myGray.900'} fontWeight={'500'}>
-              {title}
-            </Box>
+            {title}
             <Box flex={1} />
             {onClose && (
-              <ModalCloseButton position={'relative'} fontSize={'xs'} top={0} right={0} />
+              <ModalCloseButton position={'relative'} fontSize={'sm'} top={0} right={0} />
             )}
           </ModalHeader>
         )}
 
-        <MyBox
-          isLoading={isLoading}
+        <Box
           overflow={props.overflow || 'overlay'}
           h={'100%'}
           display={'flex'}
           flexDirection={'column'}
         >
           {children}
-        </MyBox>
+        </Box>
       </ModalContent>
     </Modal>
   );

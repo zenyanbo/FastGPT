@@ -1,6 +1,6 @@
 import { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { getAIApi } from '../../../../ai/config';
-import { filterGPTMessageByMaxTokens, loadRequestMessages } from '../../../../chat/utils';
+import { filterGPTMessageByMaxTokens } from '../../../../chat/utils';
 import {
   ChatCompletion,
   StreamChatType,
@@ -13,23 +13,16 @@ import {
   responseWriteController,
   responseWriteNodeStatus
 } from '../../../../../common/response';
-import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
-import { textAdaptGptResponse } from '@fastgpt/global/core/workflow/runtime/utils';
+import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { textAdaptGptResponse } from '@fastgpt/global/core/module/runtime/utils';
 import { ChatCompletionRequestMessageRoleEnum } from '@fastgpt/global/core/ai/constants';
 import { dispatchWorkFlow } from '../../index';
-import { DispatchToolModuleProps, RunToolResponse, ToolNodeItemType } from './type.d';
+import { DispatchToolModuleProps, RunToolResponse, ToolModuleItemType } from './type.d';
 import json5 from 'json5';
-import { countGptMessagesTokens } from '../../../../../common/string/tiktoken/index';
-import {
-  getNanoid,
-  replaceVariable,
-  sliceJsonStr,
-  sliceStrStartEnd
-} from '@fastgpt/global/common/string/tools';
+import { countGptMessagesTokens } from '@fastgpt/global/common/string/tiktoken';
+import { getNanoid, replaceVariable } from '@fastgpt/global/common/string/tools';
 import { AIChatItemType } from '@fastgpt/global/core/chat/type';
 import { GPTMessages2Chats } from '@fastgpt/global/core/chat/adapt';
-import { updateToolInputValue } from './utils';
-import { computedMaxToken, computedTemperature } from '../../../../ai/utils';
 
 type FunctionCallCompletion = {
   id: string;
@@ -39,32 +32,28 @@ type FunctionCallCompletion = {
   toolAvatar?: string;
 };
 
-const ERROR_TEXT = 'Tool run error';
-
 export const runToolWithPromptCall = async (
   props: DispatchToolModuleProps & {
     messages: ChatCompletionMessageParam[];
-    toolNodes: ToolNodeItemType[];
+    toolModules: ToolModuleItemType[];
     toolModel: LLMModelItemType;
   },
   response?: RunToolResponse
 ): Promise<RunToolResponse> => {
   const {
     toolModel,
-    toolNodes,
+    toolModules,
     messages,
     res,
-    requestOrigin,
-    runtimeNodes,
+    runtimeModules,
     detail = false,
-    node,
-    stream,
-    params: { temperature = 0, maxToken = 4000, aiChatVision }
+    module,
+    stream
   } = props;
   const assistantResponses = response?.assistantResponses || [];
 
   const toolsPrompt = JSON.stringify(
-    toolNodes.map((item) => {
+    toolModules.map((module) => {
       const properties: Record<
         string,
         {
@@ -73,7 +62,7 @@ export const runToolWithPromptCall = async (
           required?: boolean;
         }
       > = {};
-      item.toolParams.forEach((item) => {
+      module.toolParams.forEach((item) => {
         properties[item.key] = {
           type: 'string',
           description: item.toolDescription || ''
@@ -81,12 +70,12 @@ export const runToolWithPromptCall = async (
       });
 
       return {
-        toolId: item.nodeId,
-        description: item.intro,
+        toolId: module.moduleId,
+        description: module.intro,
         parameters: {
           type: 'object',
           properties,
-          required: item.toolParams.filter((item) => item.required).map((item) => item.key)
+          required: module.toolParams.filter((item) => item.required).map((item) => item.key)
         }
       };
     })
@@ -94,57 +83,42 @@ export const runToolWithPromptCall = async (
 
   const lastMessage = messages[messages.length - 1];
   if (typeof lastMessage.content !== 'string') {
-    return Promise.reject('Prompt call invalid input');
+    return Promise.reject('暂时只支持纯文本');
   }
   lastMessage.content = replaceVariable(lastMessage.content, {
     toolsPrompt
   });
 
-  const filterMessages = await filterGPTMessageByMaxTokens({
+  const filterMessages = filterGPTMessageByMaxTokens({
     messages,
     maxTokens: toolModel.maxContext - 500 // filter token. not response maxToken
   });
-  const [requestMessages, max_tokens] = await Promise.all([
-    loadRequestMessages({
-      messages: filterMessages,
-      useVision: toolModel.vision && aiChatVision,
-      origin: requestOrigin
-    }),
-    computedMaxToken({
-      model: toolModel,
-      maxToken,
-      filterMessages
-    })
-  ]);
-  const requestBody = {
-    ...toolModel?.defaultConfig,
-    model: toolModel.model,
-    temperature: computedTemperature({
-      model: toolModel,
-      temperature
-    }),
-    max_tokens,
-    stream,
-    messages: requestMessages
-  };
-
-  // console.log(JSON.stringify(requestBody, null, 2));
+  // console.log(JSON.stringify(filterMessages, null, 2));
   /* Run llm */
   const ai = getAIApi({
     timeout: 480000
   });
-  const aiResponse = await ai.chat.completions.create(requestBody, {
-    headers: {
-      Accept: 'application/json, text/plain, */*'
+  const aiResponse = await ai.chat.completions.create(
+    {
+      ...toolModel?.defaultConfig,
+      model: toolModel.model,
+      temperature: 0,
+      stream,
+      messages: filterMessages
+    },
+    {
+      headers: {
+        Accept: 'application/json, text/plain, */*'
+      }
     }
-  });
+  );
 
   const answer = await (async () => {
-    if (res && stream) {
+    if (stream) {
       const { answer } = await streamResponse({
         res,
         detail,
-        toolNodes,
+        toolModules,
         stream: aiResponse
       });
 
@@ -156,25 +130,17 @@ export const runToolWithPromptCall = async (
     }
   })();
 
-  const { answer: replaceAnswer, toolJson } = parseAnswer(answer);
+  const parseAnswerResult = parseAnswer(answer);
+  // console.log(parseAnswer, '==11==');
   // No tools
-  if (!toolJson) {
-    if (replaceAnswer === ERROR_TEXT && stream && detail) {
-      responseWrite({
-        res,
-        event: SseResponseEventEnum.answer,
-        data: textAdaptGptResponse({
-          text: replaceAnswer
-        })
-      });
-    }
+  if (typeof parseAnswerResult === 'string') {
     // No tool is invoked, indicating that the process is over
     const gptAssistantResponse: ChatCompletionAssistantMessageParam = {
       role: ChatCompletionRequestMessageRoleEnum.Assistant,
-      content: replaceAnswer
+      content: parseAnswerResult
     };
     const completeMessages = filterMessages.concat(gptAssistantResponse);
-    const tokens = await countGptMessagesTokens(completeMessages, undefined);
+    const tokens = countGptMessagesTokens(completeMessages, undefined);
     // console.log(tokens, 'response token');
 
     // concat tool assistant
@@ -190,16 +156,18 @@ export const runToolWithPromptCall = async (
 
   // Run the selected tool.
   const toolsRunResponse = await (async () => {
-    const toolNode = toolNodes.find((item) => item.nodeId === toolJson.name);
-    if (!toolNode) return Promise.reject('tool not found');
+    if (!parseAnswerResult) return Promise.reject('tool run error');
 
-    toolJson.toolName = toolNode.name;
-    toolJson.toolAvatar = toolNode.avatar;
+    const toolModule = toolModules.find((module) => module.moduleId === parseAnswerResult.name);
+    if (!toolModule) return Promise.reject('tool not found');
+
+    parseAnswerResult.toolName = toolModule.name;
+    parseAnswerResult.toolAvatar = toolModule.avatar;
 
     // run tool flow
     const startParams = (() => {
       try {
-        return json5.parse(toolJson.arguments);
+        return json5.parse(parseAnswerResult.arguments);
       } catch (error) {
         return {};
       }
@@ -212,11 +180,11 @@ export const runToolWithPromptCall = async (
         event: SseResponseEventEnum.toolCall,
         data: JSON.stringify({
           tool: {
-            id: toolJson.id,
-            toolName: toolNode.name,
-            toolAvatar: toolNode.avatar,
-            functionName: toolJson.name,
-            params: toolJson.arguments,
+            id: parseAnswerResult.id,
+            toolName: toolModule.name,
+            toolAvatar: toolModule.avatar,
+            functionName: parseAnswerResult.name,
+            params: parseAnswerResult.arguments,
             response: ''
           }
         })
@@ -225,16 +193,11 @@ export const runToolWithPromptCall = async (
 
     const moduleRunResponse = await dispatchWorkFlow({
       ...props,
-      isToolCall: true,
-      runtimeNodes: runtimeNodes.map((item) =>
-        item.nodeId === toolNode.nodeId
-          ? {
-              ...item,
-              isEntry: true,
-              inputs: updateToolInputValue({ params: startParams, inputs: item.inputs })
-            }
-          : item
-      )
+      runtimeModules: runtimeModules.map((module) => ({
+        ...module,
+        isEntry: module.moduleId === toolModule.moduleId
+      })),
+      startParams
     });
 
     const stringToolResponse = (() => {
@@ -251,11 +214,11 @@ export const runToolWithPromptCall = async (
         event: SseResponseEventEnum.toolResponse,
         data: JSON.stringify({
           tool: {
-            id: toolJson.id,
+            id: parseAnswerResult.id,
             toolName: '',
             toolAvatar: '',
             params: '',
-            response: sliceStrStartEnd(stringToolResponse, 500, 500)
+            response: stringToolResponse
           }
         })
       });
@@ -270,25 +233,25 @@ export const runToolWithPromptCall = async (
   if (stream && detail) {
     responseWriteNodeStatus({
       res,
-      name: node.name
+      name: module.name
     });
   }
 
   // 合并工具调用的结果，使用 functionCall 格式存储。
   const assistantToolMsgParams: ChatCompletionAssistantMessageParam = {
     role: ChatCompletionRequestMessageRoleEnum.Assistant,
-    function_call: toolJson
+    function_call: parseAnswerResult
   };
   const concatToolMessages = [
-    ...requestMessages,
+    ...filterMessages,
     assistantToolMsgParams
   ] as ChatCompletionMessageParam[];
-  const tokens = await countGptMessagesTokens(concatToolMessages, undefined);
+  const tokens = countGptMessagesTokens(concatToolMessages, undefined);
   const completeMessages: ChatCompletionMessageParam[] = [
     ...concatToolMessages,
     {
       role: ChatCompletionRequestMessageRoleEnum.Function,
-      name: toolJson.name,
+      name: parseAnswerResult.name,
       content: toolsRunResponse.toolResponsePrompt
     }
   ];
@@ -306,7 +269,7 @@ export const runToolWithPromptCall = async (
     : [toolsRunResponse.moduleRunResponse];
 
   // get the next user prompt
-  lastMessage.content += `${replaceAnswer}
+  lastMessage.content += `${answer}
 TOOL_RESPONSE: """
 ${toolsRunResponse.toolResponsePrompt}
 """
@@ -345,7 +308,7 @@ async function streamResponse({
 }: {
   res: NextApiResponse;
   detail: boolean;
-  toolNodes: ToolNodeItemType[];
+  toolModules: ToolModuleItemType[];
   stream: StreamChatType;
 }) {
   const write = responseWriteController({
@@ -363,8 +326,6 @@ async function streamResponse({
     }
 
     const responseChoice = part.choices?.[0]?.delta;
-    // console.log(responseChoice, '---===');
-
     if (responseChoice.content) {
       const content = responseChoice?.content || '';
       textAnswer += content;
@@ -399,41 +360,28 @@ async function streamResponse({
   if (!textAnswer) {
     return Promise.reject('LLM api response empty');
   }
+  // console.log(textAnswer, '---===');
   return { answer: textAnswer.trim() };
 }
 
-const parseAnswer = (
-  str: string
-): {
-  answer: string;
-  toolJson?: FunctionCallCompletion;
-} => {
-  str = str.trim();
+const parseAnswer = (str: string): FunctionCallCompletion | string => {
   // 首先，使用正则表达式提取TOOL_ID和TOOL_ARGUMENTS
-  const prefixReg = /^1(:|：)/;
-  const answerPrefixReg = /^0(:|：)/;
-
-  if (prefixReg.test(str)) {
-    const toolString = sliceJsonStr(str);
+  const prefix = '1:';
+  str = str.trim();
+  if (str.startsWith(prefix)) {
+    const toolString = str.substring(prefix.length).trim();
 
     try {
       const toolCall = json5.parse(toolString);
       return {
-        answer: `1: ${toolString}`,
-        toolJson: {
-          id: getNanoid(),
-          name: toolCall.toolId,
-          arguments: JSON.stringify(toolCall.arguments || toolCall.parameters)
-        }
+        id: getNanoid(),
+        name: toolCall.toolId,
+        arguments: JSON.stringify(toolCall.arguments || toolCall.parameters)
       };
     } catch (error) {
-      return {
-        answer: ERROR_TEXT
-      };
+      return str;
     }
   } else {
-    return {
-      answer: str.replace(answerPrefixReg, '')
-    };
+    return str;
   }
 };

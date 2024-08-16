@@ -1,10 +1,12 @@
-import { TeamPermission } from '../permission/user/controller';
 import { UserStatusEnum } from './constant';
-import { TeamTmbItemType } from './team/type';
+import { TeamItemType } from './team/type';
 
 export type UserModelSchema = {
   _id: string;
   username: string;
+  email?: string;
+  phonePrefix?: number;
+  phone?: string;
   password: string;
   avatar: string;
   promotionRate: number;
@@ -27,8 +29,6 @@ export type UserType = {
   timezone: string;
   promotionRate: UserModelSchema['promotionRate'];
   openaiAccount: UserModelSchema['openaiAccount'];
-  team: TeamTmbItemType;
+  team: TeamItemType;
   standardInfo?: standardInfoType;
-  notificationAccount?: string;
-  permission: TeamPermission;
 };

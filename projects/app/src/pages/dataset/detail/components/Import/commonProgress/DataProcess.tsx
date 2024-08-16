@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   Box,
   Flex,
@@ -17,38 +17,36 @@ import {
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
 import LeftRadio from '@fastgpt/web/components/common/Radio/LeftRadio';
-import { TrainingModeEnum, TrainingTypeMap } from '@fastgpt/global/core/dataset/constants';
+import { TrainingTypeMap } from '@fastgpt/global/core/dataset/constants';
 import { ImportProcessWayEnum } from '@/web/core/dataset/constants';
-import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
+import MyTooltip from '@/components/MyTooltip';
+import { useImportStore } from '../Provider';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import { Prompt_AgentQA } from '@fastgpt/global/core/ai/prompt/agent';
 import Preview from '../components/Preview';
-import MyTag from '@fastgpt/web/components/common/Tag/index';
-import { useContextSelector } from 'use-context-selector';
-import { DatasetImportContext } from '../Context';
-import { useToast } from '@fastgpt/web/hooks/useToast';
-import FormLabel from '@fastgpt/web/components/common/MyBox/FormLabel';
+import Tag from '@/components/Tag';
 
-function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean }) {
+function DataProcess({
+  showPreviewChunks = true,
+  goToNext
+}: {
+  showPreviewChunks: boolean;
+  goToNext: () => void;
+}) {
   const { t } = useTranslation();
   const { feConfigs } = useSystemStore();
-
   const {
-    goToNext,
     processParamsForm,
     chunkSizeField,
     minChunkSize,
     showChunkInput,
     showPromptInput,
     maxChunkSize,
-    priceTip,
-    chunkSize
-  } = useContextSelector(DatasetImportContext, (v) => v);
-  const { getValues, setValue, register, watch } = processParamsForm;
-  const { toast } = useToast();
-  const mode = watch('mode');
-  const way = watch('way');
+    priceTip
+  } = useImportStore();
+  const { getValues, setValue, register } = processParamsForm;
+  const [refresh, setRefresh] = useState(false);
 
   const {
     isOpen: isOpenCustomPrompt,
@@ -58,76 +56,67 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
 
   const trainingModeList = useMemo(() => {
     const list = Object.entries(TrainingTypeMap);
-    return list;
-  }, []);
 
-  const onSelectTrainWay = useCallback(
-    (e: TrainingModeEnum) => {
-      if (!feConfigs?.isPlus && !TrainingTypeMap[e]?.openSource) {
-        return toast({
-          status: 'warning',
-          title: t('common:common.system.Commercial version function')
-        });
-      }
-      setValue('mode', e);
-    },
-    [feConfigs?.isPlus, setValue, t, toast]
-  );
+    return list.filter(([key, value]) => {
+      if (feConfigs?.isPlus) return true;
+      return value.openSource;
+    });
+  }, [feConfigs?.isPlus]);
 
   return (
-    <Box h={'100%'} display={['block', 'flex']} fontSize={'sm'}>
-      <Box
-        flex={'1 0 0'}
-        minW={['auto', '540px']}
-        maxW={'600px'}
-        h={['auto', '100%']}
-        overflow={'auto'}
-        pr={[0, 3]}
-      >
+    <Box h={'100%'} display={['block', 'flex']} gap={5}>
+      <Box flex={'1 0 0'} minW={['auto', '540px']} maxW={'600px'}>
         <Flex alignItems={'center'}>
           <MyIcon name={'common/settingLight'} w={'20px'} />
-          <Box fontSize={'md'}>{t('common:core.dataset.import.Data process params')}</Box>
+          <Box fontSize={'lg'}>{t('core.dataset.import.Data process params')}</Box>
         </Flex>
 
-        <Box display={['block', 'flex']} mt={4} alignItems={'center'}>
-          <FormLabel flex={'0 0 100px'}>{t('common:core.dataset.import.Training mode')}</FormLabel>
+        <Flex mt={4} alignItems={'center'}>
+          <Box color={'myGray.600'} flex={'0 0 100px'}>
+            {t('core.dataset.import.Training mode')}
+          </Box>
           <LeftRadio
             list={trainingModeList.map(([key, value]) => ({
-              title: t(value.label as any),
+              title: t(value.label),
               value: key,
-              tooltip: t(value.tooltip as any)
+              tooltip: t(value.tooltip)
             }))}
             px={3}
             py={2}
-            value={mode}
-            onChange={onSelectTrainWay}
+            value={getValues('mode')}
+            onChange={(e) => {
+              setValue('mode', e);
+              setRefresh(!refresh);
+            }}
+            gridTemplateColumns={'repeat(3,1fr)'}
             defaultBg="white"
             activeBg="white"
-            display={'flex'}
-            flexWrap={'wrap'}
           />
-        </Box>
-        <Box display={['block', 'flex']} mt={5}>
-          <FormLabel flex={'0 0 100px'}>{t('common:core.dataset.import.Process way')}</FormLabel>
+        </Flex>
+        <Flex mt={5}>
+          <Box color={'myGray.600'} flex={'0 0 100px'}>
+            {t('core.dataset.import.Process way')}
+          </Box>
           <LeftRadio
             list={[
               {
-                title: t('common:core.dataset.import.Auto process'),
-                desc: t('common:core.dataset.import.Auto process desc'),
+                title: t('core.dataset.import.Auto process'),
+                desc: t('core.dataset.import.Auto process desc'),
                 value: ImportProcessWayEnum.auto
               },
               {
-                title: t('common:core.dataset.import.Custom process'),
-                desc: t('common:core.dataset.import.Custom process desc'),
+                title: t('core.dataset.import.Custom process'),
+                desc: t('core.dataset.import.Custom process desc'),
                 value: ImportProcessWayEnum.custom,
-                children: way === ImportProcessWayEnum.custom && (
+                children: getValues('way') === ImportProcessWayEnum.custom && (
                   <Box mt={5}>
                     {showChunkInput && chunkSizeField && (
                       <Box>
                         <Flex alignItems={'center'}>
-                          <Box>{t('common:core.dataset.import.Ideal chunk length')}</Box>
+                          <Box>{t('core.dataset.import.Ideal chunk length')}</Box>
                           <MyTooltip
-                            label={t('common:core.dataset.import.Ideal chunk length Tips')}
+                            label={t('core.dataset.import.Ideal chunk length Tips')}
+                            forceShow
                           >
                             <MyIcon
                               name={'common/questionLight'}
@@ -146,7 +135,7 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
                           }}
                         >
                           <MyTooltip
-                            label={t('common:core.dataset.import.Chunk Range', {
+                            label={t('core.dataset.import.Chunk Range', {
                               min: minChunkSize,
                               max: maxChunkSize
                             })}
@@ -156,7 +145,6 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
                               step={100}
                               min={minChunkSize}
                               max={maxChunkSize}
-                              value={chunkSize}
                               onChange={(e) => {
                                 setValue(chunkSizeField, +e);
                               }}
@@ -182,8 +170,11 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
 
                     <Box mt={3}>
                       <Box>
-                        {t('common:core.dataset.import.Custom split char')}
-                        <MyTooltip label={t('common:core.dataset.import.Custom split char Tips')}>
+                        {t('core.dataset.import.Custom split char')}
+                        <MyTooltip
+                          label={t('core.dataset.import.Custom split char Tips')}
+                          forceShow
+                        >
                           <MyIcon
                             name={'common/questionLight'}
                             ml={1}
@@ -205,7 +196,7 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
 
                     {showPromptInput && (
                       <Box mt={3}>
-                        <Box>{t('common:core.dataset.collection.QA Prompt')}</Box>
+                        <Box>{t('core.dataset.collection.QA Prompt')}</Box>
                         <Box
                           position={'relative'}
                           py={2}
@@ -248,7 +239,7 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
                               bottom={2}
                               onClick={onOpenCustomPrompt}
                             >
-                              {t('common:core.dataset.import.Custom prompt')}
+                              {t('core.dataset.import.Custom prompt')}
                             </Button>
                           </Box>
                         </Box>
@@ -262,33 +253,34 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
             py={3}
             defaultBg="white"
             activeBg="white"
-            value={way}
+            value={getValues('way')}
             w={'100%'}
             onChange={(e) => {
               setValue('way', e);
+              setRefresh(!refresh);
             }}
           ></LeftRadio>
-        </Box>
-        <Box mt={5} pl={[0, '100px']} gap={3}>
+        </Flex>
+        <Flex mt={5} alignItems={'center'} pl={'100px'} gap={3}>
           {feConfigs?.show_pay && (
             <MyTooltip label={priceTip}>
-              <MyTag colorSchema={'gray'} py={'6px'} borderRadius={'md'} px={3} whiteSpace={'wrap'}>
+              <Tag colorSchema={'gray'} py={'6px'} borderRadius={'md'} px={3}>
                 {priceTip}
-              </MyTag>
+              </Tag>
             </MyTooltip>
           )}
-        </Box>
+        </Flex>
         <Flex mt={5} gap={3} justifyContent={'flex-end'}>
           <Button
             onClick={() => {
               goToNext();
             }}
           >
-            {t('common:common.Next Step')}
+            {t('common.Next Step')}
           </Button>
         </Flex>
       </Box>
-      <Box flex={'1 0 0'} w={['auto', '0']} h={['auto', '100%']} overflow={'auto'} pl={[0, 3]}>
+      <Box flex={'1 0 0'} w={'0'}>
         <Preview showPreviewChunks={showPreviewChunks} />
       </Box>
 
@@ -297,6 +289,7 @@ function DataProcess({ showPreviewChunks = true }: { showPreviewChunks: boolean 
           defaultValue={getValues('qaPrompt')}
           onChange={(e) => {
             setValue('qaPrompt', e);
+            setRefresh(!refresh);
           }}
           onClose={onCloseCustomPrompt}
         />
@@ -322,7 +315,7 @@ const PromptTextarea = ({
   return (
     <MyModal
       isOpen
-      title={t('common:core.dataset.import.Custom prompt')}
+      title={t('core.dataset.import.Custom prompt')}
       iconSrc="modal/edit"
       w={'600px'}
       onClose={onClose}
@@ -339,7 +332,7 @@ const PromptTextarea = ({
             onClose();
           }}
         >
-          {t('common:common.Confirm')}
+          {t('common.Confirm')}
         </Button>
       </ModalFooter>
     </MyModal>

@@ -1,5 +1,5 @@
-import { connectionMongo, getMongoModel } from '../../common/mongo';
-const { Schema } = connectionMongo;
+import { connectionMongo, type Model } from '../../common/mongo';
+const { Schema, model, models } = connectionMongo;
 import { hashStr } from '@fastgpt/global/common/string/tools';
 import type { UserModelSchema } from '@fastgpt/global/support/user/type';
 import { UserStatusEnum, userStatusMap } from '@fastgpt/global/support/user/constant';
@@ -18,8 +18,14 @@ const UserSchema = new Schema({
     required: true,
     unique: true // 唯一
   },
+  email: {
+    type: String
+  },
   phonePrefix: {
     type: Number
+  },
+  phone: {
+    type: String
   },
   password: {
     type: String,
@@ -39,7 +45,7 @@ const UserSchema = new Schema({
   inviterId: {
     // 谁邀请注册的
     type: Schema.Types.ObjectId,
-    ref: userCollectionName
+    ref: 'user'
   },
   promotionRate: {
     type: Number,
@@ -68,4 +74,6 @@ try {
   console.log(error);
 }
 
-export const MongoUser = getMongoModel<UserModelSchema>(userCollectionName, UserSchema);
+export const MongoUser: Model<UserModelSchema> =
+  models[userCollectionName] || model(userCollectionName, UserSchema);
+MongoUser.syncIndexes();

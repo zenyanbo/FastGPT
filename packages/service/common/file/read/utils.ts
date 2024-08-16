@@ -2,99 +2,80 @@ import { markdownProcess } from '@fastgpt/global/common/string/markdown';
 import { uploadMongoImg } from '../image/controller';
 import { MongoImageTypeEnum } from '@fastgpt/global/common/file/image/constants';
 import { addHours } from 'date-fns';
+import { ReadFileByBufferParams } from './type';
+import { readFileRawText } from '../read/rawText';
+import { readMarkdown } from '../read/markdown';
+import { readHtmlRawText } from '../read/html';
+import { readPdfFile } from '../read/pdf';
+import { readWordFile } from '../read/word';
+import { readCsvRawText } from '../read/csv';
+import { readPptxRawText } from '../read/pptx';
+import { readXlsxRawText } from '../read/xlsx';
 
-import { WorkerNameEnum, runWorker } from '../../../worker/utils';
-import fs from 'fs';
-import { detectFileEncoding } from '@fastgpt/global/common/file/tools';
-import type { ReadFileResponse } from '../../../worker/readFile/type';
-
-export type readRawTextByLocalFileParams = {
-  teamId: string;
-  path: string;
-  metadata?: Record<string, any>;
-};
-export const readRawTextByLocalFile = async (params: readRawTextByLocalFileParams) => {
-  const { path } = params;
-
-  const extension = path?.split('.')?.pop()?.toLowerCase() || '';
-
-  const buffer = fs.readFileSync(path);
-  const encoding = detectFileEncoding(buffer);
-
-  const { rawText } = await readRawContentByFileBuffer({
-    extension,
-    isQAImport: false,
-    teamId: params.teamId,
-    encoding,
-    buffer,
-    metadata: params.metadata
-  });
-
-  return {
-    rawText
-  };
-};
-
-export const readRawContentByFileBuffer = async ({
-  extension,
-  isQAImport,
+export const initMarkdownText = ({
   teamId,
-  buffer,
-  encoding,
+  md,
   metadata
 }: {
-  isQAImport?: boolean;
-  extension: string;
+  md: string;
   teamId: string;
-  buffer: Buffer;
-  encoding: string;
   metadata?: Record<string, any>;
-}) => {
-  // Upload image in markdown
-  const matchMdImgTextAndUpload = ({
-    teamId,
-    md,
-    metadata
-  }: {
-    md: string;
-    teamId: string;
-    metadata?: Record<string, any>;
-  }) =>
-    markdownProcess({
-      rawText: md,
-      uploadImgController: (base64Img) =>
-        uploadMongoImg({
-          type: MongoImageTypeEnum.collectionImage,
-          base64Img,
-          teamId,
-          metadata,
-          expiredTime: addHours(new Date(), 1)
-        })
-    });
-
-  let { rawText, formatText } = await runWorker<ReadFileResponse>(WorkerNameEnum.readFile, {
-    extension,
-    encoding,
-    buffer
+}) =>
+  markdownProcess({
+    rawText: md,
+    uploadImgController: (base64Img) =>
+      uploadMongoImg({
+        type: MongoImageTypeEnum.collectionImage,
+        base64Img,
+        teamId,
+        metadata,
+        expiredTime: addHours(new Date(), 2)
+      })
   });
 
-  // markdown data format
-  if (['md', 'html', 'docx'].includes(extension)) {
-    rawText = await matchMdImgTextAndUpload({
-      teamId: teamId,
-      md: rawText,
-      metadata: metadata
-    });
+export const readFileRawContent = async ({
+  extension,
+  csvFormat,
+  params
+}: {
+  csvFormat?: boolean;
+  extension: string;
+  params: ReadFileByBufferParams;
+}) => {
+  switch (extension) {
+    case 'txt':
+      return readFileRawText(params);
+    case 'md':
+      return readMarkdown(params);
+    case 'html':
+      return readHtmlRawText(params);
+    case 'pdf':
+      return readPdfFile(params);
+    case 'docx':
+      return readWordFile(params);
+    case 'pptx':
+      return readPptxRawText(params);
+    case 'xlsx':
+      const xlsxResult = await readXlsxRawText(params);
+      if (csvFormat) {
+        return {
+          rawText: xlsxResult.formatText || ''
+        };
+      }
+      return {
+        rawText: xlsxResult.rawText
+      };
+    case 'csv':
+      const csvResult = await readCsvRawText(params);
+      if (csvFormat) {
+        return {
+          rawText: csvResult.formatText || ''
+        };
+      }
+      return {
+        rawText: csvResult.rawText
+      };
+    default:
+      return Promise.reject('Only support .txt, .md, .html, .pdf, .docx, pptx, .csv, .xlsx');
   }
-
-  if (['csv', 'xlsx'].includes(extension)) {
-    // qa data
-    if (isQAImport) {
-      rawText = rawText || '';
-    } else {
-      rawText = formatText || '';
-    }
-  }
-
-  return { rawText };
 };

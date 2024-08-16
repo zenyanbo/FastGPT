@@ -1,23 +1,21 @@
 import React from 'react';
-import { Spinner, Flex, Box, SpinnerProps } from '@chakra-ui/react';
+import { Spinner, Flex, Box } from '@chakra-ui/react';
 
 const Loading = ({
   fixed = true,
   text = '',
   bg = 'rgba(255,255,255,0.5)',
-  zIndex = 1000,
-  size = 'lg'
+  zIndex = 1000
 }: {
   fixed?: boolean;
   text?: string;
   bg?: string;
   zIndex?: number;
-  size?: SpinnerProps['size'];
 }) => {
   return (
     <Flex
       position={fixed ? 'fixed' : 'absolute'}
-      zIndex={fixed ? zIndex : 10}
+      zIndex={zIndex}
       bg={bg}
       borderRadius={'md'}
       top={0}
@@ -33,7 +31,7 @@ const Loading = ({
         speed="0.65s"
         emptyColor="myGray.100"
         color="primary.500"
-        size={size}
+        size="xl"
       />
       {text && (
         <Box mt={2} color="primary.600" fontWeight={'bold'}>

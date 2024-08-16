@@ -16,13 +16,13 @@ export const useConfirm = (props?: {
   const map = useMemo(() => {
     const map = {
       common: {
-        title: t('common:common.confirm.Common Tip'),
-        variant: 'primary',
+        title: t('common.confirm.Common Tip'),
+        bg: undefined,
         iconSrc: 'common/confirm/commonTip'
       },
       delete: {
-        title: t('common:common.Delete Warning'),
-        variant: 'dangerFill',
+        title: t('common.Delete Warning'),
+        bg: 'red.600',
         iconSrc: 'common/confirm/deleteTip'
       }
     };
@@ -31,7 +31,7 @@ export const useConfirm = (props?: {
   }, [props?.type, t]);
 
   const {
-    title = map?.title || t('common:Warning'),
+    title = map?.title || t('Warning'),
     iconSrc = map?.iconSrc,
     content,
     showCancel = true,
@@ -41,100 +41,91 @@ export const useConfirm = (props?: {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const confirmCb = useRef<Function>();
+  const confirmCb = useRef<any>();
   const cancelCb = useRef<any>();
 
-  const openConfirm = useCallback(
-    (confirm?: Function, cancel?: any, customContent?: string | React.ReactNode) => {
-      confirmCb.current = confirm;
-      cancelCb.current = cancel;
+  return {
+    openConfirm: useCallback(
+      (confirm?: any, cancel?: any, customContent?: string | React.ReactNode) => {
+        confirmCb.current = confirm;
+        cancelCb.current = cancel;
 
-      customContent && setCustomContent(customContent);
+        customContent && setCustomContent(customContent);
 
-      return onOpen;
-    },
-    []
-  );
+        return onOpen;
+      },
+      [onOpen]
+    ),
+    onClose,
+    ConfirmModal: useCallback(
+      ({
+        closeText = t('common.Close'),
+        confirmText = t('common.Confirm'),
+        isLoading,
+        bg,
+        countDown = 0
+      }: {
+        closeText?: string;
+        confirmText?: string;
+        isLoading?: boolean;
+        bg?: string;
+        countDown?: number;
+      }) => {
+        const timer = useRef<any>();
+        const [countDownAmount, setCountDownAmount] = useState(countDown);
 
-  const ConfirmModal = useCallback(
-    ({
-      closeText = t('common:common.Cancel'),
-      confirmText = t('common:common.Confirm'),
-      isLoading,
-      bg,
-      countDown = 0
-    }: {
-      closeText?: string;
-      confirmText?: string;
-      isLoading?: boolean;
-      bg?: string;
-      countDown?: number;
-    }) => {
-      const timer = useRef<any>();
-      const [countDownAmount, setCountDownAmount] = useState(countDown);
-      const [requesting, setRequesting] = useState(false);
+        useEffect(() => {
+          timer.current = setInterval(() => {
+            setCountDownAmount((val) => {
+              if (val <= 0) {
+                clearInterval(timer.current);
+              }
+              return val - 1;
+            });
+          }, 1000);
+        }, []);
 
-      useEffect(() => {
-        timer.current = setInterval(() => {
-          setCountDownAmount((val) => {
-            if (val <= 0) {
-              clearInterval(timer.current);
-            }
-            return val - 1;
-          });
-        }, 1000);
-      }, []);
+        return (
+          <MyModal
+            isOpen={isOpen}
+            onClose={onClose}
+            iconSrc={iconSrc}
+            title={title}
+            maxW={['90vw', '500px']}
+          >
+            <ModalBody pt={5}>{customContent}</ModalBody>
+            {!hideFooter && (
+              <ModalFooter>
+                {showCancel && (
+                  <Button
+                    variant={'whiteBase'}
+                    onClick={() => {
+                      onClose();
+                      typeof cancelCb.current === 'function' && cancelCb.current();
+                    }}
+                  >
+                    {closeText}
+                  </Button>
+                )}
 
-      return (
-        <MyModal isOpen={isOpen} iconSrc={iconSrc} title={title} maxW={['90vw', '400px']}>
-          <ModalBody pt={5} whiteSpace={'pre-wrap'} fontSize={'sm'}>
-            {customContent}
-          </ModalBody>
-          {!hideFooter && (
-            <ModalFooter>
-              {showCancel && (
                 <Button
-                  size={'sm'}
-                  variant={'whiteBase'}
+                  bg={bg ? bg : map.bg}
+                  isDisabled={countDownAmount > 0}
+                  ml={4}
+                  isLoading={isLoading}
                   onClick={() => {
                     onClose();
-                    typeof cancelCb.current === 'function' && cancelCb.current();
+                    typeof confirmCb.current === 'function' && confirmCb.current();
                   }}
-                  px={5}
                 >
-                  {closeText}
+                  {countDownAmount > 0 ? `${countDownAmount}s` : confirmText}
                 </Button>
-              )}
-
-              <Button
-                size={'sm'}
-                variant={map.variant}
-                isDisabled={countDownAmount > 0}
-                ml={3}
-                isLoading={isLoading || requesting}
-                px={5}
-                onClick={async () => {
-                  setRequesting(true);
-                  try {
-                    typeof confirmCb.current === 'function' && (await confirmCb.current());
-                    onClose();
-                  } catch (error) {}
-                  setRequesting(false);
-                }}
-              >
-                {countDownAmount > 0 ? `${countDownAmount}s` : confirmText}
-              </Button>
-            </ModalFooter>
-          )}
-        </MyModal>
-      );
-    },
-    [customContent, hideFooter, iconSrc, isOpen, map.variant, onClose, showCancel, t, title]
-  );
-
-  return {
-    openConfirm,
-    onClose,
-    ConfirmModal
+              </ModalFooter>
+            )}
+          </MyModal>
+        );
+      },
+      [customContent, hideFooter, iconSrc, isOpen, map.bg, onClose, showCancel, t, title]
+    )
   };
 };

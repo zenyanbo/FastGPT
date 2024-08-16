@@ -76,8 +76,7 @@ function embedChatbot() {
 
     chatBtnDown = true;
   });
-
-  window.addEventListener('mousemove', (e) => {
+  ChatBtn.addEventListener('mousemove', (e) => {
     e.stopPropagation();
     if (!canDrag || !chatBtnDown) return;
 
@@ -87,8 +86,12 @@ function embedChatbot() {
 
     ChatBtn.style.transform = `translate3d(${transformX}px, ${transformY}px, 0)`;
   });
-
+  ChatBtn.addEventListener('mouseup', (e) => {
+    chatBtnDragged = false;
+    chatBtnDown = false;
+  });
   window.addEventListener('mouseup', (e) => {
+    chatBtnDragged = false;
     chatBtnDown = false;
   });
 

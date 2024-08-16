@@ -1,56 +1,45 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { jsonRes } from '@fastgpt/service/common/response';
+import { connectToDatabase } from '@/service/mongo';
 import { MongoOpenApi } from '@fastgpt/service/support/openapi/schema';
+import { customAlphabet } from 'nanoid';
 import type { EditApiKeyProps } from '@/global/support/openapi/api';
-import { authUserPer } from '@fastgpt/service/support/permission/user/auth';
-import { getNanoid } from '@fastgpt/global/common/string/tools';
-import type { ApiRequestProps } from '@fastgpt/service/type/next';
-import { NextAPI } from '@/service/middleware/entry';
-import {
-  ManagePermissionVal,
-  WritePermissionVal
-} from '@fastgpt/global/support/permission/constant';
-import { authApp } from '@fastgpt/service/support/permission/app/auth';
-import { OpenApiErrEnum } from '@fastgpt/global/common/error/code/openapi';
+import { authUserNotVisitor } from '@fastgpt/service/support/permission/auth/user';
 
-async function handler(req: ApiRequestProps<EditApiKeyProps>): Promise<string> {
-  const { appId, name, limit } = req.body;
-  const { tmbId, teamId } = await (async () => {
-    if (!appId) {
-      // global apikey is being created, auth the tmb
-      const { teamId, tmbId } = await authUserPer({
-        req,
-        authToken: true,
-        per: WritePermissionVal
-      });
-      return { teamId, tmbId };
-    } else {
-      const { teamId, tmbId } = await authApp({
-        req,
-        per: ManagePermissionVal,
-        appId,
-        authToken: true
-      });
-      return { teamId, tmbId };
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    await connectToDatabase();
+    const { appId, name, limit } = req.body as EditApiKeyProps;
+    const { teamId, tmbId } = await authUserNotVisitor({ req, authToken: true });
+
+    const count = await MongoOpenApi.find({ tmbId, appId }).countDocuments();
+
+    if (count >= 10) {
+      throw new Error('最多 10 组 API 秘钥');
     }
-  })();
 
-  const count = await MongoOpenApi.find({ tmbId, appId }).countDocuments();
+    const nanoid = customAlphabet(
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+      Math.floor(Math.random() * 14) + 52
+    );
+    const apiKey = `${global.systemEnv?.openapiPrefix || 'fastgpt'}-${nanoid()}`;
 
-  if (count >= 10) {
-    return Promise.reject(OpenApiErrEnum.exceedLimit);
+    await MongoOpenApi.create({
+      teamId,
+      tmbId,
+      apiKey,
+      appId,
+      name,
+      limit
+    });
+
+    jsonRes(res, {
+      data: apiKey
+    });
+  } catch (err) {
+    jsonRes(res, {
+      code: 500,
+      error: err
+    });
   }
-
-  const nanoid = getNanoid(Math.floor(Math.random() * 14) + 52);
-  const apiKey = `${global.systemEnv?.openapiPrefix || 'fastgpt'}-${nanoid}`;
-
-  await MongoOpenApi.create({
-    teamId,
-    tmbId,
-    apiKey,
-    appId,
-    name,
-    limit
-  });
-  return apiKey;
 }
-
-export default NextAPI(handler);

@@ -1,4 +1,4 @@
-import { connectionMongo, getMongoModel, type Model } from '../../common/mongo';
+import { connectionMongo, type Model } from '../../common/mongo';
 const { Schema, model, models } = connectionMongo;
 import { ChatItemSchema as ChatItemType } from '@fastgpt/global/core/chat/type';
 import { ChatRoleMap } from '@fastgpt/global/core/chat/constants';
@@ -7,9 +7,10 @@ import {
   TeamCollectionName,
   TeamMemberCollectionName
 } from '@fastgpt/global/support/user/team/constant';
-import { AppCollectionName } from '../app/schema';
+import { appCollectionName } from '../app/schema';
 import { userCollectionName } from '../../support/user/schema';
-import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/workflow/runtime/constants';
+import { ModuleOutputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { DispatchNodeResponseKeyEnum } from '@fastgpt/global/core/module/runtime/constants';
 
 export const ChatItemCollectionName = 'chatitems';
 
@@ -39,7 +40,7 @@ const ChatItemSchema = new Schema({
   },
   appId: {
     type: Schema.Types.ObjectId,
-    ref: AppCollectionName,
+    ref: appCollectionName,
     required: true
   },
   time: {
@@ -98,4 +99,7 @@ try {
   console.log(error);
 }
 
-export const MongoChatItem = getMongoModel<ChatItemType>(ChatItemCollectionName, ChatItemSchema);
+export const MongoChatItem: Model<ChatItemType> =
+  models[ChatItemCollectionName] || model(ChatItemCollectionName, ChatItemSchema);
+
+MongoChatItem.syncIndexes();

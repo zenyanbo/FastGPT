@@ -1,8 +1,7 @@
 import { VectorModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { getAIApi } from '../config';
-import { countPromptTokens } from '../../../common/string/tiktoken/index';
+import { countPromptTokens } from '@fastgpt/global/common/string/tiktoken';
 import { EmbeddingTypeEnm } from '@fastgpt/global/core/ai/constants';
-import { addLog } from '../../../common/system/log';
 
 type GetVectorProps = {
   model: VectorModelItemType;
@@ -33,8 +32,7 @@ export async function getVectorsByText({ model, input, type }: GetVectorProps) {
       })
       .then(async (res) => {
         if (!res.data) {
-          addLog.error('Embedding API is not responding', res);
-          return Promise.reject('Embedding API is not responding');
+          return Promise.reject('Embedding API 404');
         }
         if (!res?.data?.[0]?.embedding) {
           console.log(res);
@@ -42,14 +40,9 @@ export async function getVectorsByText({ model, input, type }: GetVectorProps) {
           return Promise.reject(res.data?.err?.message || 'Embedding API Error');
         }
 
-        const [tokens, vectors] = await Promise.all([
-          countPromptTokens(input),
-          Promise.all(res.data.map((item) => unityDimensional(item.embedding)))
-        ]);
-
         return {
-          tokens,
-          vectors
+          tokens: countPromptTokens(input),
+          vectors: await Promise.all(res.data.map((item) => unityDimensional(item.embedding)))
         };
       });
 

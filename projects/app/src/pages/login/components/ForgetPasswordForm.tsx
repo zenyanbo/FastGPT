@@ -1,13 +1,13 @@
 import React, { useState, Dispatch, useCallback } from 'react';
 import { FormControl, Box, Input, Button } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { LoginPageTypeEnum } from '@/web/support/user/login/constants';
+import { LoginPageTypeEnum } from '@/constants/user';
 import { postFindPassword } from '@/web/support/user/api';
 import { useSendCode } from '@/web/support/user/hooks/useSendCode';
 import type { ResLogin } from '@/global/support/api/userRes.d';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { useTranslation } from 'next-i18next';
+
 interface Props {
   setPageType: Dispatch<`${LoginPageTypeEnum}`>;
   loginSuccess: (e: ResLogin) => void;
@@ -22,7 +22,6 @@ interface RegisterType {
 
 const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
   const { toast } = useToast();
-  const { t } = useTranslation();
   const { feConfigs } = useSystemStore();
   const {
     register,
@@ -59,12 +58,12 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
           })
         );
         toast({
-          title: t('user:password.retrieved'),
+          title: `密码已找回`,
           status: 'success'
         });
       } catch (error: any) {
         toast({
-          title: error.message || t('user:password.change_error'),
+          title: error.message || '修改密码异常',
           status: 'error'
         });
       }
@@ -76,7 +75,7 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
   return (
     <>
       <Box fontWeight={'bold'} fontSize={'2xl'} textAlign={'center'}>
-        {t('user:password.retrieved_account', { account: feConfigs?.systemTitle })}
+        找回 {feConfigs?.systemTitle} 账号
       </Box>
       <Box
         mt={'42px'}
@@ -89,13 +88,13 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
         <FormControl isInvalid={!!errors.username}>
           <Input
             bg={'myGray.50'}
-            placeholder={t('user:password.email_phone')}
+            placeholder="邮箱/手机号"
             {...register('username', {
-              required: t('user:password.email_phone_void'),
+              required: '邮箱/手机号不能为空',
               pattern: {
                 value:
                   /(^1[3456789]\d{9}$)|(^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$)/,
-                message: t('user:password.email_phone_error')
+                message: '邮箱/手机号格式错误'
               }
             })}
           ></Input>
@@ -111,9 +110,9 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
             bg={'myGray.50'}
             flex={1}
             maxLength={8}
-            placeholder={t('user:password.verification_code')}
+            placeholder="验证码"
             {...register('code', {
-              required: t('user:password.code_required')
+              required: '验证码不能为空'
             })}
           ></Input>
           <Box
@@ -138,16 +137,16 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
           <Input
             bg={'myGray.50'}
             type={'password'}
-            placeholder={t('user:password.new_password')}
+            placeholder="新密码(4~20位)"
             {...register('password', {
-              required: t('user:password.password_required'),
+              required: '密码不能为空',
               minLength: {
                 value: 4,
-                message: t('user:password.password_condition')
+                message: '密码最少 4 位最多 20 位'
               },
               maxLength: {
                 value: 20,
-                message: t('user:password.password_condition')
+                message: '密码最少 4 位最多 20 位'
               }
             })}
           ></Input>
@@ -156,10 +155,9 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
           <Input
             bg={'myGray.50'}
             type={'password'}
-            placeholder={t('user:password.confirm')}
+            placeholder="确认密码"
             {...register('password2', {
-              validate: (val) =>
-                getValues('password') === val ? true : t('user:password.not_match')
+              validate: (val) => (getValues('password') === val ? true : '两次密码不一致')
             })}
           ></Input>
         </FormControl>
@@ -168,12 +166,12 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
           type="submit"
           mt={10}
           w={'100%'}
-          size={['md', 'md']}
+          size={['md', 'lg']}
           colorScheme="blue"
           isLoading={requesting}
           onClick={handleSubmit(onclickFindPassword)}
         >
-          {t('user:password.retrieve')}
+          找回密码
         </Button>
         <Box
           float={'right'}
@@ -185,7 +183,7 @@ const RegisterForm = ({ setPageType, loginSuccess }: Props) => {
           _hover={{ textDecoration: 'underline' }}
           onClick={() => setPageType(LoginPageTypeEnum.passwordLogin)}
         >
-          {t('user:password.to_login')}
+          去登录
         </Box>
       </Box>
     </>

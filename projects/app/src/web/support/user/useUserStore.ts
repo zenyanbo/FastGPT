@@ -15,7 +15,6 @@ type State = {
   initUserInfo: () => Promise<UserType>;
   setUserInfo: (user: UserType | null) => void;
   updateUserInfo: (user: UserUpdateParams) => Promise<void>;
-
   teamPlanStatus: FeTeamPlanStatusType | null;
   initTeamPlanStatus: () => Promise<any>;
 };
@@ -69,7 +68,6 @@ export const useUserStore = create<State>()(
             return Promise.reject(error);
           }
         },
-        // team
         teamPlanStatus: null,
         initTeamPlanStatus() {
           return getTeamPlanStatus().then((res) => {

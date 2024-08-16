@@ -32,7 +32,7 @@ const StandDetailModal = ({ onClose }: { onClose: () => void }) => {
       isOpen
       maxW={['90vw', '1200px']}
       iconSrc="modal/teamPlans"
-      title={t('common:support.wallet.Standard Plan Detail')}
+      title={t('support.wallet.Standard Plan Detail')}
     >
       <ModalCloseButton onClick={onClose} />
       <ModalBody>
@@ -40,11 +40,12 @@ const StandDetailModal = ({ onClose }: { onClose: () => void }) => {
           <Table>
             <Thead>
               <Tr>
-                <Th>{t('common:support.standard.type')}</Th>
-                <Th>{t('common:support.standard.storage')}</Th>
-                <Th>{t('common:support.standard.AI Bonus Points')}</Th>
-                <Th>{t('common:support.standard.Start Time')}</Th>
-                <Th>{t('common:support.standard.Expired Time')}</Th>
+                <Th>{t('support.standard.type')}</Th>
+                <Th>{t('support.standard.storage')}</Th>
+                <Th>{t('support.standard.AI Bonus Points')}</Th>
+                <Th>{t('support.standard.Start Time')}</Th>
+                <Th>{t('support.standard.Expired Time')}</Th>
+                <Th />
               </Tr>
             </Thead>
             <Tbody fontSize={'sm'}>
@@ -73,16 +74,13 @@ const StandDetailModal = ({ onClose }: { onClose: () => void }) => {
                           w={'20px'}
                           color={'myGray.800'}
                         />
-                        {t(subTypeMap[type]?.label as any)}
-                        {currentSubLevel &&
-                          `(${t(standardSubLevelMap[currentSubLevel]?.label as any)})`}
+                        {t(subTypeMap[type]?.label)}
+                        {currentSubLevel && `(${t(standardSubLevelMap[currentSubLevel]?.label)})`}
                       </Td>
-                      <Td>
-                        {datasetSize ? `${datasetSize + t('common:core.dataset.data.group')}` : '-'}
-                      </Td>
+                      <Td>{datasetSize ? `${datasetSize}组` : '-'}</Td>
                       <Td>
                         {totalPoints
-                          ? `${Math.round(totalPoints - surplusPoints)} / ${totalPoints} ${t('common:support.wallet.subscription.point')}`
+                          ? `${Math.round(totalPoints - surplusPoints)} / ${totalPoints} 积分`
                           : '-'}
                       </Td>
                       <Td>{formatTime2YMDHM(startTime)}</Td>

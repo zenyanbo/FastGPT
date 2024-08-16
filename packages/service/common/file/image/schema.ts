@@ -1,5 +1,5 @@
 import { TeamCollectionName } from '@fastgpt/global/support/user/team/constant';
-import { connectionMongo, getMongoModel, type Model } from '../../mongo';
+import { connectionMongo, type Model } from '../../mongo';
 import { MongoImageSchemaType } from '@fastgpt/global/common/file/image/type.d';
 import { mongoImageTypeMap } from '@fastgpt/global/common/file/image/constants';
 const { Schema, model, models } = connectionMongo;
@@ -41,4 +41,7 @@ try {
   console.log(error);
 }
 
-export const MongoImage = getMongoModel<MongoImageSchemaType>('image', ImageSchema);
+export const MongoImage: Model<MongoImageSchemaType> =
+  models['image'] || model('image', ImageSchema);
+
+MongoImage.syncIndexes();

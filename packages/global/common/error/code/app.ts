@@ -1,28 +1,18 @@
 import { ErrType } from '../errorCode';
-import { i18nT } from '../../../../web/i18n/utils';
+
 /* dataset: 502000 */
 export enum AppErrEnum {
-  unExist = 'appUnExist',
-  unAuthApp = 'unAuthApp',
-  invalidOwner = 'invalidOwner',
-  invalidAppType = 'invalidAppType'
+  unExist = 'unExist',
+  unAuthApp = 'unAuthApp'
 }
 const appErrList = [
   {
     statusText: AppErrEnum.unExist,
-    message: i18nT('common:code_error.app_error.not_exist')
+    message: '应用不存在'
   },
   {
     statusText: AppErrEnum.unAuthApp,
-    message: i18nT('common:code_error.app_error.un_auth_app')
-  },
-  {
-    statusText: AppErrEnum.invalidOwner,
-    message: i18nT('common:code_error.app_error.invalid_owner')
-  },
-  {
-    statusText: AppErrEnum.invalidAppType,
-    message: i18nT('common:code_error.app_error.invalid_app_type')
+    message: '无权操作该应用'
   }
 ];
 export default appErrList.reduce((acc, cur, index) => {

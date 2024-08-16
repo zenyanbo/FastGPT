@@ -1,4 +1,4 @@
-import MyBox from '@fastgpt/web/components/common/MyBox';
+import MyBox from '@/components/common/MyBox';
 import { useSelectFile } from '@/web/common/file/hooks/useSelectFile';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { Box, FlexProps } from '@chakra-ui/react';
@@ -13,7 +13,6 @@ import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { uploadFile2DB } from '@/web/common/file/controller';
 import { BucketNameEnum } from '@fastgpt/global/common/file/constants';
 import { ImportSourceItemType } from '@/web/core/dataset/type';
-import { useI18n } from '@/web/context/I18n';
 
 export type SelectFileItemType = {
   fileId: string;
@@ -36,8 +35,6 @@ const FileSelector = ({
   onFinishSelect: () => void;
 } & FlexProps) => {
   const { t } = useTranslation();
-  const { fileT } = useI18n();
-
   const { toast } = useToast();
   const { feConfigs } = useSystemStore();
 
@@ -89,7 +86,7 @@ const FileSelector = ({
           // upload file
           await Promise.all(
             files.map(async ({ fileId, file }) => {
-              const { fileId: uploadFileId } = await uploadFile2DB({
+              const uploadFileId = await uploadFile2DB({
                 file,
                 bucketName: BucketNameEnum.dataset,
                 percentListen: (e) => {
@@ -98,9 +95,7 @@ const FileSelector = ({
                       item.id === fileId
                         ? {
                             ...item,
-                            uploadedFileRate: item.uploadedFileRate
-                              ? Math.max(e, item.uploadedFileRate)
-                              : e
+                            uploadedFileRate: e
                           }
                         : item
                     )
@@ -113,8 +108,7 @@ const FileSelector = ({
                     ? {
                         ...item,
                         dbFileId: uploadFileId,
-                        isUploading: false,
-                        uploadedFileRate: 100
+                        isUploading: false
                       }
                     : item
                 )
@@ -135,7 +129,7 @@ const FileSelector = ({
         files = files.slice(0, maxCount - selectFiles.length);
         toast({
           status: 'warning',
-          title: fileT('some_file_count_exceeds_limit', { maxCount })
+          title: t('common.file.Some file count exceeds limit', { maxCount })
         });
       }
       // size check
@@ -147,13 +141,13 @@ const FileSelector = ({
       if (filterFiles.length < files.length) {
         toast({
           status: 'warning',
-          title: fileT('some_file_size_exceeds_limit', { maxSize: formatFileSize(maxSize) })
+          title: t('common.file.Some file size exceeds limit', { maxSize: formatFileSize(maxSize) })
         });
       }
 
       return onSelectFile(filterFiles);
     },
-    [fileT, maxCount, maxSize, onSelectFile, selectFiles.length, toast]
+    [maxCount, maxSize, onSelectFile, selectFiles.length, t, toast]
   );
 
   const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
@@ -173,14 +167,12 @@ const FileSelector = ({
     const items = e.dataTransfer.items;
     const fileList: SelectFileItemType[] = [];
 
-    const firstEntry = items[0].webkitGetAsEntry();
-
-    if (firstEntry?.isDirectory && items.length === 1) {
-      {
-        const readFile = (entry: any) => {
-          return new Promise((resolve) => {
-            entry.file((file: File) => {
-              const folderPath = (entry.fullPath || '').split('/').slice(2, -1).join('/');
+    if (e.dataTransfer.items.length <= 1) {
+      const traverseFileTree = async (item: any) => {
+        return new Promise<void>((resolve, reject) => {
+          if (item.isFile) {
+            item.file((file: File) => {
+              const folderPath = (item.fullPath || '').split('/').slice(2, -1).join('/');
 
               if (filterTypeReg.test(file.name)) {
                 fileList.push({
@@ -189,50 +181,29 @@ const FileSelector = ({
                   file
                 });
               }
-              resolve(file);
+              resolve();
             });
-          });
-        };
-        const traverseFileTree = (dirReader: any) => {
-          return new Promise((resolve) => {
-            let fileNum = 0;
+          } else if (item.isDirectory) {
+            const dirReader = item.createReader();
             dirReader.readEntries(async (entries: any[]) => {
-              for await (const entry of entries) {
-                if (entry.isFile) {
-                  await readFile(entry);
-                  fileNum++;
-                } else if (entry.isDirectory) {
-                  await traverseFileTree(entry.createReader());
-                }
+              for (let i = 0; i < entries.length; i++) {
+                await traverseFileTree(entries[i]);
               }
-
-              // chrome: readEntries will return 100 entries at most
-              if (fileNum === 100) {
-                await traverseFileTree(dirReader);
-              }
-              resolve('');
+              resolve();
             });
-          });
-        };
-
-        for await (const item of items) {
-          const entry = item.webkitGetAsEntry();
-          if (entry) {
-            if (entry.isFile) {
-              await readFile(entry);
-            } else if (entry.isDirectory) {
-              //@ts-ignore
-              await traverseFileTree(entry.createReader());
-            }
           }
-        }
+        });
+      };
+
+      for await (const item of items) {
+        await traverseFileTree(item.webkitGetAsEntry());
       }
-    } else if (firstEntry?.isFile) {
+    } else {
       const files = Array.from(e.dataTransfer.files);
       let isErr = files.some((item) => item.type === '');
       if (isErr) {
         return toast({
-          title: t('file:upload_error_description'),
+          title: t('file.upload error description'),
           status: 'error'
         });
       }
@@ -246,11 +217,6 @@ const FileSelector = ({
             file
           }))
       );
-    } else {
-      return toast({
-        title: fileT('upload_error_description'),
-        status: 'error'
-      });
     }
 
     selectFileCallback(fileList.slice(0, maxCount));
@@ -289,25 +255,25 @@ const FileSelector = ({
       {isMaxSelected ? (
         <>
           <Box color={'myGray.500'} fontSize={'xs'}>
-            {t('file:reached_max_file_count')}
+            已达到最大文件数量
           </Box>
         </>
       ) : (
         <>
           <Box fontWeight={'bold'}>
             {isDragging
-              ? fileT('release_the_mouse_to_upload_the_file')
-              : fileT('select_and_drag_file_tip')}
+              ? t('file.Release the mouse to upload the file')
+              : t('common.file.Select and drag file tip')}
           </Box>
           {/* file type */}
           <Box color={'myGray.500'} fontSize={'xs'}>
-            {fileT('support_file_type', { fileType })}
+            {t('common.file.Support file type', { fileType })}
           </Box>
           <Box color={'myGray.500'} fontSize={'xs'}>
             {/* max count */}
-            {maxCount && fileT('support_max_count', { maxCount })}
+            {maxCount && t('common.file.Support max count', { maxCount })}
             {/* max size */}
-            {maxSize && fileT('support_max_size', { maxSize: formatFileSize(maxSize) })}
+            {maxSize && t('common.file.Support max size', { maxSize: formatFileSize(maxSize) })}
           </Box>
 
           <File

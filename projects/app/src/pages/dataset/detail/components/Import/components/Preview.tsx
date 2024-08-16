@@ -3,18 +3,17 @@ import { Box, Flex, IconButton } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
 
-import MyMenu from '@fastgpt/web/components/common/MyMenu';
+import { useImportStore } from '../Provider';
+import MyMenu from '@/components/MyMenu';
 import { ImportSourceItemType } from '@/web/core/dataset/type';
 import dynamic from 'next/dynamic';
-import { useContextSelector } from 'use-context-selector';
-import { DatasetImportContext } from '../Context';
 const PreviewRawText = dynamic(() => import('./PreviewRawText'));
 const PreviewChunks = dynamic(() => import('./PreviewChunks'));
 
 const Preview = ({ showPreviewChunks }: { showPreviewChunks: boolean }) => {
   const { t } = useTranslation();
 
-  const { sources } = useContextSelector(DatasetImportContext, (v) => v);
+  const { sources } = useImportStore();
   const [previewRawTextSource, setPreviewRawTextSource] = useState<ImportSourceItemType>();
   const [previewChunkSource, setPreviewChunkSource] = useState<ImportSourceItemType>();
 
@@ -22,7 +21,7 @@ const Preview = ({ showPreviewChunks }: { showPreviewChunks: boolean }) => {
     <Box h={'100%'} display={['block', 'flex']} flexDirection={'column'}>
       <Flex alignItems={'center'}>
         <MyIcon name={'core/dataset/fileCollection'} w={'20px'} />
-        <Box fontSize={'md'}>{t('common:core.dataset.import.Sources list')}</Box>
+        <Box fontSize={'lg'}>{t('core.dataset.import.Sources list')}</Box>
       </Flex>
       <Box mt={3} flex={'1 0 0'} width={'100%'} overflow={'auto'}>
         {sources.map((source) => (
@@ -54,26 +53,22 @@ const Preview = ({ showPreviewChunks }: { showPreviewChunks: boolean }) => {
                   }
                   menuList={[
                     {
-                      children: [
-                        {
-                          label: (
-                            <Flex alignItems={'center'}>
-                              <MyIcon name={'core/dataset/fileCollection'} w={'14px'} mr={2} />
-                              {t('common:core.dataset.import.Preview raw text')}
-                            </Flex>
-                          ),
-                          onClick: () => setPreviewRawTextSource(source)
-                        },
-                        {
-                          label: (
-                            <Flex alignItems={'center'}>
-                              <MyIcon name={'core/dataset/splitLight'} w={'14px'} mr={2} />
-                              {t('common:core.dataset.import.Preview chunks')}
-                            </Flex>
-                          ),
-                          onClick: () => setPreviewChunkSource(source)
-                        }
-                      ]
+                      label: (
+                        <Flex alignItems={'center'}>
+                          <MyIcon name={'core/dataset/fileCollection'} w={'14px'} mr={2} />
+                          {t('core.dataset.import.Preview raw text')}
+                        </Flex>
+                      ),
+                      onClick: () => setPreviewRawTextSource(source)
+                    },
+                    {
+                      label: (
+                        <Flex alignItems={'center'}>
+                          <MyIcon name={'core/dataset/splitLight'} w={'14px'} mr={2} />
+                          {t('core.dataset.import.Preview chunks')}
+                        </Flex>
+                      ),
+                      onClick: () => setPreviewChunkSource(source)
                     }
                   ]}
                 />

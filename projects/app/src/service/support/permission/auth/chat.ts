@@ -3,25 +3,19 @@ import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import { AuthModeType } from '@fastgpt/service/support/permission/type';
 import { authOutLink, authOutLinkInit } from './outLink';
 import { ChatErrEnum } from '@fastgpt/global/common/error/code/chat';
-import { authUserPer } from '@fastgpt/service/support/permission/user/auth';
+import { authUserRole } from '@fastgpt/service/support/permission/auth/user';
 import { TeamMemberRoleEnum } from '@fastgpt/global/support/user/team/constant';
 import { authTeamSpaceToken } from './team';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
-import { authOutLinkValid } from '@fastgpt/service/support/permission/publish/authLink';
-import {
-  AuthUserTypeEnum,
-  OwnerPermissionVal,
-  ReadPermissionVal,
-  WritePermissionVal
-} from '@fastgpt/global/support/permission/constant';
+import { authOutLinkValid } from '@fastgpt/service/support/permission/auth/outLink';
+import { AuthUserTypeEnum } from '@fastgpt/global/support/permission/constant';
 import { MongoTeamMember } from '@fastgpt/service/support/user/team/teamMemberSchema';
 import { OutLinkChatAuthProps } from '@fastgpt/global/support/permission/chat';
-import { addLog } from '@fastgpt/service/common/system/log';
 /* 
   outLink: Must be the owner
   token: team owner and chat owner have all permissions
 */
-export async function authChatCrud({
+export async function autChatCrud({
   appId,
   chatId,
   shareId,
@@ -29,7 +23,7 @@ export async function authChatCrud({
 
   teamId: spaceTeamId,
   teamToken,
-  per = OwnerPermissionVal,
+  per = 'owner',
   ...props
 }: AuthModeType & {
   appId: string;
@@ -61,7 +55,6 @@ export async function authChatCrud({
     // auth team space chat
     if (spaceTeamId && teamToken) {
       const { uid } = await authTeamSpaceToken({ teamId: spaceTeamId, teamToken });
-      addLog.debug('Auth team token', { uid, spaceTeamId, teamToken, chatUid: chat?.outLinkUid });
       if (!chat || (String(chat.teamId) === String(spaceTeamId) && chat.outLinkUid === uid)) {
         return { uid };
       }
@@ -70,19 +63,16 @@ export async function authChatCrud({
 
     if (!chat) return { id: outLinkUid };
 
-    // auth req
-    const { teamId, tmbId, permission } = await authUserPer({
-      ...props,
-      per: ReadPermissionVal
-    });
+    //  auth req
+    const { teamId, tmbId, role } = await authUserRole(props);
 
     if (String(teamId) !== String(chat.teamId)) return Promise.reject(ChatErrEnum.unAuthChat);
 
-    if (permission.isOwner) return { uid: outLinkUid };
+    if (role === TeamMemberRoleEnum.owner) return { uid: outLinkUid };
     if (String(tmbId) === String(chat.tmbId)) return { uid: outLinkUid };
 
-    // Admin can manage all chat
-    if (per === WritePermissionVal && permission.hasManagePer) return { uid: outLinkUid };
+    // admin
+    if (per === 'r' && role === TeamMemberRoleEnum.admin) return { uid: outLinkUid };
 
     return Promise.reject(ChatErrEnum.unAuthChat);
   })();
@@ -103,15 +93,7 @@ export async function authChatCrud({
   3. share page (body: shareId outLinkUid)
   4. team chat page (body: teamId teamToken)
 */
-export async function authChatCert(props: AuthModeType): Promise<{
-  teamId: string;
-  tmbId: string;
-  authType: AuthUserTypeEnum;
-  apikey: string;
-  isOwner: boolean;
-  canWrite: boolean;
-  outLinkUid?: string;
-}> {
+export async function authChatCert(props: AuthModeType) {
   const { teamId, teamToken, shareId, outLinkUid } = props.req.body as OutLinkChatAuthProps;
 
   if (shareId && outLinkUid) {

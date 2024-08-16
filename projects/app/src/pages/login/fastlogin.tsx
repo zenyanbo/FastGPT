@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useSystemStore } from '@/web/common/system/useSystemStore';
 import type { ResLogin } from '@/global/support/api/userRes.d';
-import { useChatStore } from '@/web/core/chat/context/storeChat';
+import { useChatStore } from '@/web/core/chat/storeChat';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { clearToken, setToken } from '@/web/support/user/auth';
 import { postFastLogin } from '@/web/support/user/api';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import Loading from '@fastgpt/web/components/common/MyLoading';
 import { serviceSideProps } from '@/web/common/utils/i18n';
+import { useQuery } from '@tanstack/react-query';
 import { getErrText } from '@fastgpt/global/common/error/utils';
-import { useTranslation } from 'next-i18next';
+
 const FastLogin = ({
   code,
   token,
@@ -23,7 +25,7 @@ const FastLogin = ({
   const { setUserInfo } = useUserStore();
   const router = useRouter();
   const { toast } = useToast();
-  const { t } = useTranslation();
+
   const loginSuccess = useCallback(
     (res: ResLogin) => {
       setToken(res.token);
@@ -50,7 +52,7 @@ const FastLogin = ({
         if (!res) {
           toast({
             status: 'warning',
-            title: t('common:support.user.login.error')
+            title: '登录异常'
           });
           return setTimeout(() => {
             router.replace('/login');
@@ -60,7 +62,7 @@ const FastLogin = ({
       } catch (error) {
         toast({
           status: 'warning',
-          title: getErrText(error, t('common:support.user.login.error'))
+          title: getErrText(error, '登录异常')
         });
         setTimeout(() => {
           router.replace('/login');

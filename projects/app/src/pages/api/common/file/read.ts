@@ -4,7 +4,6 @@ import { connectToDatabase } from '@/service/mongo';
 import { authFileToken } from '@fastgpt/service/support/permission/controller';
 import { getDownloadStream, getFileById } from '@fastgpt/service/common/file/gridfs/controller';
 import { CommonErrEnum } from '@fastgpt/global/common/error/code/common';
-import { stream2Encoding } from '@fastgpt/service/common/file/gridfs/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
@@ -18,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       throw new Error('fileId is empty');
     }
 
-    const [file, fileStream] = await Promise.all([
+    const [file, { fileStream, encoding }] = await Promise.all([
       getFileById({ bucketName, fileId }),
       getDownloadStream({ bucketName, fileId })
     ]);
@@ -27,26 +26,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       return Promise.reject(CommonErrEnum.fileNotFound);
     }
 
-    const { stream, encoding } = await (async () => {
-      if (file.metadata?.encoding) {
-        return {
-          stream: fileStream,
-          encoding: file.metadata.encoding
-        };
-      }
-      return stream2Encoding(fileStream);
-    })();
-
     res.setHeader('Content-Type', `${file.contentType}; charset=${encoding}`);
-    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
     res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(file.filename)}"`);
 
-    stream.pipe(res);
+    fileStream.pipe(res);
 
-    stream.on('error', () => {
+    fileStream.on('error', () => {
       res.status(500).end();
     });
-    stream.on('end', () => {
+    fileStream.on('end', () => {
       res.end();
     });
   } catch (error) {
@@ -58,6 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 }
 export const config = {
   api: {
-    responseLimit: '100mb'
+    responseLimit: '32mb'
   }
 };

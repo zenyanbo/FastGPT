@@ -1,33 +1,41 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { jsonRes } from '@fastgpt/service/common/response';
+import { withNextCors } from '@fastgpt/service/common/middle/cors';
+import { connectToDatabase } from '@/service/mongo';
 import { updateData2Dataset } from '@/service/core/dataset/data/controller';
+import { authDatasetData } from '@/service/support/permission/auth/dataset';
 import { pushGenerateVectorUsage } from '@/service/support/wallet/usage/push';
-import { UpdateDatasetDataProps } from '@fastgpt/global/core/dataset/controller';
-import { NextAPI } from '@/service/middleware/entry';
-import { WritePermissionVal } from '@fastgpt/global/support/permission/constant';
-import { authDatasetData } from '@fastgpt/service/support/permission/dataset/auth';
-import { ApiRequestProps } from '@fastgpt/service/type/next';
-import { MongoDatasetData } from '@fastgpt/service/core/dataset/data/schema';
+import { UpdateDatasetDataProps } from '@/global/core/dataset/api';
+import { checkDatasetLimit } from '@fastgpt/service/support/permission/teamLimit';
 
-async function handler(req: ApiRequestProps<UpdateDatasetDataProps>) {
-  const { dataId, q, a, indexes = [] } = req.body;
+export default withNextCors(async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+  try {
+    await connectToDatabase();
+    const { id, q = '', a, indexes = [] } = req.body as UpdateDatasetDataProps;
 
-  // auth data permission
-  const {
-    collection: {
-      datasetId: { vectorModel }
-    },
-    teamId,
-    tmbId
-  } = await authDatasetData({
-    req,
-    authToken: true,
-    authApiKey: true,
-    dataId,
-    per: WritePermissionVal
-  });
+    // auth data permission
+    const {
+      collection: {
+        datasetId: { vectorModel }
+      },
+      teamId,
+      tmbId
+    } = await authDatasetData({
+      req,
+      authToken: true,
+      authApiKey: true,
+      dataId: id,
+      per: 'w'
+    });
 
-  if (q || a || indexes.length > 0) {
+    // auth team balance
+    await checkDatasetLimit({
+      teamId,
+      insertLen: 1
+    });
+
     const { tokens } = await updateData2Dataset({
-      dataId,
+      dataId: id,
       q,
       a,
       indexes,
@@ -40,11 +48,12 @@ async function handler(req: ApiRequestProps<UpdateDatasetDataProps>) {
       tokens,
       model: vectorModel
     });
-  } else {
-    // await MongoDatasetData.findByIdAndUpdate(dataId, {
-    //   ...(forbid !== undefined && { forbid })
-    // });
-  }
-}
 
-export default NextAPI(handler);
+    jsonRes(res);
+  } catch (err) {
+    jsonRes(res, {
+      code: 500,
+      error: err
+    });
+  }
+});

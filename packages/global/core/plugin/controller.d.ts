@@ -1,13 +1,12 @@
-import { StoreEdgeItemType } from 'core/workflow/type/edge';
-import type { StoreNodeItemType } from '../workflow/type/node';
+import type { ModuleItemType } from '../module/type.d';
 import { PluginTypeEnum } from './constants';
-import { HttpAuthMethodType } from '../app/httpPlugin/type';
+import { HttpAuthMethodType } from './httpPlugin/type';
 
 export type CreateOnePluginParams = {
   name: string;
   avatar: string;
   intro: string;
-  modules: StoreNodeItemType[];
+  modules: ModuleItemType[];
   parentId: string | null;
   type: `${PluginTypeEnum}`;
   metadata?: {
@@ -21,8 +20,7 @@ export type UpdatePluginParams = {
   name?: string;
   avatar?: string;
   intro?: string;
-  modules?: StoreNodeItemType[];
-  edges?: StoreEdgeItemType[];
+  modules?: ModuleItemType[];
   metadata?: {
     apiSchemaStr?: string;
     customHeaders?: string;

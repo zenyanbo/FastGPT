@@ -1,15 +1,24 @@
 export const TeamCollectionName = 'teams';
-export const TeamMemberCollectionName = 'team_members';
-export const TeamTagsCollectionName = 'team_tags';
+export const TeamMemberCollectionName = 'team.members';
+export const TeamTagsCollectionName = 'team.tags';
 
 export enum TeamMemberRoleEnum {
-  owner = 'owner'
+  owner = 'owner',
+  admin = 'admin',
+  visitor = 'visitor'
 }
-
 export const TeamMemberRoleMap = {
   [TeamMemberRoleEnum.owner]: {
     value: TeamMemberRoleEnum.owner,
     label: 'user.team.role.Owner'
+  },
+  [TeamMemberRoleEnum.admin]: {
+    value: TeamMemberRoleEnum.admin,
+    label: 'user.team.role.Admin'
+  },
+  [TeamMemberRoleEnum.visitor]: {
+    value: TeamMemberRoleEnum.visitor,
+    label: 'user.team.role.Visitor'
   }
 };
 
@@ -19,7 +28,6 @@ export enum TeamMemberStatusEnum {
   reject = 'reject',
   leave = 'leave'
 }
-
 export const TeamMemberStatusMap = {
   [TeamMemberStatusEnum.waiting]: {
     label: 'user.team.member.waiting',
@@ -38,5 +46,4 @@ export const TeamMemberStatusMap = {
     color: 'red.600'
   }
 };
-
 export const notLeaveStatus = { $ne: TeamMemberStatusEnum.leave };

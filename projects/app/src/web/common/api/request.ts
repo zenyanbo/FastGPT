@@ -4,7 +4,7 @@ import axios, {
   AxiosResponse,
   AxiosProgressEvent
 } from 'axios';
-import { clearToken } from '@/web/support/user/auth';
+import { clearToken, getToken } from '@/web/support/user/auth';
 import { TOKEN_ERROR_CODE } from '@fastgpt/global/common/error/errorCode';
 import { TeamErrEnum } from '@fastgpt/global/common/error/code/team';
 import { useSystemStore } from '../system/useSystemStore';
@@ -14,8 +14,7 @@ interface ConfigType {
   timeout?: number;
   onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
   cancelToken?: AbortController;
-  maxQuantity?: number; // The maximum number of simultaneous requests, usually used to cancel old requests
-  withCredentials?: boolean;
+  maxQuantity?: number;
 }
 interface ResponseDataType {
   code: number;
@@ -31,28 +30,20 @@ const maxQuantityMap: Record<
   }
 > = {};
 
-function checkMaxQuantity({ url, maxQuantity }: { url: string; maxQuantity?: number }) {
-  if (maxQuantity) {
-    const item = maxQuantityMap[url];
-    const controller = new AbortController();
+function requestStart({ url, maxQuantity }: { url: string; maxQuantity?: number }) {
+  if (!maxQuantity) return;
+  const item = maxQuantityMap[url];
 
-    if (item) {
-      if (item.amount >= maxQuantity) {
-        item.sign?.abort?.();
-        maxQuantityMap[url] = {
-          amount: 1,
-          sign: controller
-        };
-      } else {
-        item.amount++;
-      }
-    } else {
-      maxQuantityMap[url] = {
-        amount: 1,
-        sign: controller
-      };
+  if (item) {
+    if (item.amount >= maxQuantity && item.sign) {
+      item.sign.abort();
+      delete maxQuantityMap[url];
     }
-    return controller;
+  } else {
+    maxQuantityMap[url] = {
+      amount: 1,
+      sign: new AbortController()
+    };
   }
 }
 function requestFinish({ url }: { url: string }) {
@@ -70,6 +61,7 @@ function requestFinish({ url }: { url: string }) {
  */
 function startInterceptors(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
   if (config.headers) {
+    config.headers.token = getToken();
   }
 
   return config;
@@ -146,17 +138,17 @@ instance.interceptors.response.use(responseSuccess, (err) => Promise.reject(err)
 function request(
   url: string,
   data: any,
-  { cancelToken, maxQuantity, withCredentials, ...config }: ConfigType,
+  { cancelToken, maxQuantity, ...config }: ConfigType,
   method: Method
 ): any {
   /* 去空 */
   for (const key in data) {
-    if (data[key] === undefined) {
+    if (data[key] === null || data[key] === undefined) {
       delete data[key];
     }
   }
 
-  const controller = checkMaxQuantity({ url, maxQuantity });
+  requestStart({ url, maxQuantity });
 
   return instance
     .request({
@@ -165,8 +157,7 @@ function request(
       method,
       data: ['POST', 'PUT'].includes(method) ? data : null,
       params: !['POST', 'PUT'].includes(method) ? data : null,
-      signal: cancelToken?.signal ?? controller?.signal,
-      withCredentials,
+      signal: cancelToken?.signal,
       ...config // 用户自定义配置，可以覆盖前面的配置
     })
     .then((res) => checkRes(res.data))

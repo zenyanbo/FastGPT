@@ -1,5 +1,5 @@
-import { connectionMongo, getMongoModel } from '../../../common/mongo';
-const { Schema } = connectionMongo;
+import { connectionMongo, type Model } from '../../../common/mongo';
+const { Schema, model, models } = connectionMongo;
 import { TeamMemberSchema as TeamMemberType } from '@fastgpt/global/support/user/team/type.d';
 import { userCollectionName } from '../../user/schema';
 import {
@@ -25,8 +25,8 @@ const TeamMemberSchema = new Schema({
     default: 'Member'
   },
   role: {
-    type: String
-    // enum: Object.keys(TeamMemberRoleMap) // disable enum validation for old data
+    type: String,
+    enum: Object.keys(TeamMemberRoleMap)
   },
   status: {
     type: String,
@@ -49,7 +49,5 @@ try {
   console.log(error);
 }
 
-export const MongoTeamMember = getMongoModel<TeamMemberType>(
-  TeamMemberCollectionName,
-  TeamMemberSchema
-);
+export const MongoTeamMember: Model<TeamMemberType> =
+  models[TeamMemberCollectionName] || model(TeamMemberCollectionName, TeamMemberSchema);

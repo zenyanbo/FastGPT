@@ -1,4 +1,3 @@
-import { PermissionSchemaType } from '../../support/permission/type';
 import type { LLMModelItemType, VectorModelItemType } from '../../core/ai/model.d';
 import { PermissionTypeEnum } from '../../support/permission/constant';
 import { PushDatasetDataChunkProps } from './api';
@@ -9,17 +8,15 @@ import {
   SearchScoreTypeEnum,
   TrainingModeEnum
 } from './constants';
-import { DatasetPermission } from '../../support/permission/dataset/controller';
-import { Permission } from '../../support/permission/controller';
 
+/* schema */
 export type DatasetSchemaType = {
   _id: string;
-  parentId?: string;
+  parentId: string;
   userId: string;
   teamId: string;
   tmbId: string;
   updateTime: Date;
-
   avatar: string;
   name: string;
   vectorModel: string;
@@ -27,13 +24,12 @@ export type DatasetSchemaType = {
   intro: string;
   type: `${DatasetTypeEnum}`;
   status: `${DatasetStatusEnum}`;
+  permission: `${PermissionTypeEnum}`;
   websiteConfig?: {
     url: string;
     selector: string;
   };
-  externalReadUrl?: string;
-} & PermissionSchemaType;
-// } & PermissionSchemaType;
+};
 
 export type DatasetCollectionSchemaType = {
   _id: string;
@@ -42,38 +38,26 @@ export type DatasetCollectionSchemaType = {
   datasetId: string;
   parentId?: string;
   name: string;
-  type: DatasetCollectionTypeEnum;
+  type: `${DatasetCollectionTypeEnum}`;
   createTime: Date;
   updateTime: Date;
-  forbid?: boolean;
 
-  trainingType: TrainingModeEnum;
+  trainingType: `${TrainingModeEnum}`;
   chunkSize: number;
   chunkSplitter?: string;
   qaPrompt?: string;
 
-  tags?: string[];
-
-  fileId?: string; // local file id
-  rawLink?: string; // link url
-  externalFileId?: string; //external file id
+  fileId?: string;
+  rawLink?: string;
 
   rawTextLength?: number;
   hashRawText?: string;
-  externalFileUrl?: string; // external import url
   metadata?: {
     webPageSelector?: string;
     relatedImgId?: string; // The id of the associated image collections
 
     [key: string]: any;
   };
-};
-
-export type DatasetCollectionTagsSchemaType = {
-  _id: string;
-  teamId: string;
-  datasetId: string;
-  tag: string;
 };
 
 export type DatasetDataIndexItemType = {
@@ -94,10 +78,8 @@ export type DatasetDataSchemaType = {
   updateTime: Date;
   q: string; // large chunks or question
   a: string; // answer or custom content
-  forbid?: boolean;
   fullTextToken: string;
   indexes: DatasetDataIndexItemType[];
-  rebuilding?: boolean;
 };
 
 export type DatasetTrainingSchemaType = {
@@ -110,10 +92,9 @@ export type DatasetTrainingSchemaType = {
   billId: string;
   expireAt: Date;
   lockTime: Date;
-  mode: TrainingModeEnum;
+  mode: `${TrainingModeEnum}`;
   model: string;
   prompt: string;
-  dataId?: string;
   q: string;
   a: string;
   chunkIndex: number;
@@ -129,45 +110,31 @@ export type DatasetDataWithCollectionType = Omit<DatasetDataSchemaType, 'collect
 };
 
 /* ================= dataset ===================== */
-export type DatasetSimpleItemType = {
-  _id: string;
-  avatar: string;
-  name: string;
-  vectorModel: VectorModelItemType;
-};
 export type DatasetListItemType = {
   _id: string;
+  parentId: string;
   avatar: string;
   name: string;
   intro: string;
   type: `${DatasetTypeEnum}`;
-  permission: DatasetPermission;
+  isOwner: boolean;
+  canWrite: boolean;
+  permission: `${PermissionTypeEnum}`;
   vectorModel: VectorModelItemType;
-} & PermissionSchemaType;
-
+};
 export type DatasetItemType = Omit<DatasetSchemaType, 'vectorModel' | 'agentModel'> & {
   vectorModel: VectorModelItemType;
   agentModel: LLMModelItemType;
-  permission: DatasetPermission;
-};
-
-/* ================= tag ===================== */
-export type DatasetTagType = {
-  _id: string;
-  tag: string;
-};
-
-export type TagUsageType = {
-  tagId: string;
-  collections: string[];
+  isOwner: boolean;
+  canWrite: boolean;
 };
 
 /* ================= collection ===================== */
 export type DatasetCollectionItemType = CollectionWithDatasetType & {
+  canWrite: boolean;
   sourceName: string;
   sourceId?: string;
   file?: DatasetFileSchema;
-  permission: DatasetPermission;
 };
 
 /* ================= data ===================== */
@@ -195,9 +162,10 @@ export type DatasetFileSchema = {
   filename: string;
   contentType: string;
   metadata: {
+    contentType: string;
+    datasetId: string;
     teamId: string;
     tmbId: string;
-    encoding?: string;
   };
 };
 
