@@ -6,9 +6,9 @@ import { Box, Flex, Grid } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
-import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import { AI_POINT_USAGE_CARD_ROUTE } from '@/web/support/wallet/sub/constants';
+import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 
 const StandardPlanContentList = ({
   level,
@@ -43,7 +43,7 @@ const StandardPlanContentList = ({
   }, [subPlans?.standard, level, mode]);
 
   return planContent ? (
-    <Grid gap={4}>
+    <Grid gap={4} fontSize={'sm'}>
       <Flex alignItems={'center'}>
         <MyIcon name={'price/right'} w={'16px'} mr={3} />
         <Box color={'myGray.600'}>
@@ -92,14 +92,13 @@ const StandardPlanContentList = ({
               amount: planContent.totalPoints
             })}
           </Box>
-          <MyTooltip label={t('support.wallet.subscription.AI points click to read tip')}>
-            <QuestionOutlineIcon
-              ml={'2px'}
-              onClick={() => {
-                router.push(AI_POINT_USAGE_CARD_ROUTE);
-              }}
-            />
-          </MyTooltip>
+          <QuestionTip
+            ml={1}
+            label={t('common:support.wallet.subscription.AI points click to read tip')}
+            onClick={() => {
+              router.push(AI_POINT_USAGE_CARD_ROUTE);
+            }}
+          ></QuestionTip>
         </Flex>
       </Flex>
       <Flex alignItems={'center'}>
@@ -113,13 +112,13 @@ const StandardPlanContentList = ({
       {!!planContent.permissionReRank && (
         <Flex alignItems={'center'}>
           <MyIcon name={'price/right'} w={'16px'} mr={3} />
-          <Box color={'myGray.600'}>检索结果重排</Box>
+          <Box color={'myGray.600'}>{t('support.wallet.subscription.rerank')}</Box>
         </Flex>
       )}
       {!!planContent.permissionWebsiteSync && (
         <Flex alignItems={'center'}>
           <MyIcon name={'price/right'} w={'16px'} mr={3} />
-          <Box color={'myGray.600'}>Web站点同步</Box>
+          <Box color={'myGray.600'}>{t('support.wallet.subscription.web_site_sync')}</Box>
         </Flex>
       )}
     </Grid>
