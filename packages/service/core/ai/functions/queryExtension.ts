@@ -31,7 +31,8 @@ The output is only a standard list with "Retrieval terms". Your output should ST
 ## REQUIREMENTS
 Optimizing "Retrieval terms" requires a careful understanding of the "Query" and the ability to express it clearly and professionally. Each "Retrieval term" should be a complete sentence or a phrase that captures the essence of the user's query, extending and refining it for better information retrieval. The terms should be specific, relevant, and aligned with the language and terminology used in theoretical physics and mathematics. However, you should be cautious about information that you don't know or can't infer from the query. In such cases, it's better to generate fewer terms or no terms at all than to provide incorrect or misleading information. Here are other specific requirements,
 - Strike a BALANCE between specificity and the integrity of "Query". The "Retrieval terms" should capture the core meaning and critical details of the Query without diverting from the ORIGINAL INTENT. For broader topics, introducing SPECIFIC "Retrieval terms" helps narrow the scope and improve accuracy. However, when the "Query" is already NARROW and WELL-DEFINED, CAUTION is crucial. Adding unnecessary new terms may divert from the original intent and lead to inaccurate outcomes.
-- Terminology should be wraped in single quotes, such as 'Wilson loop'. 
+- Terminology should be wraped in single quotes, such as 'Wilson loop'.
+- Mathematical formulas should be wrapped in $ or $$.
 - To clearly express "Retrieval terms", AVOID ABBREVIATE and PRONOUNS in "Retrieval terms".
 - As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into "Retrieval terms list". Note, you need to pay attention to the correspondence between Chinese and English version of the professional terminology. Be sure to obtain an accurate English version.
 
@@ -55,6 +56,10 @@ Tests of General Relativity: Precise observations of EMRIs can verify Einstein's
 <QUERY>Introduce Kerr geodesic in detail. Note that the more detailed the better, generating reports of more than 4K words.</QUERY>
 Retrieval terms list: ["Review Kerr geodesic from Kerr metric and its symmetry, geodesic constants of motion and seperable Kerr geodesic equation, as well as its analytical solutions.","Analyze the orbital dynamics and properties of 'bound Kerr geodesic' from Kerr geodesic equations.","Discuss the properties of bound Kerr geodesic oscillations and introduce 'action-angle formalism'."]
 ----------------
+<HISTORY></HISTORY>
+<QUERY>Solve the following differential equation: $\\frac{dy}{dx} + 2y = e^{-x}$</QUERY>
+Retrieval terms list: ["Solve the first-order linear ordinary differential equation $dy/dx + 2y = e^(-x)$ using the method of integrating factors. Derive the general solution of the differential equation and find the particular solution if an initial condition is given."]
+----------------
 <HISTORY>
 Q: Conversation background.
 A: The current conversation is about the quantum field theory.
@@ -67,6 +72,10 @@ Retrieval terms list: ["Give the mathematical derivation of 'Compton scattering'
 <HISTORY></HISTORY>
 <QUERY>introduce quantum mechanics in detail</QUERY>
 Retrieval terms list: ["Introduce the basic concepts of quantum mechanics, including 'wave-particle duality', quantum superposition, quantum entanglement, quantum measurement, and 'uncertainty principle'.","Give the mathematical formalism/framework of 'quantum mechanics', including wave function, 'Schrödinger equation', 'Heisenberg uncertainty principle', operators, and observables.","Provide the fundamental assumption (postulates) of 'quantum mechanics', such as the definition of Hilbert space and state vector, operator as the quantization of observables, and the probabilistic interpretation of observables, the time evolution of quantum states, and measurement postulate (Born rule)","Discuss the different formalisms of quantum mechanics, including 'wave mechanics', 'matrix mechanics', 'Dirac notation', and 'path integral formulation'.", "Introduce the 'quantum harmonic oscillator' as a fundamental model in quantum mechanics and its solutions in 'position space' and 'momentum space'.","Discuss the big, open and tight problem from the historical development and latest progress in quantum mechanics."]
+----------------
+<HISTORY></HISTORY>
+<QUERY>Consider the matrix $A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}$. Find the eigenvalues and eigenvectors of matrix $A$.</QUERY>
+Retrieval terms list: ["Find the eigenvalues of the matrix $A$ by solving the characteristic equation $det(A - λI) = 0$, where $λ$ represents the eigenvalues and $I$ is the identity matrix. Then Determine the eigenvectors corresponding to each eigenvalue by solving the equation $(A - λI)v = 0$, where $v$ represents the eigenvector."]
 
 ## Note
 Be honest and cautious when dealing with concrete or unknown topic. Assuming you don't know 'Taiji Program in Space'. 
