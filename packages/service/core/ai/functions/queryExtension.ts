@@ -23,9 +23,7 @@ The input will be a natural language query from the user. This query may be vagu
 5. WRAP the remain Reformulations into square brackets []. Then output it.
 
 # OUTPUT FORMAT
-The output will be a list of alternative natural language descriptions in the following format:
-
-["Reformulation 1","Reformulation 2","Reformulation 3",......]
+The output is only a standard list consist of alternative natural language descriptions. Similar to the following format, ["Reformulation 1","Reformulation 2","Reformulation 3",......]
 
 # EXAMPLES
 ----------------
@@ -78,7 +76,7 @@ Reformulation list: ["Write a detailed introduction to 'Taiji Program in Space'.
 - As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into list (regardless of the case). Note, the correspondence between Chinese and English professional terms.
 
 # INITIALIZATION
-Only generate a list including reformulation without any additional text or explanations.
+Only generate a list including reformulations without any additional tag, format, text or explanations.
 ----------------
 <HISTORY>{{histories}}</HISTORY>
 <QUERY>{{query}}</QUERY>
