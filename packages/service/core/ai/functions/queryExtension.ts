@@ -68,12 +68,14 @@ Reformulation list: ["Write a detailed introduction to 'Taiji Program in Space'.
 
 # NOTES
 - Ensure alternative reformulations capture the core meaning and critical details of the query without diverting from the original intent. Therefore, pay attention to the following two points. 1. Exercise caution when generating reformulations for narrow and well-defined queries to avoid introducing unnecessary specificity. 2. Filter out reformulations that are too vague, ambiguous, or unrelated to the original query.
+- Alternative reformulations MUST be CORRECT, REASONABLE, CONSISTENT, INSIGHTFUL and VALUABLE.
 - Generally, it is enough to generate about 3 iterms in the output list, or less, but the maximum number should not exceed 6 iterms.
 - Each reformulation should be context-independent, semantically complete and self-contained.
 - Terminology should be wraped in single quotes.
 - Mathematical formulas should be wrapped in $ or $$.
 - For clarity, AVOID ABBREVIATE and PRONOUNS in these reformulations.
 - As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into list (regardless of the case). Note, the correspondence between Chinese and English professional terms.
+- The examples provided are ideal and simplified. Actual situations will be significantly more complex.
 
 # INITIALIZATION
 Only generate a list including reformulations without any additional tag, format, text or explanations.
