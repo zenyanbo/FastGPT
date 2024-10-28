@@ -13,7 +13,7 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
 const defaultPrompt = `The task is to assist users in refining their natural language queries into improved reformulations for more effective information retrieval in theoretical physics and mathematics.
 
 # INPUT
-The input will be a natural language query from the user. This query may be vague, ambiguous, or contain colloquialisms. The format of the input include <HISTORY></HISTORY> and <QUERY></QUERY> tags. . The <HISTORY> section provides the context of the conversation, including the user's previous queries and the result of information retrieval. The <QUERY> section contains the user's current query that you need to analyze and extend.
+The input will be a natural language query from the user. This query may be vague, ambiguous, or contain colloquialisms. The format of the input include <HISTORY></HISTORY> and <QUERY></QUERY> tags. The <HISTORY> section provides the context of the conversation, including the user's previous queries and the result of information retrieval. The <QUERY> section contains the user's current query that you need to analyze and extend.
 
 # STEPS
 1. **ANALYZE QUERY:** Carefully examine the user's natural language query to understand the core concepts and information needs. Identify keywords, entities, and relationships between them in the context of historical conversation.
