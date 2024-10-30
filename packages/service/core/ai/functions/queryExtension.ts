@@ -50,8 +50,8 @@ Reformulation list: ["Review Kerr geodesic from Kerr metric and its symmetry, ge
 Reformulation list: ["Solve the first-order linear ordinary differential equation $dy/dx + 2y = e^(-x)$ using the method of integrating factors. Derive the general solution of the differential equation and find the particular solution if an initial condition is given."]
 ----------------
 <HISTORY></HISTORY>
-<QUERY>introduce quantum mechanics in detail</QUERY>
-Reformulation list: ["Introduce the basic concepts of quantum mechanics, including 'wave-particle duality', quantum superposition, quantum entanglement, quantum measurement, and 'uncertainty principle'.","Give the mathematical formalism/framework of 'quantum mechanics', including wave function, 'Schrödinger equation', 'Heisenberg uncertainty principle', operators, and observables.","Provide the fundamental assumption (postulates) of 'quantum mechanics', such as the definition of Hilbert space and state vector, operator as the quantization of observables, and the probabilistic interpretation of observables, the time evolution of quantum states, and measurement postulate (Born rule)","Discuss the different formalisms of quantum mechanics, including 'wave mechanics', 'matrix mechanics', 'Dirac notation', and 'path integral formulation'.", "Introduce the 'quantum harmonic oscillator' as a fundamental model in quantum mechanics and its solutions in 'position space' and 'momentum space'.","Discuss the big, open and tight problem from the historical development and latest progress in quantum mechanics."]
+<QUERY>What is quantum mechanics?</QUERY>
+Reformulation list: ["Introduce quantum mechanics comprehensively. The response should include the following:\n1. Mathematical Foundations\n2. Postulates of Quantum Mechanics\n3. Fundamental Concepts\n4. Specific Systems and Applications\n5. Advanced Topics","Describe the Foundational Postulates and Mathematical Formalism of 'quantum mechanics', such as the definition of Hilbert space and state vector, operator as the quantization of observables, and the probabilistic interpretation of observables, the time evolution of quantum states, and measurement postulate (Born rule)","Explain the Key Features, Concepts and Phenomena of quantum mechanics, including 'wave-particle duality', quantum superposition, quantum entanglement, quantum measurement, and 'uncertainty principle'.","Discuss the different formalisms of quantum mechanics, including 'wave mechanics', 'matrix mechanics', 'Dirac notation', and 'path integral formulation'.", "Illustrate the 'quantum harmonic oscillator' as a fundamental model in quantum mechanics and its solutions in 'position space' and 'momentum space'.","Discuss the big, open and tight problem from the historical development and latest progress in quantum mechanics.","Introduce the Extensions and Applications of Quantum Mechanics, including but not limited to Quantum Field Theory, Quantum Statistical Mechanics, Quantum Computing."]
 ----------------
 <HISTORY></HISTORY>
 <QUERY>Consider the matrix $A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}$. Find the eigenvalues and eigenvectors of matrix $A$.</QUERY>
@@ -65,17 +65,21 @@ Reformulation list: []
 <HISTORY></HISTORY>
 <QUERY>对太极项目写一个详细的简介，生成一个知识图谱来介绍。</QUERY>
 Reformulation list: ["Write a detailed introduction to 'Taiji Program in Space'."]
+----------------
+<HISTORY></HISTORY>
+<QUERY>GeneralRelativity</QUERY>
+Reformulation list: ["Comprehensively outline General Relativity, including its fundamental principles, mathematical formalism, key predictions, and experimental verifications. Discuss topics such as spacetime curvature, the Einstein field equations, and applications to black holes and cosmology.","Explain the mathematical foundations of General Relativity using tensor calculus and differential geometry, and how these tools are used to formulate the Einstein field equations and describe gravitational phenomena.","Discuss the experimental confirmations of General Relativity, including gravitational lensing, gravitational waves, time dilation, and the precession of planetary orbits, highlighting their significance in modern physics.", "Explore the implications of General Relativity in cosmology, such as models of the expanding universe, dark matter, dark energy, and the cosmic microwave background radiation.", "Examine current challenges and open questions in General Relativity, including efforts to reconcile it with quantum mechanics, the nature of singularities, and the development of a quantum theory of gravity."]
 
 # NOTES
 - Ensure alternative reformulations capture the core meaning and critical details of the query without diverting from the original intent. Therefore, pay attention to the following two points. 1. Exercise caution when generating reformulations for narrow and well-defined queries to avoid introducing unnecessary specificity. 2. Filter out reformulations that are too vague, ambiguous, or unrelated to the original query.
 - Alternative reformulations MUST be CORRECT, REASONABLE, CONSISTENT, INSIGHTFUL and VALUABLE.
 - Generally, it is enough to generate about 3 iterms in the output list, or less, but the maximum number should not exceed 6 iterms.
 - Each reformulation should be context-independent, semantically complete and self-contained.
-- Terminology should be wraped in single quotes.
 - Mathematical formulas should be wrapped in $ or $$.
 - For clarity, AVOID ABBREVIATE and PRONOUNS in these reformulations.
 - As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into list (regardless of the case). Note, the correspondence between Chinese and English professional terms.
 - The examples provided are ideal and simplified. Actual situations will be significantly more complex.
+- It is best to use some common cognitive skills of physicists to come up with some insightful statements, including but not limited to analysis (qualitative, quantitative, first principles), critical thinking, modeling (assumption, approximation, estimation), etc.
 
 # INITIALIZATION
 Only generate a list including reformulations without any additional tag, format, text or explanations.
