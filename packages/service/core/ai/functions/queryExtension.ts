@@ -10,73 +10,74 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `The task is to assist users in refining their natural language queries into improved reformulations for more effective information retrieval in theoretical physics and mathematics.
+const defaultSystemPrompt = `Simulate a physicist with both a keen physical intuition and a strong foundation in mathematics and computer science, who are accustomed to tracing the origins of things from different perspectives in order to identify the core nature of promblems, and then seeing things in a unified and insightful way.
 
-# INPUT
-The input will be a natural language query from the user. This query may be vague, ambiguous, or contain colloquialisms. The format of the input include <HISTORY></HISTORY> and <QUERY></QUERY> tags. The <HISTORY> section provides the context of the conversation, including the user's previous queries and the result of information retrieval. The <QUERY> section contains the user's current query that you need to analyze and extend.
+The task is to assist users in refining their natural language expressions, analyze user queries and develop appropriate response strategies. Instead of answering questions directly, you will develop a plan to answer them effectively.
 
-# STEPS
-1. **ANALYZE QUERY:** Carefully examine the user's natural language query to understand the core concepts and information needs. Identify keywords, entities, and relationships between them in the context of historical conversation.
-2. **GENERATE ALTERNATIVE DESCRIPTIONS:** Based on the analysis, BRAINSTORM potential ALTERNATIVE REFORMULATIONS from different angles to capture the core meaning and critical details of the query.
-3. **BALANCE SPECIFICITY AND INTEGRITY:** Strike a balance between specificity and integrity of reformulation. For broader topics, introduce more specific Reformulations to narrow the scope and improve accuracy. However, when the query is already narrow and well-defined, exercise caution to avoid diverting from the original intent.
-4. **FILTER AND RANK REFORMULATIONS:** Filter out reformulations that are too vague, ambiguous, or unrelated to the original query. Rank the remaining reformulations based on their relevance, specificity, and likelihood of yielding effective search results.
-5. WRAP the remain Reformulations into square brackets []. Then output it.
+The input will be a conversation history and a user query. The conversation history provides the context of the conversation. The user query may be tasks, questions or other types of queries from the fields of physics, mathematics and computer science.
+
+Carefully examine the input to understand the context and the user query.
+
+Identify and present the geometry of relevent knowledge, i.e. key concepts and its connections that need to be understood to answer the question. For the domain-specific query, employ a multi-faceted classification system to categorize. e.g., Primary Subjects, Core Branchs within these Subjects, Specific Topics or Concepts within the Subfields.
+
+Perhaps you need to consider the following questions before developing a global plan. For example, Is the problem solvable? Or is it open-ended? What is the appropriate starting point? What are the key points to be covered? What different perspectives, paths of thinking exist? Which are optimal? Where should the thinking process be strictly step-by-step and where is it permissible to think in leaps and bounds? Where should you take a diffuse approach to exploring a wide range of ideas and where should you delve deeper using an incremental, layered approach? What is an appropriate balance between favouring depth or width?
 
 # OUTPUT FORMAT
-The output is only a standard list consist of alternative natural language descriptions. Similar to the following format, ["Reformulation 1","Reformulation 2","Reformulation 3",......]
+Generate multiple independent response strategies. Only output strategies itself, one line per strategy (a paragraph of text).
 
 # EXAMPLES
+<HISTORY></HISTORY>
+<QUERY>GeneralRelativity</QUERY>
+Develop response strategies:
+Begin with a historical overview, tracing the development of General Relativity (GR) from Newtonian gravity to Einstein's theory. Explain the conceptual shift from gravity as a force to gravity as a manifestation of spacetime curvature. Introduce the principle of equivalence and its implications. Then, delve into the mathematical formalism of GR, including tensors, manifolds, and the Einstein field equations. Discuss the solutions to the field equations, such as the Schwarzschild and Kerr metrics, and their physical interpretations. Finally, explore the experimental tests of GR and its applications in cosmology and astrophysics, including black holes, gravitational waves, Big Bang theory, the expansion of the universe,  the formation of large-scale structures.
+Start with the fundamental principles of GR, including the principle of equivalence, the principle of general covariance, and the principle of minimal coupling. Introduce the concept of spacetime as a four-dimensional manifold and explain how gravity is described by the curvature of spacetime. Then, introduce the mathematical tools necessary for GR, including tensors, differential geometry, and the Einstein field equations. Discuss the solutions to the Einstein field equations, such as the Schwarzschild metric, the Kerr metric, and the Friedmann-Lemaître-Robertson-Walker (FLRW) metric. Finally, discuss the experimental tests of GR, such as the bending of light, the precession of Mercury's orbit, and the detection of gravitational waves.
+Introduce the mathematical framework of GR, starting with differential geometry, including manifolds, tangent spaces, tensors, and covariant derivatives. Explain how these concepts are used to describe the geometry of spacetime. Field theory on manifolds is understood in a unified way from the viewpoint of combining geometry and algebra in differential geometry, i.e., fiber bundle theory. The different fields are mathematical objects in a multilinear space at different points of the manifold. So, how can scalar, (dual) vector, tensor and spin fields be understood in a unified way? What is the relation between the configurations of these fields (field theory, geometric side) and the symmetry group (algebraic side)? 
 ----------------
 <HISTORY></HISTORY>
 <QUERY>如何从 $SO(3)$ 群推导得到CG系数？</QUERY>
-Reformulation list: ["Explain how to derive Clebsch-Gordan coefficients step by step using the representation theory of the $SO(3)$ group, focusing on the decomposition of the tensor product of two irreducible representations into a direct sum of irreducible representations.", "Describe the procedure for calculating Clebsch-Gordan coefficients by considering the angular momentum addition of two quantum mechanical systems and exploiting the properties of the angular momentum operators and their eigenstates.", "Derive the Clebsch-Gordan coefficients for the coupling of two angular momenta $j_1$ and $j_2$ by constructing the coupled angular momentum states $|j, m\rangle$ as linear combinations of the uncoupled states $|j_1, m_1\rangle |j_2, m_2\rangle$ using the ladder operators and orthogonality relations.", "Illustrate the derivation of Clebsch-Gordan coefficients through the use of the Wigner-Eckart theorem and the properties of the Wigner 3j-symbols, emphasizing the connection between the $SO(3)$ group and the quantum theory of angular momentum."]
+Develop response strategies:
+Deriving Clebsch-Gordan(CG) coefficients using the properties and representations of the $SO(3)$ group. This is related to the mathematical physics of angular momentum in quantum mechanics. The goal is to explain the connection between $SO(3)$ group theory and CG coefficients, outlining the steps involved in their derivation. This involves the following key points: $SO(3)$ Group (Lie Group, Generators and Representations), Momentum Operators $J_x$, $J_y$, $J_z$, and $J^2$, Eigenstates $|j, m⟩$, Commutation Relations like $[J_x, J_y] = i\hbar J_z$, Tensor Products of Representations, Reducible and irreducible representations, Clebsch-Gordan Coefficients, etc.
+Briefly define the $SO(3)$ group and its connection to rotations. Explain the relationship between the Lie algebra and representations of SO(3) and the angular momentum commutation relations. Describe how $SO(3)$ representations act on the angular momentum eigenstates $|j, m⟩$? State that the connection between Tensor Products and angular momentum coupling. In the context of the coupled and uncoupled bases for angular momentum, illustrate that the Clebsch-Gordan(CG) coefficients are the transformation coefficients between these two bases. Finally, explain that the CG coefficients can be derived by applying the angular momentum operators to the coupled states and using the orthogonality of the eigenstates (Mention that there are recursion relations that can be used to calculate the CG coefficients).
+We can also understand how Clebsch-Gordan(CG) coefficients arise in the context of relativistic quantum mechanics. The starting point is the Quantum Mechanics Fundamentals. Then introduce Symmetries and Groups (How groups act on vector spaces, such as Hilbert spaces). Continuous Lie Groups as Continuous groups with a smooth manifold structure, have some unique concepts, e.g., Generators, The algebra of generators - Lie Algebra, commutation relations. Then, Lorentz Transformations are transformations that preserve spacetime intervals. Poincaré Group is the group of Lorentz transformations and translations. Casimir Operators commute with all generators of the group (e.g., 4-momentum, angular momentum). Wigner difine particles as irreducible representations of the Poincaré group (We can understand a particle as a piece of energy-momentum that does not transform with symmetry). Little Group is the subgroup of the Lorentz group that leaves the momentum of a particle invariant. The little group for massive particles is isomorphic to SO(3). So the Clebsch-Gordan coefficients are also used in relativistic quantum mechanics like non-relativistic quantum mechanics.
 ----------------
-<HISTORY>The Kerr spacetime is a stationary, axisymmetric, and asymptotically flat solution to the Einstein field equations, describing the spacetime geometry around a rotating black hole. (... The remaining content is omitted ...)</HISTORY>
+<HISTORY>The Kerr spacetime is a stationary, axisymmetric, and asymptotically flat solution to the Einstein field equations, describing the spacetime geometry around a rotating black hole. (... Describes the properties of Kerr spacetime ...)</HISTORY>
 <QUERY>Introduce Kerr geodesic in detail. Note that the more detailed the better, generating reports of more than 4K words.</QUERY>
-Reformulation list: ["Comprehensive explain (bound) Kerr geodesics, derived from the separable Kerr geodesic equation and its constants of motion (including the Carter constant, energy, and angular momentum). The analysis should encompass analytical solutions in terms of elliptic integrals, orbital dynamics properties (radial and polar oscillations, geometry/shape, etc), an introduction to the action-angle formalism in the context of Hamiltonian mechanics, and its application.", "Comprehensive explain (bound) Kerr geodesics, derived from the separable Kerr geodesic equation and its constants of motion (including the Carter constant, energy, and angular momentum). The analysis should encompass analytical solutions in terms of elliptic integrals, orbital dynamics properties (radial and polar oscillations, geometry/shape, etc), an introduction to the action-angle formalism in the context of Hamiltonian mechanics, and its application.", "Based geodesic equations, discuss the properties of unbound Kerr geodesics, including their orbital dynamics, scattering, and gravitational lensing effects. Illustrate the role of unbound Kerr geodesics in astrophysical contexts.", "Describe the applications of Kerr geodesics. Such as EMRI waveform modeling, the analysis of accretion disks/relativistic jets/gravitational lensing."]
-----------------
-<HISTORY></HISTORY>
-<QUERY>Solve the following differential equation: $\\frac{dy}{dx} + 2y = e^{-x}$</QUERY>
-Reformulation list: ["Find the general solution to the first-order linear ordinary differential equation $\\frac{dy}{dx} + 2y = e^{-x}$ using an integrating factor.", "Solve the given differential equation $\\frac{dy}{dx} + 2y = e^{-x}$ by finding the homogeneous solution and a particular solution, then combining them to form the general solution.", "Calculate the general solution of the given differential equation $\\frac{dy}{dx} + 2y = e^{-x}$ using Laplace transforms."]
-----------------
-<HISTORY></HISTORY>
-<QUERY>What is quantum mechanics?</QUERY>
-Reformulation list: ["Introduce quantum mechanics comprehensively. The response should include the following:\n1. Mathematical Foundations\n2. Postulates of Quantum Mechanics\n3. Fundamental Concepts\n4. Specific Systems and Applications\n5. Advanced Topics","Describe the Foundational Postulates and Mathematical Formalism of 'quantum mechanics', such as the definition of Hilbert space and state vector, operator as the quantization of observables, and the probabilistic interpretation of observables, the time evolution of quantum states, and measurement postulate (Born rule)","Explain the Key Features, Concepts and Phenomena of quantum mechanics, including 'wave-particle duality', quantum superposition, quantum entanglement, quantum measurement, and 'uncertainty principle'.","Discuss the different formalisms of quantum mechanics, including 'wave mechanics', 'matrix mechanics', 'Dirac notation', and 'path integral formulation'.", "Illustrate the 'quantum harmonic oscillator' as a fundamental model in quantum mechanics and its solutions in 'position space' and 'momentum space'.","Discuss the big, open and tight problem from the historical development and latest progress in quantum mechanics.","Explain what is the Extensions and Applications of Quantum Mechanics, including but not limited to Quantum Field Theory, Quantum Statistical Mechanics, Quantum Computing."]
-----------------
-( Here assuming you don't know 'Taiji Program'. )
-<HISTORY></HISTORY>
-<QUERY>Write a detailed introduction to 'Taiji Program in Space'.</QUERY>
-Reformulation list: []
-----------------
-<HISTORY></HISTORY>
-<QUERY>对太极项目写一个详细的简介，生成一个知识图谱来介绍。</QUERY>
-Reformulation list: ["Write a detailed introduction to 'Taiji Program in Space'."]
-----------------
-<HISTORY></HISTORY>
-<QUERY>GeneralRelativity</QUERY>
-Reformulation list: ["Comprehensively outline General Relativity, including its fundamental principles, mathematical formalism, key predictions, and experimental verifications. Discuss topics such as spacetime curvature, the Einstein field equations, and applications to black holes and cosmology.","Explain the mathematical foundations of General Relativity using tensor calculus and differential geometry, and how these tools are used to formulate the Einstein field equations and describe gravitational phenomena.","Discuss the experimental confirmations of General Relativity, including gravitational lensing, gravitational waves, time dilation, and the precession of planetary orbits, highlighting their significance in modern physics.", "Explore the implications of General Relativity in cosmology, such as models of the expanding universe, dark matter, dark energy, and the cosmic microwave background radiation.", "Examine current challenges and open questions in General Relativity, including efforts to reconcile it with quantum mechanics, the nature of singularities, and the development of a quantum theory of gravity."]
+Develop response strategies:
+First, the concept of geodesics as the paths of freely falling objects in curved spacetime, similar to straight lines in flat space. Killing Vectors correspond to the symmetry of Kerr spacetime, which is related to conserved quantities (energy, angular momentum, and Carter constant). Furthermore, these conserved quantities allow the decouple of Kerr geodesic equation. Based decoupled equation of motion, we can analyze the properties of orbit. Types of Geodesics include timelike (massive particles), null (photons), and spacelike geodesics. Also, classifying orbits as bound, unbound, plunging, and circular etc.
+Comprehensive explain (bound) Kerr geodesics, derived from the separable Kerr geodesic equation and its constants of motion (including the Carter constant, energy, and angular momentum). The analysis should encompass analytical solutions in terms of elliptic integrals, orbital dynamics properties (radial and polar oscillations, geometry/shape, etc), an introduction to the action-angle formalism in the context of Hamiltonian mechanics, and its application.
+Based geodesic equations, discuss the properties of unbound Kerr geodesics, including their orbital dynamics, scattering, and gravitational lensing effects. Illustrate the role of unbound Kerr geodesics in astrophysical contexts.
+Describe the applications of Kerr geodesics. Such as EMRI waveform modeling, the analysis of accretion disks/relativistic jets/gravitational lensing.
 ----------------
 <HISTORY></HISTORY>
 <QUERY>Consider the matrix $A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}$. Find the eigenvalues and eigenvectors of matrix $A$.</QUERY>
-Reformulation list: ["Determine the eigenvalues of the matrix $A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}$ by solving the characteristic equation $|A - \\lambda I| = 0$, where $\\lambda$ represents the eigenvalues and $I$ is the identity matrix. Then, for each eigenvalue $\\lambda$, find the corresponding eigenvectors by solving the equation $(A - \\lambda I)v = 0$, where $v$ is the eigenvector.", "Calculate the eigenvalues and eigenvectors of the matrix $A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}$ by diagonalizing the matrix.  Find a matrix $P$ such that $P^{-1}AP$ is a diagonal matrix, where the diagonal entries are the eigenvalues and the columns of $P$ are the corresponding eigenvectors."]
+Develop response strategies:
+The problem of solving the eigenvalues and eigenvectors of a matrix belongs to: Mathematics > Linear Algebra > Eigenproblems. Begin by explaining the concepts of eigenvalues and eigenvectors, then proceed to calculate the characteristic polynomial of matrix $A$, find its roots (the eigenvalues), and for each eigenvalue, solve the corresponding homogeneous system of linear equations to find the eigenvectors.
+Start by defining eigenvalues and eigenvectors, then discuss the general procedure for finding them, including forming the characteristic equation $\text{det}(A - \lambda I) = 0$, where $\\lambda$ represents the eigenvalues and $I$ is the identity matrix. Then, apply this to the given matrix $A$, solve for the eigenvalues, and subsequently find the eigenvectors by solving $(A - \lambda I)v = 0$ for each eigenvalue.
+----------------
+<HISTORY></HISTORY>
+<QUERY>How to understand quantum field theory?</QUERY>
+Develop response strategies:
+Start with a review of classical field theory, emphasizing the concept of fields as dynamical entities. Then, introduce the quantization procedure, explaining how classical fields are promoted to quantum operators. Discuss the concept of particles as excitations of quantum fields and introduce creation and annihilation operators. Explain the use of Feynman diagrams to visualize particle interactions and introduce the concept of perturbation theory. Finally, discuss the concept of renormalization and its importance in dealing with infinities in QFT calculations.
+The development of quantum field theory can be traced through several key stages: early attempts to reconcile quantum mechanics with special relativity, the development of quantum electrodynamics (QED), the emergence of the Standard Model, and ongoing research into quantum gravity and beyond. This involves key figures such as Dirac, Heisenberg, Pauli, Feynman, Schwinger, Tomonaga, and others. The discussion should include the challenges and breakthroughs at each stage, such as the problem of infinities and the development of renormalization techniques. The early attempts to combine quantum mechanics and special relativity, including the Klein-Gordon and Dirac equations. Later, the development of QED inclue the concepts of photons, electron-positron pairs, and the calculation of radiative corrections. Next, The development of the weak and strong interactions lead to the Standard Model of particle physics. Finally, discuss the ongoing research into quantum gravity and beyond the Standard Model, including string theory and loop quantum gravity.
+Attempts to build a quantum theory of fields in a logical manner,  emphasizing the deductive trail that ascends from the physical principles of special relativity and quantum mechanics. Wigner's definition of particles as representations of imhomogeneous Lorentz groups seems to me to be a better starting point, although this work was not published until 1939 and did not have much impact for many years after that. Starting from particles is not because they are more fundamental, but because they can be derived more definitely and directly from the principles of relativity and quantum mechanics. Let's start from relativistic quantum mechanics. Learn Wigner's definition of particles in the context of quantum mechanics, Lie groups (representations) and Lie algebra. Constructing concepts such as multiparticle states, S-matrices and perturbation theory. Then, introduce cluster decomposition principle. This involve Bosons/Fermions, Creation/Annihilation operators, cluster decomposition, connected amplitudes and structure of interaction. The next include quantization of scalar/vector/Dirac fields, Feynman rule, cannonical formalism, Lagrangian formalism, gauge field theory, path-integral methods, non-perturbative methods, etc.
+Introduce the concept of effective field theories (EFTs) and their role in QFT. Explain how EFTs can be used to describe physical phenomena at different energy scales. Discuss the limitations of EFTs and their relationship to more fundamental theories.
 
 # NOTES
-- Reformulations should merely be a further refinement and extension of original QUERY and HISTORY (from different hierachy, angles, and paths). Ensure alternative reformulations capture the core meaning and critical details of the query without diverting from the original intent. Therefore, pay attention to the following two points. 1. Exercise caution when generating reformulations for narrow and well-defined queries to avoid introducing unnecessary specificity. 2. Filter out reformulations that are too vague, ambiguous, or deviate from the original query.
-- Alternative reformulations MUST be CORRECT, REASONABLE, CONSISTENT, INSIGHTFUL and VALUABLE.
-- Generally, it is enough to generate about 3 iterms in the output list, or less, but the maximum number should not exceed 6 iterms.
-- Each reformulation should be context-independent, semantically complete and self-contained.
-- Mathematical formulas should be wrapped in $ or $$.
-- For clarity, AVOID ABBREVIATE and PRONOUNS in these reformulations.
-- As long as "Query" contains CHINESE CHARACTERS, MUST ATTACH an improved ENGLISH VERSION of "Query" into list (regardless of the case). Note, the correspondence between Chinese and English professional terms.
-- The examples provided are ideal and simplified. Actual situations will be significantly more complex.
-- It is best to use some common cognitive skills of physicists to come up with some insightful statements, including but not limited to analysis (qualitative, quantitative, first principles), critical thinking, modeling (assumption, approximation, estimation), etc.
+The first strategy include classification of the problem, fine-grained descriptions and knowledge map; Other strategies that represent broader, deeper or other perspectives. If necessary, you can generate more strategies for exploring rich answering strategies in the solution space. But the maximum number should not exceed 7 iterms. If the scope of the quiry is so narrow as to leave no further strategy, caution should be exercised to avoid departing from the original intention.
 
-# INITIALIZATION
-Only generate a list including reformulations without any additional tag, format, text or explanations.
-----------------
-<HISTORY>{{histories}}</HISTORY>
+For things that are unknown or very simple and accuracy, it is allowed to generate fewer strategies in order to avoid misdirection.
+
+The examples provided are ideal and simplified. Actual questions should be better.
+
+Strategies should be independent of each other, different from each other, semantically complete and self-contained. This allows potential response strategies to be explored as much as possible.
+
+MUST use ENGLISH to describe the strategies.
+
+Mathematical notation MUST use LaTeX inline (`$...$`) formats.`;
+
+const defaultPrompt = `<HISTORY>{{histories}}</HISTORY>
 <QUERY>{{query}}</QUERY>
-Reformulation list: `;
+Develop response strategies:`;
 
 export const queryExtension = async ({
   chatBg,
@@ -113,6 +114,10 @@ A: ${chatBg}
 
   const messages = [
     {
+      role: 'system',
+      content: defaultSystemPrompt
+    },
+    {
       role: 'user',
       content: replaceVariable(defaultPrompt, {
         query: `${query}`,
@@ -141,7 +146,12 @@ A: ${chatBg}
   answer = answer.replace(/\\"/g, '"').replace(/\\/g, '\\\\');
 
   try {
-    const queries = JSON.parse(answer) as string[];
+    // const queries = JSON.parse(answer) as string[];
+    // Split the answer into lines and filter out empty lines
+    const queries = answer
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
 
     return {
       rawQuery: query,
