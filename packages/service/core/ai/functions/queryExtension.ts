@@ -73,7 +73,7 @@ Strategies should be independent of each other, different from each other, seman
 
 MUST use ENGLISH to describe the strategies.
 
-Mathematical notation MUST use LaTeX inline (`$...$`) formats.`;
+Mathematical notation MUST use LaTeX inline ($...$) formats.`;
 
 const defaultPrompt = `<HISTORY>{{histories}}</HISTORY>
 <QUERY>{{query}}</QUERY>
