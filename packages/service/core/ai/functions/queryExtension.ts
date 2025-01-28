@@ -169,6 +169,20 @@ A: ${chatBg}
 
   answer = answer.replace(/\\"/g, '"').replace(/\\/g, '\\\\');
 
+  // Find the index where response strategies start
+  const strategyIndex = answer.indexOf('Develop response strategies:');
+  if (strategyIndex === -1) {
+    return {
+      rawQuery: query,
+      extensionQueries: [],
+      model,
+      tokens: countGptMessagesTokens(messages)
+    };
+  }
+
+  // Extract everything after "Develop response strategies:"
+  const strategiesSection = answer.slice(strategyIndex + 'Develop response strategies:'.length);
+    
   try {
     // const queries = JSON.parse(answer) as string[];
     // Split the answer into lines and filter out empty lines
