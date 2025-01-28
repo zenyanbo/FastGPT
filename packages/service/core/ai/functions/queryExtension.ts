@@ -97,7 +97,7 @@ Strategies should be independent of each other, different from each other, seman
 
 MUST use ENGLISH to describe the strategies.
 
-Mathematical notation MUST use LaTeX inline ($...$) formats.`;
+Mathematical notation MUST use LaTeX inline ($...$) formats or display ($$...$$) formats (without line breaks).`;
 
 const defaultPrompt = `<HISTORY>{{histories}}</HISTORY>
 <QUERY>{{query}}</QUERY>`;
@@ -189,7 +189,7 @@ A: ${chatBg}
       .split('\n')
       .map(line => line.trim())
       .filter(line => 
-        line.length > 0 && 
+        line.length > 6 && 
         !line.includes(':') && // Filter out any other section headers
         !line.startsWith('Subjects') &&
         !line.startsWith('Core Branchs') &&
