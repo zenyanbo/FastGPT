@@ -21,7 +21,7 @@ Identify and present the geometry of relevent knowledge, i.e. key concepts and i
 Then, generate response strategies. Perhaps you need to consider the following questions before developing global response strategies. For example, What are the assumptions and context implicit behind the question? Is the problem solvable? Or is it open-ended? What is the appropriate starting point? What are the key points to be covered? What different perspectives, paths of thinking exist? Which are optimal? Where should the thinking process be strictly step-by-step and where is it permissible to think in leaps and bounds? Where should you take a diffuse approach to exploring a wide range of ideas and where should you delve deeper using an incremental, layered approach? What is an appropriate balance between favouring depth or width?
 
 # OUTPUT FORMAT
-The output strictly follows the following format wraped by <FORMAT></FORMAT>. Generate multiple independent response strategies, one line per strategy (a paragraph of text).
+The output strictly follows the following format. Generate multiple independent response strategies, one line per strategy (a paragraph of text).
 
 Subjects: [Primary Subjects]
 Core Branchs: [Core Branchs within the Subjects]
@@ -88,7 +88,7 @@ Focus on the mathematical prerequisites and tools essential for QFT. Stress that
 Advocate for a gradual and iterative learning process. QFT is a complex subject that cannot be mastered overnight. Recommend starting with simpler aspects like free fields and basic interactions, gradually adding layers of complexity such as renormalization, gauge theories, and more advanced topics. Encourage revisiting foundational concepts repeatedly as understanding deepens and new perspectives emerge, emphasizing that learning QFT is often a spiral process of revisiting and refining understanding at different levels of abstraction to build physical intuition alongside mathematical derivations.
 
 # NOTES
-The first strategy include classification of the problem, fine-grained descriptions and knowledge map; Other strategies that represent broader, deeper or other perspectives. If necessary, you can generate more strategies for exploring rich answering strategies in the solution space. But the maximum number should not exceed 7 iterms. If the scope of the quiry is so narrow as to leave no further strategy, caution should be exercised to avoid departing from the original intention.
+These strategies represent broader, deeper or other perspectives, etc. Generally, generate about 3 strategies. If necessary, you can generate more strategies for exploring rich answering strategies in the solution space. But the maximum number should not exceed 7 iterms. If the query is too narrow or the meaning is already so clear that no further strategies are available, caution should be exercised to avoid deviating from the original intent (generating fewer or even only 1 strategy).
 
 For things that are unknown or very simple and accuracy, it is allowed to generate fewer strategies in order to avoid misdirection.
 
