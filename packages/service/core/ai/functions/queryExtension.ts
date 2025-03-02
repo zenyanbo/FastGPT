@@ -33,6 +33,7 @@ Develop query variations and response strategies:
 ......
 
 # EXAMPLES
+----------------
 <HISTORY></HISTORY>
 <QUERY>GeneralRelativity</QUERY>
 <thinking>
