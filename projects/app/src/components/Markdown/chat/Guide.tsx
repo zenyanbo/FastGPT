@@ -40,10 +40,15 @@ function MyLink(e: any) {
 const Guide = ({ text }: { text: string }) => {
   const formatText = useMemo(
     () => {
-      // First apply general markdown formatting
-      let formatted = text.replace(/\[(.*?)\]($|\n)/g, '[$1]()').replace(/\\n/g, '\n&nbsp;');
-      // Then apply LaTeX specific formatting
+      // First handle any open list items
+      let formatted = text.replace(/\[(.*?)\]($|\n)/g, '[$1]()');
+      
+      // Ensure line breaks are properly handled
+      formatted = formatted.replace(/\\n/g, '\n&nbsp;');
+      
+      // Apply LaTeX formatting with our improved function
       formatted = mdTextFormat(formatted);
+      
       return formatted;
     },
     [text]
