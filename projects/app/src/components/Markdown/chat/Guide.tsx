@@ -6,6 +6,7 @@ import RemarkMath from 'remark-math';
 import RehypeKatex from 'rehype-katex';
 import RemarkBreaks from 'remark-breaks';
 import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
+import { mdTextFormat } from '../utils';
 
 import 'katex/dist/katex.min.css';
 import styles from '../index.module.scss';
@@ -38,12 +39,13 @@ function MyLink(e: any) {
 
 const Guide = ({ text }: { text: string }) => {
   const formatText = useMemo(
-    () =>
-      text
-        .replace(/\[(.*?)\]($|\n)/g, '[$1]()')
-        .replace(/\\n/g, '\n&nbsp;')
-        // Add a space before $$ if it's immediately after a newline
-        .replace(/\n\$\$+/g, '\n $$'),
+    () => {
+      // First apply general markdown formatting
+      let formatted = text.replace(/\[(.*?)\]($|\n)/g, '[$1]()').replace(/\\n/g, '\n&nbsp;');
+      // Then apply LaTeX specific formatting
+      formatted = mdTextFormat(formatted);
+      return formatted;
+    },
     [text]
   );
 

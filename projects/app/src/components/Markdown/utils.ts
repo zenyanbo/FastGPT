@@ -13,6 +13,12 @@ export enum CodeClassNameEnum {
 }
 
 export const mdTextFormat = (text: string) => {
+  // Handle multi-line LaTeX equations with $$ delimiters
+  text = text.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
+    // Replace newlines within $$ blocks with a space to ensure proper rendering
+    return match.replace(/\n/g, ' ');
+  });
+
   // NextChat function - Format latex to $$
   const pattern = /(```[\s\S]*?```|`.*?`)|\\\[([\s\S]*?[^\\])\\\]|\\\((.*?)\\\)/g;
   text = text.replace(pattern, (match, codeBlock, squareBracket, roundBracket) => {
