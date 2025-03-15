@@ -38,7 +38,12 @@ function MyLink(e: any) {
 
 const Guide = ({ text }: { text: string }) => {
   const formatText = useMemo(
-    () => text.replace(/\[(.*?)\]($|\n)/g, '[$1]()').replace(/\\n/g, '\n&nbsp;'),
+    () =>
+      text
+        .replace(/\[(.*?)\]($|\n)/g, '[$1]()')
+        .replace(/\\n/g, '\n&nbsp;')
+        // Add a space before $$ if it's immediately after a newline
+        .replace(/\n\$\$+/g, '\n $$'),
     [text]
   );
 
