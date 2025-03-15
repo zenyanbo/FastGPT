@@ -13,36 +13,40 @@ export enum CodeClassNameEnum {
 }
 
 export const mdTextFormat = (text: string) => {
-  // Handle multi-line LaTeX equations with $$ delimiters
-  text = text.replace(/\$\$([\s\S]*?)\$\$/g, (match) => {
-    // Replace newlines within $$ blocks with a space to ensure proper rendering
-    return match.replace(/\n/g, ' ');
-  });
+  // First handle direct LaTeX blocks with $$ syntax
+  text = text
+    // Ensure display math has line breaks around it
+    .replace(/([^\n])\$\$([\s\S]*?)\$\$([^\n])/g, '$1\n$$\n$2\n$$\n$3')
+    .replace(/([^\n])\$\$([\s\S]*?)\$\$/g, '$1\n$$\n$2\n$$')
+    .replace(/\$\$([\s\S]*?)\$\$([^\n])/g, '$$\n$1\n$$\n$2')
+    // Handle blocks where content is on the same line as delimiters
+    .replace(/\$\$([\s\S]*?)\$\$/g, (match, content) => {
+      // If content doesn't have line breaks, add them
+      if (!content.includes('\n')) {
+        return `$$\n${content}\n$$`;
+      }
+      return match;
+    });
 
-  // NextChat function - Format latex to $$
+  // Legacy handling for \[ and \( LaTeX syntax
   const pattern = /(```[\s\S]*?```|`.*?`)|\\\[([\s\S]*?[^\\])\\\]|\\\((.*?)\\\)/g;
   text = text.replace(pattern, (match, codeBlock, squareBracket, roundBracket) => {
     if (codeBlock) {
       return codeBlock;
     } else if (squareBracket) {
-      return `$$${squareBracket}$$`;
+      return `$$\n${squareBracket}\n$$`;
     } else if (roundBracket) {
       return `$${roundBracket}$`;
     }
     return match;
   });
 
-  // 处理 [quote:id] 格式引用，将 [quote:675934a198f46329dfc6d05a] 转换为 [675934a198f46329dfc6d05a](QUOTE)
+  // Handle quote formatting and other cleanups
   text = text
-    // .replace(
-    //   /([\u4e00-\u9fa5\u3000-\u303f])([a-zA-Z0-9])|([a-zA-Z0-9])([\u4e00-\u9fa5\u3000-\u303f])/g,
-    //   '$1$3 $2$4'
-    // )
-    // 处理 [quote:id] 格式引用，将 [quote:675934a198f46329dfc6d05a] 转换为 [675934a198f46329dfc6d05a](QUOTE)
     .replace(/\[quote:?\s*([a-f0-9]{24})\](?!\()/gi, '[$1](QUOTE)')
     .replace(/\[([a-f0-9]{24})\](?!\()/g, '[$1](QUOTE)');
 
-  // 处理链接后的中文标点符号，增加空格
+  // Add spaces between URLs and Chinese punctuation
   text = text.replace(/(https?:\/\/[^\s，。！？；：、]+)([，。！？；：、])/g, '$1 $2');
 
   return text;
