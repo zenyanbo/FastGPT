@@ -37,10 +37,40 @@ function MyLink(e: any) {
 }
 
 const Guide = ({ text }: { text: string }) => {
-  const formatText = useMemo(
-    () => text.replace(/\[(.*?)\]($|\n)/g, '[$1]()').replace(/\\n/g, '\n&nbsp;'),
-    [text]
-  );
+  const formatText = useMemo(() => {
+    // First replace clickable links
+    let processed = text.replace(/\[(.*?)\]($|\n)/g, '[$1]()');
+    
+    // Handle newlines outside of LaTeX blocks
+    let result = '';
+    let inMathBlock = false;
+    const lines = processed.split('\n');
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      
+      // Count the number of '$$' in this line to track math block state
+      const matches = line.match(/\$\$/g) || [];
+      
+      if (matches.length % 2 !== 0) {
+        // Toggle the math block state when we encounter an odd number of '$$'
+        inMathBlock = !inMathBlock;
+      }
+      
+      // Append the current line
+      result += line;
+      
+      // Only add &nbsp; if we're not inside a math block and there's a next line
+      if (!inMathBlock && i < lines.length - 1) {
+        result += '\n&nbsp;';
+      } else if (i < lines.length - 1) {
+        // Just add a normal newline in math blocks
+        result += '\n';
+      }
+    }
+    
+    return result;
+  }, [text]);
 
   return (
     <ReactMarkdown
