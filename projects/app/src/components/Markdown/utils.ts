@@ -19,6 +19,8 @@ export const mdTextFormat = (text: string) => {
     .replace(/([^\n])\$\$([\s\S]*?)\$\$([^\n])/g, '$1\n$$\n$2\n$$\n$3')
     .replace(/([^\n])\$\$([\s\S]*?)\$\$/g, '$1\n$$\n$2\n$$')
     .replace(/\$\$([\s\S]*?)\$\$([^\n])/g, '$$\n$1\n$$\n$2')
+    // Additional case: ensure proper breaks when $$ is at line start but content is on same line
+    .replace(/\n\$\$([^\n]+?)\n/g, '\n$$\n$1\n')
     // Handle blocks where content is on the same line as delimiters
     .replace(/\$\$([\s\S]*?)\$\$/g, (match, content) => {
       // If content doesn't have line breaks, add them
