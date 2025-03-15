@@ -13,36 +13,31 @@ export enum CodeClassNameEnum {
 }
 
 export const mdTextFormat = (text: string) => {
-  // First handle direct LaTeX blocks with $$ syntax
-  text = text
-    // Ensure display math has line breaks around it
-    .replace(/([^\n])\$\$([\s\S]*?)\$\$([^\n])/g, '$1\n$$\n$2\n$$\n$3')
-    .replace(/([^\n])\$\$([\s\S]*?)\$\$/g, '$1\n$$\n$2\n$$')
-    .replace(/\$\$([\s\S]*?)\$\$([^\n])/g, '$$\n$1\n$$\n$2')
-    // Additional case: ensure proper breaks when $$ is at line start but content is on same line
-    .replace(/\n\$\$([^\n]+?)\n/g, '\n$$\n$1\n')
-    // Handle blocks where content is on the same line as delimiters
-    .replace(/\$\$([\s\S]*?)\$\$/g, (match, content) => {
-      // If content doesn't have line breaks, add them
-      if (!content.includes('\n')) {
-        return `$$\n${content}\n$$`;
-      }
-      return match;
-    });
-
-  // Legacy handling for \[ and \( LaTeX syntax
-  const pattern = /(```[\s\S]*?```|`.*?`)|\\\[([\s\S]*?[^\\])\\\]|\\\((.*?)\\\)/g;
-  text = text.replace(pattern, (match, codeBlock, squareBracket, roundBracket) => {
-    if (codeBlock) {
-      return codeBlock;
-    } else if (squareBracket) {
-      return `$$\n${squareBracket}\n$$`;
-    } else if (roundBracket) {
-      return `$${roundBracket}$`;
-    }
-    return match;
+  // First protect code blocks from any modification
+  const codeBlocks: string[] = [];
+  text = text.replace(/(```[\s\S]*?```|`[^`]*?`)/g, (match) => {
+    const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
+    codeBlocks.push(match);
+    return placeholder;
   });
 
+  // Handle all LaTeX notation systematically
+  
+  // 1. First convert \[...\] to $$...$$ format with proper line breaks
+  text = text.replace(/\\\[([\s\S]*?[^\\])\\\]/g, '\n$$\n$1\n$$\n');
+  
+  // 2. Convert \(...\) to $...$ inline format
+  text = text.replace(/\\\((.*?)\\\)/g, '$$$1$$');
+  
+  // 3. Standardize all $$ display math blocks
+  // Start by ensuring there's a newline before and after every $$ block
+  text = text.replace(/([^\n])\$\$/g, '$1\n$$');
+  text = text.replace(/\$\$([^\n])/g, '$$\n$1');
+  
+  // 4. Ensure there are newlines between $$ and the content
+  text = text.replace(/\$\$\n([^\n])/g, '$$\n\n$1');
+  text = text.replace(/([^\n])\n\$\$/g, '$1\n\n$$');
+  
   // Handle quote formatting and other cleanups
   text = text
     .replace(/\[quote:?\s*([a-f0-9]{24})\](?!\()/gi, '[$1](QUOTE)')
@@ -51,5 +46,10 @@ export const mdTextFormat = (text: string) => {
   // Add spaces between URLs and Chinese punctuation
   text = text.replace(/(https?:\/\/[^\s，。！？；：、]+)([，。！？；：、])/g, '$1 $2');
 
+  // Restore code blocks
+  codeBlocks.forEach((block, i) => {
+    text = text.replace(`__CODE_BLOCK_${i}__`, block);
+  });
+  
   return text;
 };
