@@ -7,13 +7,13 @@ export const simpleMarkdownText = (rawText: string) => {
   rawText = simpleText(rawText);
 
   // Remove a line feed from a hyperlink or picture
-  rawText = rawText.replace(/\[([^\]]+)\]\((.+?)\)/g, (match, linkText, url) => {
+  rawText = rawText.replace(/\[([^\]]+)\]\(([^)\n]+?)\)/g, (match, linkText, url) => {
     const cleanedLinkText = linkText.replace(/\n/g, ' ').trim();
-
+  
     if (!url) {
       return '';
     }
-
+  
     return `[${cleanedLinkText}](${url})`;
   });
 
