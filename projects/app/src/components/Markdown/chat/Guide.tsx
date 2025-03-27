@@ -46,6 +46,9 @@ const Guide = ({ text }: { text: string }) => {
       // Ensure line breaks are properly handled
       formatted = formatted.replace(/\\n/g, '\n&nbsp;');
       
+      // Fix any LaTeX blocks that might be malformed
+      formatted = formatted.replace(/\$\$\s*\n\s*\$\$/g, '$$\n\n$$');
+      
       // Apply LaTeX formatting with our improved function
       formatted = mdTextFormat(formatted);
       

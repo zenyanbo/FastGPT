@@ -13,24 +13,24 @@ export enum CodeClassNameEnum {
 }
 
 export const mdTextFormat = (text: string) => {
-  // First handle existing $$ LaTeX blocks to ensure consistent formatting
+  // Handle LaTeX blocks with proper line breaks
   text = text.replace(
-    /(```[\s\S]*?```|`.*?`)|(\$\$)([\s\S]*?)(\$\$)/g, 
-    (match, codeBlock, startDelim, content, endDelim) => {
-      if (codeBlock) return codeBlock;
-      if (startDelim && endDelim) {
-        // Normalize LaTeX block with proper line breaks if needed
-        const trimmedContent = content.trim();
-        // For multi-line content, ensure proper formatting
-        if (trimmedContent.includes('\n')) {
-          return `\n$$\n${trimmedContent}\n$$\n`;
-        }
-        // For inline content, keep it on the same line
-        return `$$${trimmedContent}$$`;
+    /(\${2,})([^\$]*?)(\${2,})/gs,
+    (match, startDelim, content, endDelim) => {
+      const trimmedContent = content.trim();
+      // If the content has line breaks, ensure proper formatting
+      if (trimmedContent.includes('\n')) {
+        return `\n$$\n${trimmedContent}\n$$\n`;
       }
-      return match;
+      // For inline content, keep it on the same line
+      return `$$${trimmedContent}$$`;
     }
   );
+
+  // Handle standalone $$ delimiters on their own lines
+  text = text.replace(/^\s*\$\$\s*$/gm, (match) => {
+    return '\n$$\n';
+  });
 
   // Then handle \[...\] and \(...\) format
   const pattern = /(```[\s\S]*?```|`.*?`)|\\\[([\s\S]*?[^\\])\\\]|\\\((.*?)\\\)/g;
