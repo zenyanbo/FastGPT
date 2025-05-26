@@ -22,13 +22,18 @@ Then, select a limited number of query variations and insightful response strate
 Perhaps you need to consider the following points. For example, What are the assumptions and context implicit behind the question? Is the problem solvable? Or is it open-ended? Is it reasonable and well-defined? What is the appropriate starting point? What are the key points to be covered? What different perspectives, paths of thinking exist? Which are optimal? Where should the thinking process be strictly step-by-step and where is it permissible to think in leaps and bounds? Where should you take a diffuse approach to exploring a wide range of ideas and where should you delve deeper using an incremental, layered approach? What is an appropriate balance between favouring depth or width?
 
 # OUTPUT FORMAT
-The output strictly follows the following format. Generate multiple independent items, one line per item (a paragraph of text).
+The output strictly follows the following format. Generate multiple independent items. Each should be separated by the dividing line ***.
 
 Develop query variations and response strategies:
+***
 [Item 1]
+***
 [Item 2]
+***
 [Item 3]
+***
 ......
+***
 [Item N]
 
 # EXAMPLES
@@ -94,11 +99,35 @@ Layer 4: Geometric interpretation (spinor bundles).
 Now, let's generate query variations and response strategies based on these thought processes.
 </REASON>
 Develop query variations and response strategies:
-Explain why the Dirac field must be a multi-component field in the context of relativistic quantum mechanics, contrasting this with scalar fields. Discuss how the requirement of Lorentz covariance and the description of spin-1/2 particles necessitate a spinor representation, leading to multiple components. How does this relate to the representation theory of the Lorentz group, specifically focusing on the need for spinor representations beyond scalar or vector representations?
-The Dirac field is 4-component due to the fundamental requirement of relativistic invariance for spin-1/2 particles. In essence, to construct a relativistic quantum theory that linearly relates energy and momentum (unlike the Klein-Gordon equation which is quadratic), we need to introduce Dirac matrices ($\\gamma^\\mu$) that satisfy the Clifford algebra $\{\\gamma^\\mu, \\gamma^\\nu\} = 2g^{\\mu\\nu}I$. The minimal dimension of these matrices is 4x4 in 4-dimensional spacetime, thus necessitating a 4-component spinor on which they act. This 4-component structure is mathematically linked to the representation theory of the Lorentz group, specifically the reducible spinor representation $(1/2, 0) \\oplus (0, 1/2)$.
+***
+Explain why the Dirac field must be a multi-component field in the context of relativistic quantum mechanics, contrasting this with scalar fields. 
+
+Discuss how the requirement of Lorentz covariance and the description of spin-1/2 particles necessitate a spinor representation, leading to multiple components. How does this relate to the representation theory of the Lorentz group, specifically focusing on the need for spinor representations beyond scalar or vector representations?
+***
+The Dirac field is 4-component due to the fundamental requirement of relativistic invariance for spin-1/2 particles. In essence, to construct a relativistic quantum theory that linearly relates energy and momentum (unlike the Klein-Gordon equation which is quadratic), we need to introduce Dirac matrices ($\\gamma^\\mu$) that satisfy the Clifford algebra, 
+$$
+\{\\gamma^\\mu, \\gamma^\\nu\} = 2g^{\\mu\\nu}I.
+$$
+The minimal dimension of these matrices is 4x4 in 4-dimensional spacetime, thus necessitating a 4-component spinor on which they act. This 4-component structure is mathematically linked to the representation theory of the Lorentz group, specifically the reducible spinor representation $(1/2, 0) \\oplus (0, 1/2)$.
+***
 Physically, the 4 components of the Dirac field are necessary to describe both particle and antiparticle states, each with two spin degrees of freedom (spin up and spin down). Relativistic quantum mechanics predicts the existence of antiparticles as a consequence of negative energy solutions to relativistic wave equations. The Dirac equation and its 4-component spinor naturally incorporate both particle and antiparticle solutions, with two components representing particle spin states and the other two representing antiparticle spin states.
-Starting from the Lorentz group $SO(1,3)$ and its Lie algebra $\mathfrak{so}(1,3)$, detail the construction of finite-dimensional representations. Explain why the Dirac field transforms under a spinor representation of the Lorentz group, not a vector or scalar representation. Elaborate on how spinor representations are fundamentally different and why they naturally lead to a 4-component field in 4-dimensional spacetime. Connect this to the double cover of the Lorentz group, $SL(2, \mathbb{C})$, and its irreducible representations.
-In order to understand the 4-component nature of the Dirac field, we first need to understand the fields with different spins on the manifold in a unified way. From the point of view of differential geometry, the different field is a section of a bundle over spacetime, i.e., these fields are mathematical objects in a multilinear space at different points of the manifold. From the perspective of algebra, these different fields must be representations of the Lorentz group. In summary, the bundle is associated with a representation of the Lorentz group. In more detail, the spinor bundle is a complex vector bundle associated with a spinor representation of the Lorentz group. The 4-component nature of the Dirac field arises from the structure of the spinor representation of the Lorentz group, which is irreducible and has 4 complex dimensions. This geometric viewpoint provides a deeper understanding of the Dirac field and its components, connecting the physics of spin-1/2 particles to the geometry and symmetry (algebra) of spacetime.
+***
+1. Starting from the Lorentz group $SO(1,3)$ and its Lie algebra $\mathfrak{so}(1,3)$, detail the construction of finite-dimensional representations.
+
+2. Explain why the Dirac field transforms under a spinor representation of the Lorentz group, not a vector or scalar representation. 
+
+3. Elaborate on how spinor representations are fundamentally different and why they naturally lead to a 4-component field in 4-dimensional spacetime. 
+
+4. Connect this to the double cover of the Lorentz group, $SL(2, \\mathbb{C})$, and its irreducible representations.
+***
+In order to understand the 4-component nature of the Dirac field, we first need to understand the fields with different spins on the manifold in a unified way.
+
+From the point of view of differential geometry, the different field is a section of a bundle over spacetime, i.e., these fields are mathematical objects in a multilinear space at different points of the manifold.
+
+From the perspective of algebra, these different fields must be representations of the Lorentz group.
+
+In summary, the bundle is associated with a representation of the Lorentz group. In more detail, the spinor bundle is a complex vector bundle associated with a spinor representation of the Lorentz group. The 4-component nature of the Dirac field arises from the structure of the spinor representation of the Lorentz group, which is irreducible and has 4 complex dimensions. This geometric viewpoint provides a deeper understanding of the Dirac field and its components, connecting the physics of spin-1/2 particles to the geometry and symmetry (algebra) of spacetime.
+***
 Introduce the concept of spinor bundles in differential geometry over Minkowski spacetime. Explain how the Dirac field can be understood as a section of a spinor bundle. Describe how the tangent space at each point of spacetime carries a spinor representation of the Lorentz group, and how the spinor bundle structure ensures Lorentz covariance of the Dirac field globally. How does this geometric viewpoint provide a deeper understanding of the nature of the Dirac field and its components?
 ----------------
 <HISTORY>The Kerr spacetime is a stationary, axisymmetric, and asymptotically flat solution to the Einstein field equations, describing the spacetime geometry around a rotating black hole. (... Describes the properties of Kerr spacetime ...)</HISTORY>
@@ -125,13 +154,27 @@ The query is broad, so the response strategies need to cover different aspects o
 The task is to provide query variations and response strategies relating to Kerr geodesics.
 </REASON>
 Develop query variations and response strategies:
-Provide a detailed mathematical derivation of Kerr geodesics, starting from the Kerr metric in Boyer-Lindquist coordinates. Systematically derive the geodesic equations using the Lagrangian formalism, and explicitly show how to obtain the four constants of motion: energy ($E$), azimuthal angular momentum ($L_z$), the Carter constant ($Q$), and the rest mass ($\mu$). These conserved quantities allow the decouple of Kerr geodesic equation. Based decoupled equation of motion, we can analyze the properties of orbit. For example, Mino fundamental frequency $\\Upsilon_r, \\Upsilon_\\theta, \\Upsilon_\\phi$ (BL frequency $\\Omega_r, \\Omega_\\theta, \\Omega_\\phi$), orbit geometry parameters $(p, e, x)$, etc. These constants of motion determine the qualitative nature of the orbits, radial and polar oscillations, geometry shape, orbit type. The orbit type including bound orbits, unbound orbits, plunging trajectories, and scattering orbits. Detail the conditions for circular orbits, spherical orbits, and explore the properties of equatorial and non-equatorial geodesics separately, highlighting their distinct characteristics. In addition, Analytical solutions in terms of elliptic integrals, an introduction to the action-angle formalism in the context of Hamiltonian mechanics, and its application.
+***
+Provide a detailed mathematical derivation of Kerr geodesics, starting from the Kerr metric in Boyer-Lindquist coordinates. Systematically derive the geodesic equations using the Lagrangian formalism, and explicitly show how to obtain the four constants of motion: energy ($E$), azimuthal angular momentum ($L_z$), the Carter constant ($Q$), and the rest mass ($\\mu$).
+
+These conserved quantities allow the decouple of Kerr geodesic equation. Based decoupled equation of motion, we can analyze the properties of orbit. For example, Mino fundamental frequency $\\Upsilon_r, \\Upsilon_\\theta, \\Upsilon_\\phi$ (BL frequency $\\Omega_r, \\Omega_\\theta, \\Omega_\\phi$), orbit geometry parameters $(p, e, x)$, etc.
+
+These constants of motion determine the qualitative nature of the orbits, radial and polar oscillations, geometry shape, orbit type. The orbit type including bound orbits, unbound orbits, plunging trajectories, and scattering orbits. Detail the conditions for circular orbits, spherical orbits, and explore the properties of equatorial and non-equatorial geodesics separately, highlighting their distinct characteristics. In addition, Analytical solutions in terms of elliptic integrals, an introduction to the action-angle formalism in the context of Hamiltonian mechanics, and its application.
+***
 Explain Kerr geodesics from a physical perspective, emphasizing the unique effects of spacetime rotation. Describe the phenomenon of frame-dragging and how it influences the motion of particles near a rotating black hole, contrasting this with geodesic motion in Schwarzschild spacetime. Discuss how the rotation of the black hole alters the innermost stable circular orbit (ISCO) and the energy extraction mechanisms related to Kerr geodesics.
+***
 Discuss the astrophysical applications of Kerr geodesics, focusing on phenomena such as accretion disks around rotating black holes, the shapes of black hole shadows, and the dynamics of relativistic jets. Explain how the properties of Kerr geodesics are crucial for understanding observational signatures from these astrophysical systems and for testing general relativity in strong gravity regimes.
+***
 From a computational standpoint, outline the numerical methods used to solve the geodesic equations in Kerr spacetime. Describe how to implement these methods to trace the trajectories of particles and photons, and discuss techniques for visualizing Kerr geodesics, including orbit plots and embedding diagrams that illustrate the spacetime curvature and the paths of particles. You could also touch upon publicly available software or libraries that can be used for Kerr geodesic calculations.
 ----------------
 <HISTORY></HISTORY>
-<QUERY>Consider the matrix $A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}$. Find the eigenvalues and eigenvectors of matrix $A$.</QUERY>
+<QUERY>
+考虑矩阵
+$$
+A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}.
+$$
+Find the eigenvalues and eigenvectors of matrix $A$.
+</QUERY>
 <REASON>
 The query asks for the eigenvalues and eigenvectors of a 2x2 matrix. This is a standard problem in linear algebra. The key concepts are:
 Primary Subject: Mathematics
@@ -146,18 +189,20 @@ The calculation involves the following steps:
 This query is clear and simple, so only one item is generated.
 </REASON>
 Develop query variations and response strategies:
-First, calculate the characteristic polynomial by finding the determinant of $(A - \\lambda I)$. Then, solve for the eigenvalues $\lambda$. For each $\lambda$, solve the system of linear equations $(A - \\lambda I)v = 0$ to find the corresponding eigenvector $v$.
+***
+First, calculate the characteristic polynomial by finding the determinant of $(A - \\lambda I)$. Then, solve for the eigenvalues $\\lambda$. For each $\\lambda$, solve the system of linear equations
+$$
+(A - \\lambda I)v = 0
+$$ to find the corresponding eigenvector $v$.
 
 # NOTES
 These query variations or response strategies represent broader, deeper or other perspectives of the origin query, etc. Generally, generate about 3 items. If necessary, you can generate more for exploring the rich solution space. But the maximum number should not exceed 7. If the query is too narrow or the meaning is already so clear that no further items are available, caution should be exercised to avoid deviating from the original intent (generating fewer or even only 1 strategy).
 
-For things that are unknown or very simple and accuracy, it is allowed to generate fewer strategies in order to avoid misdirection.
-
 The examples provided are ideal and simplified. Actual questions should be better.
 
-Strategies should be independent of each other, different from each other, semantically REASON>ete and self-contained. This allows potential query variations or response strategies to be explored as much as possible.
+Strategies should be independent of each other, different from each other. This allows potential query variations or response strategies to be explored as much as possible.
 
-MUST use ENGLISH to describe the strategies.
+No matter what language the input is your response should be in **English**.
 
 Mathematical notation MUST use LaTeX inline ($...$) formats or display ($$...$$) formats (without line breaks).`;
 
@@ -248,7 +293,7 @@ A: ${chatBg}
     // const queries = JSON.parse(answer) as string[];
     // Split the answer into lines and filter out empty lines
     const queries = strategiesSection
-      .split('\n')
+      .split('***')
       .map(line => line.trim())
       .filter(line => 
         line.length > 6 && 
