@@ -40,7 +40,7 @@ Develop query variations and response strategies:
 ----------------
 <HISTORY></HISTORY>
 <QUERY>GeneralRelativity</QUERY>
-<REASON>
+<think>
 For the query "GeneralRelativity", the key concepts are gravity, spacetime, curvature, and the mathematical framework to describe them. We can categorize the knowledge structure as follows:
 Primary Subject: Physics
 Core Branches: Relativity, Gravitation, Cosmology, Astrophysics, Mathematical Physics
@@ -53,7 +53,7 @@ Specific Topics:
     Applications: Black holes, Gravitational waves, Big Bang theory, Expansion of the universe, Large-scale structures
 
 The query is very broad and serves as a starting point for learning GR. A good response should be structured and progressive, starting from basic principles and gradually introducing more complex concepts. Different starting points are possible, for example, starting from physical principles, or from mathematical tools, or from the historical limitations of Newtonian gravity. We need to consider different levels of detail and different angles to approach this topic.
-</REASON>
+</think>
 Develop query variations and response strategies:
 Please introduce General Relativity (GR) from a historical, mathematical, and physical perspective. Maybe you can cover the fundamental principles of GR, the mathematical tools necessary for GR, the solutions to the Einstein field equations, the experimental tests of GR, and its applications in cosmology and astrophysics.
 Start with the fundamental principles of GR, including the principle of equivalence, the principle of general covariance, and the principle of minimal coupling. Introduce the concept of spacetime as a four-dimensional manifold $(M, g_{\\mu\\nu})$ and explain how gravity is described by the curvature of spacetime. Then, introduce the mathematical tools necessary for GR, including tensors, differential geometry, and the Einstein field equations. Discuss the solutions to the Einstein field equations $$R_{\\mu\\nu} - \\frac{1}{2}Rg_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T_{\\mu\\nu}$$, such as the Schwarzschild metric, the Kerr metric, and the Friedmann-Lemaître-Robertson-Walker (FLRW) metric. Discuss the experimental tests of GR, such as the bending of light, the precession of Mercury's orbit, and the detection of gravitational waves. Finally, explore the experimental tests of GR and its applications in cosmology and astrophysics, including black holes, gravitational waves, Big Bang theory, the expansion of the universe,  the formation of large-scale structures.
@@ -62,7 +62,7 @@ Start with the limitations of Newtonian gravity, particularly its instantaneous 
 ----------------
 <HISTORY></HISTORY>
 <QUERY>为什么Dirac场是4分量的？</QUERY>
-<REASON>
+<think>
 The Dirac field's 4-component nature stems from relativistic quantum mechanics and deeper mathematical structures in differential geometry, Lie groups, and Lie algebras. Understanding this requires exploring the mathematical foundations of the Dirac field and its connection to spin-1/2 fermions.
 
 The geometry of relevant knowledge can be structured as follows:
@@ -97,7 +97,7 @@ Layer 3: Clifford algebra and gamma matrices (construction of spinor representat
 Layer 4: Geometric interpretation (spinor bundles).
 
 Now, let's generate query variations and response strategies based on these thought processes.
-</REASON>
+</think>
 Develop query variations and response strategies:
 ***
 Explain why the Dirac field must be a multi-component field in the context of relativistic quantum mechanics, contrasting this with scalar fields. 
@@ -132,7 +132,7 @@ Introduce the concept of spinor bundles in differential geometry over Minkowski 
 ----------------
 <HISTORY>The Kerr spacetime is a stationary, axisymmetric, and asymptotically flat solution to the Einstein field equations, describing the spacetime geometry around a rotating black hole. (... Describes the properties of Kerr spacetime ...)</HISTORY>
 <QUERY>Introduce Kerr geodesic in depth.</QUERY>
-<REASON>
+<think>
 The previous response was incomplete and lacked the initial analysis of the user query. The query "Kerr geodesics" is a request for information about the paths of objects moving in the spacetime around a rotating black hole (Kerr black hole). This involves concepts from general relativity, differential geometry, and potentially numerical methods. The knowledge domain can be classified as follows:
 
 Primary Subject: Physics, Mathematics
@@ -152,7 +152,7 @@ The query is broad, so the response strategies need to cover different aspects o
 4. Computational: Outline numerical methods for solving the geodesic equations.
 
 The task is to provide query variations and response strategies relating to Kerr geodesics.
-</REASON>
+</think>
 Develop query variations and response strategies:
 ***
 Provide a detailed mathematical derivation of Kerr geodesics, starting from the Kerr metric in Boyer-Lindquist coordinates. Systematically derive the geodesic equations using the Lagrangian formalism, and explicitly show how to obtain the four constants of motion: energy ($E$), azimuthal angular momentum ($L_z$), the Carter constant ($Q$), and the rest mass ($\\mu$).
@@ -175,7 +175,7 @@ A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}.
 $$
 Find the eigenvalues and eigenvectors of matrix $A$.
 </QUERY>
-<REASON>
+<think>
 The query asks for the eigenvalues and eigenvectors of a 2x2 matrix. This is a standard problem in linear algebra. The key concepts are:
 Primary Subject: Mathematics
 Core Branches: Linear Algebra
@@ -187,7 +187,7 @@ The calculation involves the following steps:
 3. For each eigenvalue, solve the equation $(A - \\lambda I)v = 0$ to find the corresponding eigenvector $v$.
 
 This query is clear and simple, so only one item is generated.
-</REASON>
+</think>
 Develop query variations and response strategies:
 ***
 First, calculate the characteristic polynomial by finding the determinant of $(A - \\lambda I)$. Then, solve for the eigenvalues $\\lambda$. For each $\\lambda$, solve the system of linear equations
