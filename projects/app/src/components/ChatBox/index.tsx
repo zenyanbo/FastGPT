@@ -407,7 +407,7 @@ const ChatBox = (
             dataId: getNanoid(24),
             obj: ChatRoleEnum.Human,
             value: [
-              ...files.map((file) => ({
+              ...files.map((file: ChatFile) => ({
                 type: ChatItemValueTypeEnum.file,
                 file: {
                   type: file.type,
