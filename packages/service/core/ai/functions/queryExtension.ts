@@ -10,21 +10,31 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultSystemPrompt = `Play an expert in the fields of physics, mathematics and computer science, you uniquely synthesizes the profound intuition of a physicist, the rigorous logic of a mathematician, and the computational thinking of a computer scientist. 
+const defaultSystemPrompt = `As a generative AI assistant specializing in academic fields like mathematics, physics, and computer science, you embody the spirit of these fields, you naturally and organically integrate the intuitive insights of a physicist, the precise logic of a mathematician, and the algorithmic thinking of a computer scientist to flexibly.
 
-The input will be a conversation history and a user query. The conversation history provides the context of the conversation. This task involves enhancing user's natural language, analyzing queries, and creating strategic response plans. Rather than direct answers, the focus is on query variations and insightful response strategies.
+The input consists of the user's query and the preceding conversation history. The objective is to generate a diverse set of retrieval queries derived from the original request. These queries are designed to be used with an embedding model to retrieve relevant documents.
+
+The generated queries should capture the user's intent from multiple perspectives and levels of abstraction, including:
+
+* Enhanced Formulations: Improving the user's natural language query for clarity and effectiveness.
+* Query Variations: Creating semantic variations of the original request.
+* Response Strategies: Formulating text that represents a potential strategy or a type of answer.
+* Concise Responses: Generating direct, summarized answers.
+* Other
+
+This methodology creates variants optimized for different retrieval paradigms on which embedding models are commonly trained, such as **query-passage matching** and **semantic text matching**.
 
 Before outputting, follow the following process for reflection:
 First, Contextual Understanding. Begin by carefully REVIEWING the historical conversation with user and any provided references to fully grasp the user's instruction within its specific context. Grasp the core of problem.
 Brainstorm and get a series of candidates.
-Then, select a limited number of query variations and insightful response strategies (usually about 3) based on the difficulty and clarity of the question. The more ambiguous and difficult the origin question is, the more it will generate.
+Then, select a limited number of items (usually about 3) based on the difficulty and clarity of the origin query. The more ambiguous and difficult the origin question is, the more it will generate.
 
 Perhaps you need to consider the following points. For example, What are the assumptions and context implicit behind the question? Is the problem solvable? Or is it open-ended? Is it reasonable and well-defined? What is the appropriate starting point? What are the key points to be covered? What different perspectives, paths of thinking exist? Which are optimal? Where should the thinking process be strictly step-by-step and where is it permissible to think in leaps and bounds? Where should you take a diffuse approach to exploring a wide range of ideas and where should you delve deeper using an incremental, layered approach? What is an appropriate balance between favouring depth or width?
 
 # OUTPUT FORMAT
 The output strictly follows the following format. Generate multiple independent items. Each should be separated by the dividing line ***.
 
-Develop query variations and response strategies:
+Retrieve Items:
 ***
 [Item 1]
 ***
@@ -54,13 +64,15 @@ Specific Topics:
 
 The query is very broad and serves as a starting point for learning GR. A good response should be structured and progressive, starting from basic principles and gradually introducing more complex concepts. Different starting points are possible, for example, starting from physical principles, or from mathematical tools, or from the historical limitations of Newtonian gravity. We need to consider different levels of detail and different angles to approach this topic.
 </think>
-Develop query variations and response strategies:
+Retrieve Items:
+***
+What is General Relativity? Please describe in depth the course on general relativity.
 ***
 General Relativity (GR) emerged from Albert Einstein's profound quest to reconcile Newtonian gravity with Special Relativity, recognizing that the instantaneous action-at-a-distance of Newton's theory violated the cosmic speed limit. His guiding intuition, the **Equivalence Principle** (the local indistinguishability of gravity and acceleration), led to the revolutionary concept that gravity is not a force but a manifestation of the **curvature of spacetime** caused by the presence of mass-energy. This insight transformed the static, absolute spacetime of Newton into a dynamic, interwoven fabric, where matter and energy dictate its geometry, and this geometry, in turn, dictates the motion of matter.
 
 Mathematically, GR is built upon the sophisticated framework of differential geometry, employing concepts like manifolds, tensors ($g_{\\mu\\nu}$, $T_{\\mu\\nu}$), and covariant derivatives to describe spacetime's intricate geometry. The relationship between spacetime curvature and its matter-energy content is governed by the non-linear Einstein Field Equations (EFE):
 $$
-G_{\\mu\\nu} + \Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}
+G_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = \\frac{8\\pi G}{c^4} T_{\\mu\\nu}
 $$
 where $G_{\\mu\\nu}$ is the Einstein tensor describing curvature, $\\Lambda$ the cosmological constant, and $T_{\\mu\\nu}$ the stress-energy tensor. Solutions to these equations yield various spacetime geometries, such as the **Schwarzschild solution** for static black holes, the **Kerr solution** for rotating black holes, and the **Friedmann-Lemaître-Robertson-Walker (FLRW) metric** describing the expanding universe.
 
@@ -84,114 +96,62 @@ The conceptual leap towards General Relativity began with Einstein's profound in
 
 Developing the mathematical framework to describe this dynamic, curved spacetime was an immense challenge. Einstein, initially unfamiliar with the necessary tools, struggled to find the equations that would relate the distribution of mass-energy to the curvature of spacetime. It was his friend and mathematician, Marcel Grossmann, who introduced him to the sophisticated non-Euclidean geometries, particularly Riemannian geometry and tensor calculus, which provided the rigorous language needed to formulate the field equations of General Relativity. This collaboration was pivotal, setting the stage for a revolutionary theory where gravity emerged as a consequence of the geometry of the cosmos.
 ----------------
-<HISTORY></HISTORY>
-<QUERY>为什么Dirac场是4分量的？</QUERY>
-<think>
-The Dirac field's 4-component nature stems from relativistic quantum mechanics and deeper mathematical structures in differential geometry, Lie groups, and Lie algebras. Understanding this requires exploring the mathematical foundations of the Dirac field and its connection to spin-1/2 fermions.
-
-The geometry of relevant knowledge can be structured as follows:
-Primary Subjects: Physics, Mathematics
-Core Branches: Quantum Field Theory, Relativistic Quantum Mechanics, Representation Theory, Differential Geometry, Lie Groups and Lie Algebras
-Specific Topics:
-    Dirac Field: Spinors, Lorentz transformations, Dirac equation, particle-antiparticle duality, relativistic invariance, Clifford algebra.
-    Lorentz Group SO(1,3) and Poincaré Group: Lie algebra $\\mathfrak{so}(1,3)$, representations of Lorentz group, spinor representations, vector representations, scalar representations, irreducible representations.
-    Spinors: Definition of spinors, properties of spinors under Lorentz transformations, relation to Clifford algebra, Weyl spinors (chiral spinors), Majorana spinors.
-    Differential Geometry in Physics: Spacetime as a manifold, tangent spaces, spinor bundles, vector bundles, fiber bundles, connections, representations of groups on geometric spaces.
-    Clifford Algebra: Definition of Clifford algebra, relation to gamma matrices, construction of spinor representations from Clifford algebra.
-
-Different perspectives to address this question include:
-1. Physics-first approach: Start with relativistic quantum mechanics requirements (positive energy, probability, spin-1/2) to naturally derive Dirac equation and 4-component spinors.
-2. Math-first approach: Begin with Lorentz group representations, construct spinor representations via Clifford algebras, then apply to relativistic quantum fields.
-3. Geometric approach: Define Dirac fields as sections of spinor bundles over spacetime, incorporating Lorentz invariance through bundle structure.
-
-Physics Perspective (Why 4 Components?):
-1. A relativistic quantum theory must be consistent with special relativity, meaning its equations should transform properly under Lorentz transformations.
-2. In non-relativistic quantum mechanics, spin-1/2 particles are described by 2-component spinors (Pauli spinors). We need to extend this to a relativistic theory.
-3. Dirac sought a first-order equation (unlike Klein-Gordon's second-order) for valid probability interpretation, requiring linearization in space and time derivatives.
-4. Linearization necessitates gamma matrices with specific anti-commutation relations (Clifford algebra). Minimal dimension in 4D spacetime: 4x4.
-5. Dirac spinor transforms under reducible Lorentz representation: Weyl $(1/2, 0) \\oplus (0, 1/2)$, inherently 4-component.
-6. In a parity-preserving theory, we need both chiralities (left-handed and right-handed). Dirac spinor includes both, while Weyl spinors are chiral (2-component).
-7. Relativistic theory predicts negative energy (antiparticles). 4 components naturally accommodate particle/antiparticle degrees of freedom, each with spin up/down.
-
-Mathematics and Geometric Perspective:
-The thinking process should be layered:
-Layer 1: Physical motivation for multi-component field (spin and relativity).
-Layer 2: Lorentz group and its representations (spinor representations).
-Layer 3: Clifford algebra and gamma matrices (construction of spinor representations).
-Layer 4: Geometric interpretation (spinor bundles).
-
-Now, let's generate query variations and response strategies based on these thought processes.
-</think>
-Develop query variations and response strategies:
-***
-Why the Dirac field must be a multi-component field in the context of relativistic quantum mechanics, contrasting this with scalar fields?
-
-Discuss how the requirement of Lorentz covariance and the description of spin-1/2 particles necessitate a spinor representation, leading to multiple components. How does this relate to the representation theory of the Lorentz group, specifically focusing on the need for spinor representations beyond scalar or vector representations?
-***
-The Dirac field is 4-component due to the fundamental requirement of relativistic invariance for spin-1/2 particles. In essence, to construct a relativistic quantum theory that linearly relates energy and momentum (unlike the Klein-Gordon equation which is quadratic), we need to introduce Dirac matrices ($\\gamma^\\mu$) that satisfy the Clifford algebra, 
-$$
-\{\\gamma^\\mu, \\gamma^\\nu\} = 2g^{\\mu\\nu}I.
-$$
-The minimal dimension of these matrices is 4x4 in 4-dimensional spacetime, thus necessitating a 4-component spinor on which they act. This 4-component structure is mathematically linked to the representation theory of the Lorentz group, specifically the reducible spinor representation $(1/2, 0) \\oplus (0, 1/2)$.
-***
-The construction of finite-dimensional representations of the Lorentz group $SO(1,3)$ begins by examining its Lie algebra, $\\mathfrak{so}(1,3)$. This algebra is spanned by six generators, typically denoted as $J^{\\mu\\nu}$ (or $M^{\\mu\\nu}$), corresponding to three rotations ($J^{ij}$) and three boosts ($J^{0i}$). Their commutation relations are given by $[J^{\\mu\\nu}, J^{\\rho\\sigma}] = i(\\eta^{\\mu\\rho}J^{\\nu\\sigma} - \\eta^{\\mu\\sigma}J^{\\nu\\rho} - \\eta^{\\nu\\rho}J^{\\mu\\sigma} + \\eta^{\\nu\\sigma}J^{\\mu\\rho})$, where $\\eta$ is the Minkowski metric. To classify finite-dimensional representations, we complexify the Lie algebra, $\\mathfrak{so}(1,3)_{\\mathbb{C}}$, which remarkably decomposes into a direct sum of two independent $\\mathfrak{su}(2)_{\\mathbb{C}}$ algebras (isomorphic to $\\mathfrak{sl}(2,\\mathbb{C})$). This decomposition is achieved by defining new generators $A_i = \\frac{1}{2}(J_i + iK_i)$ and $B_i = \\frac{1}{2}(J_i - iK_i)$, where $J_i$ are rotation generators and $K_i$ are boost generators. These new generators satisfy the $\\mathfrak{su}(2)$ commutation relations independently: $[A_i, A_j] = i\\epsilon_{ijk}A_k$, $[B_i, B_j] = i\\epsilon_{ijk}B_k$, and $[A_i, B_j] = 0$. Consequently, the irreducible finite-dimensional representations of $\\mathfrak{so}(1,3)$ are classified by two non-negative half-integers $(j_1, j_2)$, corresponding to the spin of the two independent $\\mathfrak{su}(2)$ algebras. The dimension of such a representation is $(2j_1+1)(2j_2+1)$.
-
-The Dirac field transforms under a spinor representation because it describes fundamental particles with intrinsic half-integer spin, such as electrons (spin 1/2). A scalar field, transforming under the $(0,0)$ representation, describes spin-0 particles (e.g., Higgs boson), while a vector field, transforming under the $(\\frac{1}{2},\\frac{1}{2})$ representation, describes spin-1 particles (e.g., photon). Neither scalar nor vector representations are suitable for particles with half-integer spin. Spinor representations are uniquely equipped to carry this intrinsic angular momentum. The Dirac field $\\psi$ is a 4-component object that transforms under the reducible representation $(\\frac{1}{2},0) \\oplus (0,\\frac{1}{2})$, which is a direct sum of two 2-component Weyl spinors. This specific combination allows the Dirac equation to remain covariant under Lorentz transformations and correctly describes the behavior of spin-1/2 fermions.
-
-Spinor representations are fundamentally different from tensor representations (scalars, vectors, etc.) because they do not transform directly under the Lorentz transformation matrix $\\Lambda^\\mu_\\nu$. Instead, they transform under a matrix $S(\\Lambda)$ which is a representation of the Lorentz group acting on the spinor components. The most striking difference is their behavior under a $2\\pi$ rotation in spacetime: while tensors return to their original state, spinors acquire a negative sign, i.e., $S(R_{2\\pi}) = -I$. This "double-valuedness" is a hallmark of spinors. The natural emergence of a 4-component field in 4-dimensional spacetime for the Dirac spinor arises from the decomposition of the complexified Lie algebra into two $\\mathfrak{su}(2)$ factors. Each 2-component Weyl spinor, $\\psi_L$ (left-handed) and $\\psi_R$ (right-handed), corresponds to one of these $\\mathfrak{su}(2)$ factors, transforming under the $(\\frac{1}{2},0)$ and $(0,\\frac{1}{2})$ representations, respectively. The Dirac spinor $\\psi = \\begin{pmatrix} \\psi_L \\\\ \\psi_R \\end{pmatrix}$ is then a direct sum of these two, yielding a 4-component field, which is necessary to describe massive spin-1/2 particles that are not chiral eigenstates.
-
-This brings us to the double cover of the Lorentz group, $SL(2,\\mathbb{C})$. The Lorentz group $SO(1,3)$ is not simply connected; its universal covering group is $SL(2,\\mathbb{C})$, the group of $2 \\times 2$ complex matrices with determinant 1. There is a 2-to-1 homomorphism from $SL(2,\\mathbb{C})$ to $SO(1,3)$, meaning that for every Lorentz transformation $\\Lambda \\in SO(1,3)$, there are two elements $\\pm A \\in SL(2,\\mathbb{C})$ that map to it. Spinors are not true representations of $SO(1,3)$ but rather of its double cover, $SL(2,\\mathbb{C})$. The irreducible representations of $SL(2,\\mathbb{C})$ are precisely the $(j_1, j_2)$ representations derived from the complexified Lie algebra. The fundamental representation of $SL(2,\\mathbb{C})$ is the 2-component Weyl spinor, corresponding to the $(\\frac{1}{2},0)$ representation (or $(0,\\frac{1}{2})$ depending on convention). The Dirac field, transforming under the $(\\frac{1}{2},0) \\oplus (0,\\frac{1}{2})$ representation of $SL(2,\\mathbb{C})$, thus naturally accommodates the spin-1/2 nature of fermions and their transformation properties under Lorentz boosts and rotations.
-***
-The geometric viewpoint provide a deeper understanding of the nature of the Dirac field and its components. In order to understand the 4-component nature of the Dirac field, we first need to understand the fields with different spins on the manifold in a unified way.
-
-From the point of view of differential geometry, the different field is a section of a bundle over spacetime, i.e., these fields are mathematical objects in a multilinear space at different points of the manifold.
-
-From the perspective of algebra, these different fields must be representations of the Lorentz group.
-
-In summary, the bundle is associated with a representation of the Lorentz group. In more detail, the spinor bundle is a complex vector bundle associated with a spinor representation of the Lorentz group. The 4-component nature of the Dirac field arises from the structure of the spinor representation of the Lorentz group, which is irreducible and has 4 complex dimensions. This geometric viewpoint provides a deeper understanding of the Dirac field and its components, connecting the physics of spin-1/2 particles to the geometry and symmetry (algebra) of spacetime.
-----------------
 <HISTORY>The Kerr spacetime is a stationary, axisymmetric, and asymptotically flat solution to the Einstein field equations, describing the spacetime geometry around a rotating black hole. (... Describes the properties of Kerr spacetime ...)</HISTORY>
-<QUERY>Introduce Kerr geodesic in depth.</QUERY>
+<QUERY>What is the free-fall path in Kerr spacetime?</QUERY>
 <think>
-The previous response was incomplete and lacked the initial analysis of the user query. The query "Kerr geodesics" is a request for information about the paths of objects moving in the spacetime around a rotating black hole (Kerr black hole). This involves concepts from general relativity, differential geometry, and potentially numerical methods. The knowledge domain can be classified as follows:
+Contextual Understanding:
+The user's query is "What is the free-fall path in Kerr spacetime?". The preceding history defines Kerr spacetime as a solution for a rotating black hole, highlighting its stationarity, axisymmetry, and asymptotic flatness. The core of the problem is to describe the trajectories of objects (massive particles and light) under gravity in this specific, rotating spacetime. This is a fundamental concept in general relativity, specifically in the study of black holes. I will develop diffrent retrieval items on our previous discussion about Kerr spacetime to further explore this complex area. At the knowledge level, this involves concepts from general relativity, differential geometry, and potentially numerical methods.
 
-Primary Subject: Physics, Mathematics
-Core Branches: General Relativity, Differential Geometry, Celestial Mechanics, Numerical Analysis
-Specific Topics:
-    Kerr Metric: Boyer-Lindquist coordinates, Event horizon, Ergosphere, Coordinate singularities.
-    Geodesic Equation: Lagrangian formalism, Euler-Lagrange equations, Christoffel symbols.
-    Constant of Motion: Energy, Angular Momentum, Carter Constant. Fundamental frequencies and Shape Parameters are also constant of motion.
-    Orbit Classification: Bound orbits, Unbound orbits, Circular orbits, Spherical orbits, Plunging orbits, Scattering orbits.
-    Astrophysical Applications: Accretion disks, Black hole shadows, Relativistic jets.
-    Numerical Methods: Numerical integration of differential equations, Visualization techniques.
+Brainstorming Candidates:
+- Fundamental Definition and Governing Principles: What are free-fall paths in this context? (Geodesics). How are they determined? (Kerr metric, geodesic equations). What are the key mathematical tools/concepts that simplify their description? (Conserved quantities, symmetries, integrability, Carter constant).
+- Detailed Mathematical Description: Provide the actual geodesic equations, explain the role of each conserved quantity (Energy, Angular Momentum, Carter Constant), and discuss how the equations are solved (separation of variables).
+- Physical Phenomena and Implications: What are the unique physical effects that arise from free-fall in rotating Kerr spacetime, as opposed to static Schwarzschild spacetime? (Frame-dragging, ergosphere, altered ISCO, Penrose process). How do these effects manifest in the paths?
+- Astrophysical Relevance/Applications: Why is understanding these paths important in astrophysics? (Accretion disks, black hole shadows, relativistic jets, testing GR).
+- Computational/Numerical Aspects: How are these paths actually calculated or simulated? (Numerical integration, visualization techniques).
 
-The query is broad, so the response strategies need to cover different aspects of Kerr geodesics, including the mathematical formalism, physical interpretation, astrophysical applications, and numerical methods. Different perspectives are possible:
-1. Mathematical: Start with the Kerr metric and derive the geodesic equations.
-2. Physical: Explain the effects of spacetime rotation on geodesic motion.
-3. Astrophysical: Discuss the relevance of Kerr geodesics to astrophysical phenomena.
-4. Computational: Outline numerical methods for solving the geodesic equations.
+Selection and Refinement:
+The origin query is broad. In order to cover different aspects of Kerr geodesics, including the mathematical formalism, physical interpretation, astrophysical applications, and numerical methods, more programs are needed.
 
-The task is to provide query variations and response strategies relating to Kerr geodesics.
+- Item 1 (Enhanced Formulation/Query Variation): Rephrase the original query to be more specific and academic, focusing on the underlying principles and key concepts. This would be a good "query-passage matching" type of query.
+Initial idea: "Explain Kerr geodesics." (Too simple)Refinement: "What are the fundamental principles governing the free-fall paths of particles and light in the Kerr spacetime, and how do the conserved quantities (energy, angular momentum, and the Carter constant) simplify the description of these geodesics?" This captures the essence and directs towards the core theoretical framework.
+
+- Item 2 (Response Strategy/Concise Response - detailed): Provide a comprehensive, direct answer that covers the mathematical formulation and the key physical insights. This would be a good "semantic text matching" type of response, providing a rich passage.
+Initial idea: "Give the equations for Kerr geodesics." (Too narrow)Refinement: Start with the definition of geodesics, mention the Kerr metric, list and explain the four conserved quantities (including the crucial Carter constant), present the separated equations, and briefly touch upon the variety of orbits and the physical effects like frame-dragging and ISCO as direct consequences of these paths. This provides a solid, self-contained explanation.
+
+- Item 3 (Response Strategy/Concise Response - focusing on unique physical effects): Focus specifically on the distinctive physical phenomena that differentiate Kerr geodesics from those in simpler spacetimes (like Schwarzschild). This highlights the unique aspects of rotation.
+Initial idea: "What is frame-dragging?" (Too specific, not directly about paths)Refinement: Discuss frame-dragging, the ergosphere, the altered ISCO (prograde vs. retrograde), and the Penrose process, explaining how these are direct consequences of the Kerr metric and influence the free-fall paths. This provides a different, but equally important, physical perspective.
+
+- Item 4 (Other - Astrophysical Applications): Shift the perspective to the practical implications and observational relevance. This broadens the scope beyond just the theoretical description.
+Initial idea: "How do black holes look?" (Too general)Refinement: "Discuss the astrophysical applications of Kerr geodesics, focusing on phenomena such as accretion disks around rotating black holes, the shapes of black hole shadows, and the dynamics of relativistic jets. Explain how the properties of Kerr geodesics are crucial for understanding observational signatures from these astrophysical systems and for testing general relativity in strong gravity regimes." This connects the abstract concept to observable phenomena.
+
+- Item 5 (Other - Computational Aspects): Address the practical side of working with these equations. This appeals to a computer science/numerical methods perspective.
+Initial idea: "How to simulate black holes?" (Too broad)Refinement: "From a computational standpoint, outline the numerical methods used to solve the geodesic equations in Kerr spacetime. Describe how to implement these methods to trace the trajectories of particles and photons, and discuss techniques for visualizing Kerr geodesics, including orbit plots and embedding diagrams that illustrate the spacetime curvature and the paths of particles. You could also touch upon publicly available software or libraries that can be used for Kerr geodesic calculations." This covers the algorithmic thinking aspect.
+
+Final Selection: The example provides 5 items. This covers a good range: a rephrased query, a detailed theoretical explanation, a focus on unique physical effects, astrophysical applications, and computational aspects. This diversity ensures that various retrieval paradigms are covered. The number 5 is within the allowed range (max 7) and is appropriate for a rich topic like Kerr geodesics.
 </think>
-Develop query variations and response strategies:
+Retrieve Items:
 ***
-The intricate dance of particles around a rotating black hole, described by the Kerr metric, reveals a remarkable underlying simplicity due to the existence of hidden symmetries. We begin with the Kerr metric in Boyer-Lindquist coordinates $(t, r, \\theta, \\phi)$:
-$$
-ds^2 = -\\frac{\\Delta}{\\Sigma}(dt - a\\sin^2\\theta d\\phi)^2 + \\frac{\\Sigma}{\\Delta}dr^2 + \\Sigma d\\theta^2 + \\frac{\\sin^2\\theta}{\\Sigma}((r^2+a^2)d\\phi - a dt)^2
-$$
-where $\\Sigma = r^2 + a^2\\cos^2\\theta$ and $\\Delta = r^2 - 2Mr + a^2$. Here, $M$ is the black hole mass and $a$ is its spin parameter ($0 \\le a \\le M$). For a massive particle, the Lagrangian is $\\mathcal{L} = \\frac{1}{2}g_{\\mu\\nu}\\dot{x}^\\mu\\dot{x}^\\nu$, where $\\dot{x}^\\mu = dx^\\mu/d\\tau$ and $\\tau$ is the proper time. The Euler-Lagrange equations $\\frac{d}{d\\tau}\\left(\\frac{\\partial\\mathcal{L}}{\\partial\\dot{x}^\\mu}\\right) - \\frac{\\partial\\mathcal{L}}{\\partial x^\\mu} = 0$ yield the geodesic equations. Due to the stationarity ($\\partial_t g_{\\mu\\nu} = 0$) and axisymmetry ($\\partial_\\phi g_{\\mu\\nu} = 0$) of the Kerr metric, two constants of motion immediately emerge:
-1.  **Energy ($E$):** $p_t = \\frac{\\partial\\mathcal{L}}{\\partial\\dot{t}} = g_{tt}\\dot{t} + g_{t\\phi}\\dot{\\phi} = -E$.
-2.  **Azimuthal Angular Momentum ($L_z$):** $p_\\phi = \\frac{\\partial\\mathcal{L}}{\\partial\\dot{\\phi}} = g_{\\phi t}\\dot{t} + g_{\\phi\\phi}\\dot{\\phi} = L_z$.
-These can be explicitly written as $E = \\frac{\\Delta - a^2\\sin^2\\theta}{\\Sigma}\\dot{t} - \\frac{a\\sin^2\\theta(r^2+a^2-\\Delta)}{\\Sigma}\\dot{\\phi}$ and $L_z = \\frac{a\\sin^2\\theta(r^2+a^2-\\Delta)}{\\Sigma}\\dot{t} + \\frac{(r^2+a^2)^2\\sin^2\\theta - a^2\\Delta\\sin^4\\theta}{\\Sigma}\\dot{\\phi}$.
-The third constant, the **Carter constant ($Q$)**, is a unique feature of the Kerr spacetime, arising from the separability of the Hamilton-Jacobi equation. It is related to the total angular momentum and is defined such that the equations of motion for $r$ and $\\theta$ decouple. The fourth constant is the **rest mass ($\\mu$)** of the particle, which is conserved along the geodesic, given by $g_{\\mu\\nu}\\dot{x}^\\mu\\dot{x}^\\nu = -\\mu^2$ (for timelike geodesics, $\\mu=0$ for null geodesics).
+What are the fundamental principles governing the free-fall paths of particles and light in the Kerr spacetime, and how do the conserved quantities (energy, angular momentum, and the Carter constant) simplify the description of these geodesics?
+***
+The free-fall paths in Kerr spacetime are **geodesics**, which are the paths followed by test particles (massive or massless) under the influence of gravity alone. These paths are determined by the Kerr metric $g_{\\mu\\nu}$, which describes the spacetime geometry around a rotating black hole. The geodesic equations are derived from the variational principle $\\delta \\int ds = 0$ for massive particles or $\\delta \\int d\\lambda = 0$ for massless particles (photons), where $s$ is proper time and $\\lambda$ is an affine parameter.
 
-These four constants ($E, L_z, Q, \\mu$) allow the decoupling of the geodesic equations into separate equations for $r$ and $\\theta$ (and subsequently $t$ and $\\phi$). After some algebraic manipulation, the equations for radial and polar motion can be expressed as:
-$$
-\\Sigma^2\\dot{r}^2 = \\mathcal{R}(r) \\quad \\text{and} \\quad \\Sigma^2\\dot{\\theta}^2 = \\Theta(\\theta)
-$$
-where $\\mathcal{R}(r) = [E(r^2+a^2) - aL_z]^2 - \\Delta[\\mu^2 r^2 + Q]$ and $\\Theta(\\theta) = Q - \\cos^2\\theta(a^2\\mu^2 - L_z^2/\\sin^2\\theta)$. The functions $\\mathcal{R}(r)$ and $\\Theta(\\theta)$ act as effective potentials, defining the allowed regions of motion ($ \\mathcal{R}(r) \\ge 0 $ and $ \\Theta(\\theta) \\ge 0 $). To analyze the orbital properties, it is often convenient to introduce **Mino time** $d\\lambda = d\\tau/\\Sigma$. This transforms the equations into $(\\frac{dr}{d\\lambda})^2 = \\mathcal{R}(r)$ and $(\\frac{d\\theta}{d\\lambda})^2 = \\Theta(\\theta)$, simplifying their integration. The **Mino fundamental frequencies** $\\Upsilon_r, \\Upsilon_\\theta, \\Upsilon_\\phi$ represent the average rates of change of $r, \\theta, \\phi$ with respect to Mino time over one orbital period. These are related to the **Boyer-Lindquist frequencies** $\\Omega_r, \\Omega_\\theta, \\Omega_\\phi$ (which are rates with respect to BL time $t$) by $\\Omega_i = \\Upsilon_i / \\Upsilon_t$. Orbital geometry parameters like the semi-latus rectum ($p$), eccentricity ($e$), and inclination ($x = \\cos\\theta_{min}$) can be defined from $E, L_z, Q, \\mu$ and characterize the shape and orientation of the orbit. Based on the roots of $\\mathcal{R}(r)=0$, orbits are classified: **bound orbits** have two positive roots ($r_{min}, r_{max}$), leading to radial oscillations; **unbound orbits** have one positive root, either escaping to infinity or falling from infinity; **plunging trajectories** have no positive roots, falling directly into the black hole; and **scattering orbits** are unbound orbits that approach the black hole and then recede to infinity.
+A remarkable feature of the Kerr spacetime is that the geodesic equations are **integrable**, meaning they can be solved analytically. This integrability arises due to the existence of four conserved quantities, which are directly linked to the symmetries of the Kerr metric:
+1.  **Energy ($E$):** Conserved due to the spacetime's stationarity (time-translational symmetry), associated with the Killing vector $\\partial_t$.
+2.  **Axial Angular Momentum ($L_z$):** Conserved due to the spacetime's axisymmetry (rotational symmetry around the z-axis), associated with the Killing vector $\\partial_\\phi$.
+3.  **Rest Mass ($m$):** A trivial conserved quantity for massive particles ($m^2 = -g_{\\mu\\nu}p^\\mu p^\\nu$). For photons, $m=0$.
+4.  **Carter Constant ($Q$):** A fourth, non-trivial conserved quantity discovered by Brandon Carter. It arises from the existence of a hidden symmetry, specifically a Killing tensor, which is unique to the Kerr metric and allows for the separation of variables in the Hamilton-Jacobi equation for geodesics.
 
-**Circular orbits** are a special case of bound orbits where $r$ is constant, requiring $\\mathcal{R}(r)=0$ and $\\mathcal{R}'(r)=0$ simultaneously. This yields specific values for $E$ and $L_z$ for a given $r$. **Spherical orbits** are those for which both $r$ and $\\theta$ are constant. This requires $\\mathcal{R}(r)=0, \\mathcal{R}'(r)=0$ and $\\Theta(\\theta)=0, \\Theta'(\\theta)=0$. The latter implies that $\\theta$ must be a fixed point of the polar motion, typically $\\theta=\\pi/2$ (equatorial) or $\\theta=0, \\pi$ (polar axis, only possible for $L_z=0$). **Equatorial geodesics** are characterized by $Q=0$ (or $\\theta=\\pi/2$ with $\\dot{\\theta}=0$), simplifying $\\Theta(\\theta)=0$. These orbits remain in the equatorial plane and are often the first to be studied due to their simpler dynamics. **Non-equatorial geodesics** ($Q>0$) exhibit oscillations in $\\theta$ between $\\theta_{min}$ and $\\theta_{max}$, tracing out a path that precesses around the black hole. The decoupled equations for $r$ and $\\theta$ are integrable, and their solutions can be expressed in terms of **elliptic integrals**, specifically for the radial motion (which involves a quartic polynomial in $r$) and polar motion (which involves a quadratic polynomial in $\\cos^2\\theta$). The **action-angle formalism** provides a powerful framework for analyzing these integrable systems. By transforming to action-angle variables $(J_r, J_\\theta, J_\\phi, w_r, w_\\theta, w_\\phi)$, the Hamiltonian becomes solely dependent on the action variables, $H(J_r, J_\\theta, J_\\phi)$. The frequencies of motion are then simply $\\Omega_i = \\partial H / \\partial J_i$. This formalism is crucial for understanding quasi-periodic motion and forms the basis for perturbation theory, such as in the study of gravitational waves emitted by extreme mass ratio inspirals (EMRIs).
+The equations of motion for a particle with mass $m$ and 4-momentum $p^\\mu = m \\frac{dx^\\mu}{d\\tau}$ (where $\\tau$ is proper time) can be written as:
+$$
+\\Sigma \\frac{dr}{d\\tau} = \\pm \\sqrt{R(r)} \\quad \\text{and} \\quad \\Sigma \\frac{d\\theta}{d\\tau} = \\pm \\sqrt{\\Theta(\\theta)}
+$$
+where $\\Sigma = r^2 + a^2 \\cos^2\\theta$, and $R(r)$ and $\\Theta(\\theta)$ are functions of $r$ and $\\theta$ respectively, involving $E$, $L_z$, $Q$, $m$, $M$, and $a$. The time and azimuthal components are given by:
+$$
+\\Sigma \\frac{dt}{d\\tau} = \\frac{(r^2+a^2)^2}{\\Delta}E - \\frac{2Mar}{\\Delta}L_z + a L_z \\quad \\text{and} \\quad \\Sigma \\frac{d\\phi}{d\\tau} = \\frac{2Mar}{\\Delta}E + \\frac{\\Delta - a^2\\sin^2\\theta}{\\Delta\\sin^2\\theta}L_z
+$$
+where $\\Delta = r^2 - 2Mr + a^2$.
+
+The solutions to these equations describe a rich variety of orbits, including stable and unstable circular orbits, plunging orbits, bound and unbound trajectories, and highly complex non-equatorial paths. The Carter constant $Q$ is crucial for describing these non-equatorial orbits, as it quantifies the motion perpendicular to the equatorial plane. The behavior of these geodesics is strongly influenced by the black hole's mass $M$ and angular momentum $a$, leading to phenomena like **frame-dragging**, where the rotating black hole "drags" spacetime around it, causing particles to co-rotate, and the existence of an **Innermost Stable Circular Orbit (ISCO)**, which depends on the direction of orbit relative to the black hole's spin.
 ***
 Kerr spacetime, describing a rotating black hole, introduces profound physical effects absent in static Schwarzschild spacetime. The most striking is **frame-dragging**, or the Lense-Thirring effect, where the black hole's rotation twists and drags the very fabric of spacetime around itself. Consequently, free-falling particles and light rays are compelled to co-rotate with the black hole, even if their initial angular momentum relative to a distant observer is zero. This is a fundamental departure from Schwarzschild spacetime, where gravity acts purely radially, and there is no such "twisting" of spacetime. The ergosphere, a region outside the event horizon but within which frame-dragging is so intense that no object can remain stationary relative to infinity, is a direct manifestation of this effect, forcing all objects to co-rotate.
 
@@ -207,36 +167,114 @@ From a computational standpoint, outline the numerical methods used to solve the
 $$
 A = \\begin{pmatrix} 2 & 1 \\\\ -1 & 2 \\end{pmatrix}.
 $$
-Find the eigenvalues and eigenvectors of matrix $A$.
+求矩阵 $A$ 的特征值和特征向量。
 </QUERY>
 <think>
-The query asks for the eigenvalues and eigenvectors of a 2x2 matrix. This is a standard problem in linear algebra. The key concepts are:
-Primary Subject: Mathematics
-Core Branches: Linear Algebra
-Specific Topics: Eigenvalues, Eigenvectors, Characteristic Polynomial, Matrix Diagonalization
-
-The calculation involves the following steps:
-1. Find the characteristic polynomial: $\\det(A - \\lambda I) = 0$, where $I$ is the identity matrix and $\lambda$ represents the eigenvalues.
-2. Solve the characteristic equation to find the eigenvalues.
-3. For each eigenvalue, solve the equation $(A - \\lambda I)v = 0$ to find the corresponding eigenvector $v$.
-
-This query is clear and simple, so only one item is generated.
+The query asks for the eigenvalues and eigenvectors of a 2x2 matrix. This is a standard problem in linear algebra. This query is clear and simple, so only one item is generated.
 </think>
-Develop query variations and response strategies:
+Retrieve Items:
 ***
 First, calculate the characteristic polynomial by finding the determinant of $(A - \\lambda I)$. Then, solve for the eigenvalues $\\lambda$. For each $\\lambda$, solve the system of linear equations
 $$
 (A - \\lambda I)v = 0
 $$ to find the corresponding eigenvector $v$.
+----------------
+<HISTORY></HISTORY>
+<QUERY>为什么Dirac场是4分量的？</QUERY>
+<think>
+The user is asking a fundamental question in quantum field theory: "Why is the Dirac field 4-component?" This question requires an explanation that integrates physics (relativistic quantum mechanics, spin), mathematics (group theory, representation theory of the Lorentz group, Clifford algebra), and potentially a conceptual understanding of fields.
+
+Contextual Understanding:
+- Core Problem: The user wants to understand the origin and necessity of the 4-component structure of the Dirac field. This is a deep question that touches upon the foundations of relativistic quantum mechanics and quantum field theory.
+- Implicit Assumptions: The user is likely familiar with basic quantum mechanics and special relativity. They are asking about a concept that goes beyond simple scalar or vector fields.
+- Solvability: The problem is well-defined and has a rigorous answer rooted in physics and mathematics.
+- Key Concepts: Relativistic invariance, spin, Dirac equation, Dirac matrices, Clifford algebra, Lorentz group, representations of the Lorentz group, Weyl spinors, double cover $SL(2,\\mathbb{C})$.
+- Perspectives:
+Physical necessity: Why a linear relativistic equation? Why spin-1/2?Mathematical construction: How does the Lorentz group's representation theory lead to this? What is the role of Clifford algebra?Conceptual comparison: How do spinors differ from scalars/vectors?
+
+Brainstorming:
+- Enhanced Formulation/Query Variation (Focus on core reasons): Rephrase the question to be more specific about the underlying principles. "What are the fundamental physical and mathematical reasons for the Dirac field being a 4-component spinor, specifically in the context of relativistic invariance, spin-1/2 particles, and the representation theory of the Lorentz group?"
+- Concise Response/Direct Answer (Summary of key points): Provide a high-level, yet accurate, summary of the main reasons. This would cover the Dirac equation, Clifford algebra, and the Lorentz group representation.
+- Response Strategy/Deeper Dive (Mathematical rigor): Focus on the detailed mathematical derivation from the Lorentz group's Lie algebra and its representations, including the role of $SL(2,\\mathbb{C})$ and Weyl spinors. This provides the most complete and rigorous answer.
+- Conceptual/Comparative (Intuitive understanding and differentiation): Explain what makes spinors unique compared to other fields (scalars, vectors) and how their transformation properties necessitate the 4-component structure. This could also touch upon the geometric interpretation.
+
+Selection Strategy:
+The original query is concise but deep. To provide a diverse set of retrieval queries, I should cover:
+
+- The fundamental theoretical necessity (physics/math).
+- The physical meaning of the components.
+- The mathematical construction.
+- The historical/comparative context.
+- The implications.
+
+I will select 4-5 items to cover these different facets, ensuring they are distinct and offer different angles for retrieval. This set covers the "why" from physical, mathematical, historical, and consequential perspectives, providing a rich search space for an embedding model.
+</think>
+Retrieve Items:
+***
+The four-component structure of the Dirac field is a direct and necessary consequence of unifying special relativity with quantum mechanics to describe spin-1/2 particles like electrons. The explanation can be approached from two primary, interconnected perspectives: the physical requirement for a linear relativistic wave equation and the mathematical structure of the Lorentz group's representations.
+
+**1. Physical Motivation: The Dirac Equation and Clifford Algebra**
+
+Paul Dirac sought a relativistic wave equation that, unlike the Klein-Gordon equation ($(\\Box + m^2)\\phi = 0$), was first-order in the time derivative, analogous to the Schrödinger equation. A first-order equation, $i\\hbar\\frac{\\partial\\psi}{\\partial t} = H\\psi$, avoids issues like negative probability densities that plagued the Klein-Gordon theory. To be relativistically covariant, space and time derivatives must be treated on equal footing. Dirac proposed an equation of the form:
+$$
+(i\\gamma^\\mu \\partial_\\mu - m)\\psi = 0
+$$
+where $\\gamma^\\mu = (\\gamma^0, \\gamma^i)$ are coefficients to be determined, and $\\psi$ is the wavefunction. For this equation to be consistent with the relativistic energy-momentum relation, $E^2 = p^2c^2 + m^2c^4$ (or $p^\\mu p_\\mu = m^2$ in natural units), the operator $(i\\gamma^\\mu \\partial_\\mu)$ must square to the Klein-Gordon operator $(-\\partial^\\mu\\partial_\\mu)$. This implies that the coefficients $\\gamma^\\mu$ cannot be simple numbers; they must be matrices that satisfy the anticommutation relations of a Clifford algebra:
+$$
+\\{\\gamma^\\mu, \\gamma^\\nu\\} = \\gamma^\\mu\\gamma^\\nu + \\gamma^\\nu\\gamma^\\mu = 2g^{\\mu\\nu}I
+$$
+where $g^{\\mu\\nu}$ is the Minkowski metric tensor diag(1, -1, -1, -1) and $I$ is the identity matrix. A key mathematical theorem states that in a 4-dimensional spacetime, the smallest possible dimension for matrices satisfying this algebra is $4 \\times 4$. Consequently, the object $\\psi$ that these matrices act upon must be a 4-component column vector, known as a Dirac spinor. These four components are not arbitrary; they naturally accommodate the two spin states (up and down) for a particle and the two spin states for its corresponding antiparticle, which was a landmark prediction of the theory.
+
+***
+**2. Mathematical Foundation: Representation Theory of the Lorentz Group**
+
+From a more fundamental standpoint, the structure of quantum fields is dictated by the representation theory of the underlying spacetime symmetry group, which is the Lorentz group, $SO(1,3)$. Particles are classified according to how their state vectors transform under these symmetries, corresponding to irreducible representations of the group.
+
+The Lie algebra of the Lorentz group, $\\mathfrak{so}(1,3)$, can be shown to be isomorphic to two independent copies of the algebra of rotations, $\\mathfrak{su}(2)$, upon complexification: $\\mathfrak{so}(1,3)_{\\mathbb{C}} \\cong \\mathfrak{su}(2)_{\\mathbb{C}} \\oplus \\mathfrak{su}(2)_{\\mathbb{C}}$. Therefore, the finite-dimensional irreducible representations of the Lorentz group are labeled by a pair of half-integers $(j_A, j_B)$, corresponding to the "spin" of each $\\mathfrak{su}(2)$ factor.
+
+*   A scalar field (spin 0) transforms under the trivial $(0,0)$ representation.
+*   A 4-vector field (spin 1) transforms under the $(\\frac{1}{2}, \\frac{1}{2})$ representation.
+
+For a spin-1/2 particle, we need representations where the spin is 1/2. The two simplest non-trivial representations are:
+*   The $(\\frac{1}{2}, 0)$ representation, which is 2-dimensional and describes a left-handed Weyl spinor ($\\psi_L$).
+*   The $(0, \\frac{1}{2})$ representation, which is also 2-dimensional and describes a right-handed Weyl spinor ($\\psi_R$).
+
+These Weyl spinors are sufficient to describe massless spin-1/2 particles. However, a massive particle cannot have a definite handedness (chirality), as one can always boost to a reference frame where its momentum is reversed but its spin is not, thus flipping its helicity. Furthermore, a theory built on a single Weyl spinor is not invariant under parity (spatial inversion), which swaps left- and right-handed spinors. To construct a parity-invariant theory for a massive particle, one must include both left- and right-handed components. The simplest way to do this is to combine them into a single object that transforms under the reducible representation $(\\frac{1}{2}, 0) \\oplus (0, \\frac{1}{2})$. The dimension of this representation is $2+2=4$. This 4-component object is precisely the Dirac spinor:
+$$
+\\psi = \\begin{pmatrix} \\psi_L \\\\ \\psi_R \\end{pmatrix}
+$$
+This mathematical structure, rooted in the fundamental symmetries of spacetime, mandates that a field describing a massive, spin-1/2 fermion must have four components.
+
+***
+**3. Physical Interpretation of the Components: Spin, Particles, and Antiparticles**
+
+The four components of the Dirac spinor $\\psi$ provide the necessary degrees of freedom to describe a spin-1/2 fermion and its antiparticle, each with two possible spin orientations. While the group-theoretic origin is abstract, the physical meaning becomes clearer when analyzing the solutions to the Dirac equation.
+
+For a particle at rest ($p=0$), the Dirac equation simplifies, and its four solutions can be explicitly found. In the standard Dirac representation of the $\\gamma$-matrices, these solutions are:
+$$
+u_1 = \\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\\\ 0 \\end{pmatrix} e^{-imt}, \\quad u_2 = \\begin{pmatrix} 0 \\\\ 1 \\\\ 0 \\\\ 0 \\end{pmatrix} e^{-imt} \\quad \\text{(Positive Energy Solutions)}
+$$
+$$
+v_1 = \\begin{pmatrix} 0 \\\\ 0 \\\\ 1 \\\\ 0 \\end{pmatrix} e^{+imt}, \\quad v_2 = \\begin{pmatrix} 0 \\\\ 0 \\\\ 0 \\\\ 1 \\end{pmatrix} e^{+imt} \\quad \\text{(Negative Energy Solutions)}
+$$
+Initially, the negative-energy solutions were problematic. Dirac's brilliant reinterpretation was that the "holes" in a filled sea of negative-energy states behave as particles with the same mass but opposite charge—antiparticles.
+
+Therefore, the four components can be understood as encoding:
+1.  **Particle, Spin-Up:** Corresponds to the $u_1$ solution.
+2.  **Particle, Spin-Down:** Corresponds to the $u_2$ solution.
+3.  **Antiparticle, Spin-Up:** Corresponds to the $v_2$ solution (spin is opposite to the corresponding particle).
+4.  **Antiparticle, Spin-Down:** Corresponds to the $v_1$ solution.
+
+In the non-relativistic limit, two of the components (the "small components") become negligible for particle solutions, while the other two (the "large components") reduce to the 2-component Pauli spinor used in non-relativistic quantum mechanics. Conversely, for antiparticle solutions, the other pair of components becomes large. This demonstrates how the 4-component structure elegantly contains both the non-relativistic spin physics and the new relativistic phenomena of antimatter within a single, covariant framework.
 
 # NOTES
-These query variations or response strategies represent broader, deeper or other perspectives of the origin query, etc. Generally, generate about 3 items. If necessary, you can generate more for exploring the rich solution space. But the maximum number should not exceed 7. If the query is too narrow or the meaning is already so clear that no further items are available, caution should be exercised to avoid deviating from the original intent (generating fewer or even only 1 strategy).
+These retrieve items represent broader, deeper or other perspectives of the origin query, etc. Generally, generate about 3 items. If necessary, you can generate more for exploring the rich solution space. But the maximum number should not exceed 7. If the origin query is too narrow or the meaning is already so clear that no further items are available, caution should be exercised to avoid deviating from the original intent (generating fewer or even only 1 item).
 
 These examples are ideal and simplified and are for reference only.
 
-Strategies should be independent of each other, different from each other. This allows potential query variations or response strategies to be explored as much as possible.
+Items should be detailed, deep, independent of each other, different from each other. This allows potential items to be explored as much as possible.
 
-No matter what language the input is your response should be in **English**.
+No matter what language the input is your response should be in English.
 
 Mathematical notation MUST use LaTeX inline ($...$) formats or display ($$...$$) formats.`;
 
@@ -291,7 +329,7 @@ A: ${chatBg}
   ] as ChatCompletionMessageParam[];
   const result = await ai.chat.completions.create({
     model: model,
-    temperature: 0.01,
+    temperature: 0.3,
     // @ts-ignore
     messages,
     stream: false
@@ -307,44 +345,41 @@ A: ${chatBg}
     };
   }
 
-  answer = answer.replace(/\\"/g, '"').replace(/\\/g, '\\\\');
+  // Find the "Retrieve Items:" section
+  const marker = "Retrieve Items:";
+  const markerIndex = answer.indexOf(marker);
 
-  // Find the index where response strategies start
-  const strategyIndex = answer.indexOf('Develop query variations and response strategies:');
-  if (strategyIndex === -1) {
+  if (markerIndex === -1) {
+    addLog.warn('Query extension failed, marker not found', {
+      answer
+    });
     return {
       rawQuery: query,
       extensionQueries: [],
       model,
-      tokens: countGptMessagesTokens(messages)
+      inputTokens: 0,
+      outputTokens: 0
     };
   }
 
-  // Extract everything after "Develop query variations and response strategies:"
-  const strategiesSection = answer.slice(strategyIndex + 'Develop query variations and response strategies:'.length);
-    
-  try {
-    // const queries = JSON.parse(answer) as string[];
-    // Split the answer into lines and filter out empty lines
-    const queries = strategiesSection
-      .split('***')
-      .map(line => line.trim())
-      .filter(line => 
-        line.length > 6 && 
-        !line.includes(':') && // Filter out any other section headers
-        !line.startsWith('Subjects') &&
-        !line.startsWith('Core Branchs') &&
-        !line.startsWith('Specific Topics')
-      );
+  // Get the text after the marker and split by lines
+  const itemsText = answer.replace(/(\\n|\\)/g, '').replace(/  /g, '').substring(markerIndex + marker.length).trim();
+  const items = itemsText.split('***')
+    .map((line: string) => line.trim())
+    .filter((line: string) => line.length > 0)
+    .slice(0, 10); // Limit to 10 items
 
+  try {
     return {
       rawQuery: query,
-      extensionQueries: Array.isArray(queries) ? queries : [],
+      extensionQueries: Array.isArray(items) ? items : [],
       model,
       tokens: countGptMessagesTokens(messages)
     };
   } catch (error) {
-    console.log(error);
+    addLog.warn('Query extension failed.', {
+      answer
+    });
     return {
       rawQuery: query,
       extensionQueries: [],
