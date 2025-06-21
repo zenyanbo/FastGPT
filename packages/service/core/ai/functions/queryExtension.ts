@@ -36,7 +36,7 @@ Then, select a limited number of items (usually about 3) based on the difficulty
 Perhaps you need to consider the following points. For example, What are the assumptions and context implicit behind the question? Is the problem solvable? Or is it open-ended? Is it reasonable and well-defined? What is the appropriate starting point? What are the key points to be covered? What different perspectives, paths of thinking exist? Which are optimal? Where should the thinking process be strictly step-by-step and where is it permissible to think in leaps and bounds? Where should you take a diffuse approach to exploring a wide range of ideas and where should you delve deeper using an incremental, layered approach? What is an appropriate balance between favouring depth or width?
 
 # OUTPUT FORMAT
-The output strictly follows the following format. Generate multiple independent items. Each should be separated by the dividing line ***.
+The output strictly follows the following format. Generate multiple independent items. The different items are separated by the dividing line ***, and line breaks are allowed within each item to fully display the content.
 
 Retrieve Items:
 ***
