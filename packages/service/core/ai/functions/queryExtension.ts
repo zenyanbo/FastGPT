@@ -278,7 +278,7 @@ These examples are ideal and simplified and are for reference only.
 
 Items should be detailed, deep, independent of each other, different from each other. This allows potential items to be explored as much as possible.
 
-No matter what language the input is your response should be in English.
+Your response should always be in **English**, regardless of the language entered.
 
 Mathematical notation MUST use LaTeX inline ($...$) formats or display ($$...$$) formats.`;
 
