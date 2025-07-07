@@ -1,13 +1,12 @@
 import {
-  AppChatConfigType,
-  AppDetailType,
-  AppSchema,
-  AppSimpleEditFormType
+  type AppChatConfigType,
+  type AppDetailType,
+  type AppSchema,
+  type AppSimpleEditFormType
 } from '@fastgpt/global/core/app/type';
-import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/node.d';
+import { type StoreNodeItemType } from '@fastgpt/global/core/workflow/type/node.d';
 import {
   chatHistoryValueDesc,
-  defaultNodeVersion,
   FlowNodeInputTypeEnum,
   FlowNodeTypeEnum
 } from '@fastgpt/global/core/workflow/node/constant';
@@ -18,10 +17,9 @@ import {
 } from '@fastgpt/global/core/workflow/constants';
 
 import { getNanoid } from '@fastgpt/global/common/string/tools';
-import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import { EditorVariablePickerType } from '@fastgpt/web/components/common/Textarea/PromptEditor/type';
-import { ToolModule } from '@fastgpt/global/core/workflow/template/system/tools';
-import { useDatasetStore } from '../dataset/store/dataset';
+import { type StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { type EditorVariablePickerType } from '@fastgpt/web/components/common/Textarea/PromptEditor/type';
+import { AgentNode } from '@fastgpt/global/core/workflow/template/system/agent';
 import {
   WorkflowStart,
   userFilesInput
@@ -36,7 +34,7 @@ import {
 import { DatasetSearchModule } from '@fastgpt/global/core/workflow/template/system/datasetSearch';
 import { i18nT } from '@fastgpt/web/i18n/utils';
 import {
-  Input_Template_File_Link_Prompt,
+  Input_Template_File_Link,
   Input_Template_UserChatInput
 } from '@fastgpt/global/core/workflow/template/input';
 import { workflowStartNodeId } from './constants';
@@ -54,12 +52,7 @@ export function form2AppWorkflow(
 } {
   const datasetNodeId = 'iKBoX2vIzETU';
   const aiChatNodeId = '7BdojPlukIQw';
-
-  const allDatasets = useDatasetStore.getState().allDatasets;
-  const selectedDatasets = data.dataset.datasets.filter((item) =>
-    allDatasets.some((ds) => ds._id === item.datasetId)
-  );
-
+  const selectedDatasets = data.dataset.datasets;
   function systemConfigTemplate(): StoreNodeItemType {
     return {
       nodeId: SystemConfigNode.id,
@@ -181,7 +174,7 @@ export function form2AppWorkflow(
           value: selectedDatasets?.length > 0 ? [datasetNodeId, 'quoteQA'] : undefined
         },
         {
-          ...Input_Template_File_Link_Prompt,
+          ...Input_Template_File_Link,
           value: [[workflowStartNodeId, NodeOutputKeyEnum.userFiles]]
         },
         {
@@ -245,58 +238,79 @@ export function form2AppWorkflow(
       version: DatasetSearchModule.version,
       inputs: [
         {
-          key: 'datasets',
+          key: NodeInputKeyEnum.datasetSelectList,
           renderTypeList: [FlowNodeInputTypeEnum.selectDataset, FlowNodeInputTypeEnum.reference],
-          label: 'core.module.input.label.Select dataset',
+          label: i18nT('common:core.module.input.label.Select dataset'),
           value: selectedDatasets,
           valueType: WorkflowIOValueTypeEnum.selectDataset,
           list: [],
           required: true
         },
         {
-          key: 'similarity',
+          key: NodeInputKeyEnum.datasetSimilarity,
           renderTypeList: [FlowNodeInputTypeEnum.selectDatasetParamsModal],
           label: '',
           value: formData.dataset.similarity,
           valueType: WorkflowIOValueTypeEnum.number
         },
         {
-          key: 'limit',
+          key: NodeInputKeyEnum.datasetMaxTokens,
           renderTypeList: [FlowNodeInputTypeEnum.hidden],
           label: '',
           value: formData.dataset.limit,
           valueType: WorkflowIOValueTypeEnum.number
         },
         {
-          key: 'searchMode',
+          key: NodeInputKeyEnum.datasetSearchMode,
           renderTypeList: [FlowNodeInputTypeEnum.hidden],
           label: '',
           valueType: WorkflowIOValueTypeEnum.string,
           value: formData.dataset.searchMode
         },
         {
-          key: 'usingReRank',
+          key: NodeInputKeyEnum.datasetSearchEmbeddingWeight,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: '',
+          valueType: WorkflowIOValueTypeEnum.number,
+          value: formData.dataset.embeddingWeight
+        },
+        {
+          key: NodeInputKeyEnum.datasetSearchUsingReRank,
           renderTypeList: [FlowNodeInputTypeEnum.hidden],
           label: '',
           valueType: WorkflowIOValueTypeEnum.boolean,
           value: formData.dataset.usingReRank
         },
         {
-          key: 'datasetSearchUsingExtensionQuery',
+          key: NodeInputKeyEnum.datasetSearchRerankModel,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: '',
+          valueType: WorkflowIOValueTypeEnum.string,
+          value: formData.dataset.rerankModel
+        },
+        {
+          key: NodeInputKeyEnum.datasetSearchRerankWeight,
+          renderTypeList: [FlowNodeInputTypeEnum.hidden],
+          label: '',
+          valueType: WorkflowIOValueTypeEnum.number,
+          value: formData.dataset.rerankWeight
+        },
+        {
+          key: NodeInputKeyEnum.datasetSearchUsingExtensionQuery,
           renderTypeList: [FlowNodeInputTypeEnum.hidden],
           label: '',
           valueType: WorkflowIOValueTypeEnum.boolean,
           value: formData.dataset.datasetSearchUsingExtensionQuery
         },
         {
-          key: 'datasetSearchExtensionModel',
+          key: NodeInputKeyEnum.datasetSearchExtensionModel,
           renderTypeList: [FlowNodeInputTypeEnum.hidden],
           label: '',
           valueType: WorkflowIOValueTypeEnum.string,
           value: formData.dataset.datasetSearchExtensionModel
         },
         {
-          key: 'datasetSearchExtensionBg',
+          key: NodeInputKeyEnum.datasetSearchExtensionBg,
           renderTypeList: [FlowNodeInputTypeEnum.hidden],
           label: '',
           valueType: WorkflowIOValueTypeEnum.string,
@@ -386,8 +400,7 @@ export function form2AppWorkflow(
               x: 500 + 500 * (i + 1),
               y: 545
             },
-            // 这里不需要固定版本，给一个不存在的版本，每次都会用最新版
-            version: defaultNodeVersion,
+            toolConfig: tool.toolConfig,
             pluginData: tool.pluginData,
             inputs: tool.inputs.map((input) => {
               // Special key value
@@ -424,19 +437,19 @@ export function form2AppWorkflow(
       nodes: [
         {
           nodeId: toolNodeId,
-          name: ToolModule.name,
-          intro: ToolModule.intro,
-          avatar: ToolModule.avatar,
-          flowNodeType: ToolModule.flowNodeType,
+          name: AgentNode.name,
+          intro: AgentNode.intro,
+          avatar: AgentNode.avatar,
+          flowNodeType: AgentNode.flowNodeType,
           showStatus: true,
           position: {
             x: 1062.1738942532802,
             y: -223.65033022650476
           },
-          version: ToolModule.version,
+          version: AgentNode.version,
           inputs: [
             {
-              key: 'model',
+              key: NodeInputKeyEnum.aiModel,
               renderTypeList: [
                 FlowNodeInputTypeEnum.settingLLMModel,
                 FlowNodeInputTypeEnum.reference
@@ -487,7 +500,7 @@ export function form2AppWorkflow(
               value: formData.aiSettings.maxHistories
             },
             {
-              ...Input_Template_File_Link_Prompt,
+              ...Input_Template_File_Link,
               value: [[workflowStartNodeId, NodeOutputKeyEnum.userFiles]]
             },
             {
@@ -513,7 +526,7 @@ export function form2AppWorkflow(
               value: formData.aiSettings.aiChatReasoning
             }
           ],
-          outputs: ToolModule.outputs
+          outputs: AgentNode.outputs
         },
         // tool nodes
         ...(datasetTool ? datasetTool.nodes : []),

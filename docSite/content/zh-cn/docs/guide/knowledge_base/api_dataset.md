@@ -43,7 +43,7 @@ type ResponseType = {
 // 文件列表中，单项的文件类型
 type FileListItem = {
   id: string;
-  parentId: string | null;
+  parentId: string  //也可能为 null 或者 undefined 类型;
   name: string;
   type: 'file' | 'folder';
   updateTime: Date;
@@ -59,7 +59,7 @@ type FileListItem = {
 {{< markdownify >}}
 
 {{% alert icon=" " context="success" %}}
-- parentId - 父级 id，可选，或者 null。
+- parentId - 父级 id，可选，或者 null | undefined。
 - searchKey - 检索词，可选
 {{% /alert %}}
 
@@ -68,7 +68,7 @@ curl --location --request POST '{{baseURL}}/v1/file/list' \
 --header 'Authorization: Bearer {{authorization}}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "parentId": null,
+    "parentId": "",
     "searchKey": ""
 }'
 ```
@@ -124,6 +124,7 @@ curl --location --request GET '{{baseURL}}/v1/file/content?id=xx' \
     "success": true,
     "message": "",
     "data": {
+        "title": "文档标题",
         "content": "FastGPT 是一个基于 LLM 大语言模型的知识库问答系统，提供开箱即用的数据处理、模型调用等能力。同时可以通过 Flow 可视化进行工作流编排，从而实现复杂的问答场景！\n",
         "previewUrl": "xxxx"
     }
@@ -131,10 +132,13 @@ curl --location --request GET '{{baseURL}}/v1/file/content?id=xx' \
 ```
 
 {{% alert icon=" " context="success" %}}
-二选一返回，如果同时返回则 content 优先级更高。
 
+- title - 文件标题。
 - content - 文件内容，直接拿来用。
 - previewUrl - 文件链接，系统会请求该地址获取文件内容。
+
+`content`和`previewUrl`二选一返回，如果同时返回则 `content` 优先级更高，返回 `previewUrl`时，则会访问该链接进行文档内容读取。
+
 {{% /alert %}}
 
 {{< /markdownify >}}
@@ -175,6 +179,43 @@ curl --location --request GET '{{baseURL}}/v1/file/read?id=xx' \
 {{% alert icon=" " context="success" %}}
 - url - 文件访问链接，拿到后会自动打开。
 {{% /alert %}}
+
+{{< /markdownify >}}
+{{< /tab >}}
+{{< /tabs >}}
+
+
+### 4. 获取文件详细信息（用于获取文件信息）
+
+{{< tabs tabTotal="2" >}}
+{{< tab tabName="请求示例" >}}
+{{< markdownify >}}
+
+id 为文件的 id。
+
+```bash
+curl --location --request GET '{{baseURL}}/v1/file/detail?id=xx' \
+--header 'Authorization: Bearer {{authorization}}'
+```
+
+{{< /markdownify >}}
+{{< /tab >}}
+
+{{< tab tabName="响应示例" >}}
+{{< markdownify >}}
+
+```json
+{
+    "code": 200,
+    "success": true,
+    "message": "",
+    "data": {
+        "id": "docs",
+        "parentId": "",
+        "name": "docs"
+    }
+}
+```
 
 {{< /markdownify >}}
 {{< /tab >}}

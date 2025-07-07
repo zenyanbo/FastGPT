@@ -2,27 +2,47 @@ import { postWorkflowDebug } from '@/web/core/workflow/api';
 import {
   checkWorkflowNodeAndConnection,
   compareSnapshot,
-  storeEdgesRenderEdge,
+  storeEdge2RenderEdge,
   storeNode2FlowNode
 } from '@/web/core/workflow/utils';
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
-import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type/node';
+import { type RuntimeNodeItemType } from '@fastgpt/global/core/workflow/runtime/type';
+import {
+  type FlowNodeItemType,
+  type StoreNodeItemType
+} from '@fastgpt/global/core/workflow/type/node';
 import type { FlowNodeTemplateType } from '@fastgpt/global/core/workflow/type/node';
-import { RuntimeEdgeItemType, StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import { FlowNodeChangeProps } from '@fastgpt/global/core/workflow/type/fe';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io';
+import {
+  type RuntimeEdgeItemType,
+  type StoreEdgeItemType
+} from '@fastgpt/global/core/workflow/type/edge';
+import {
+  type FlowNodeOutputItemType,
+  type FlowNodeInputItemType
+} from '@fastgpt/global/core/workflow/type/io';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import { useMemoizedFn, useUpdateEffect } from 'ahooks';
-import React, { Dispatch, SetStateAction, useCallback, useMemo, useRef, useState } from 'react';
-import { Edge, Node, OnConnectStartParams, ReactFlowProvider, useReactFlow } from 'reactflow';
+import React, {
+  type Dispatch,
+  type SetStateAction,
+  useCallback,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import {
+  type Edge,
+  type Node,
+  type OnConnectStartParams,
+  ReactFlowProvider,
+  useReactFlow
+} from 'reactflow';
 import { createContext, useContextSelector } from 'use-context-selector';
 import { defaultRunningStatus } from '../constants';
 import { checkNodeRunStatus } from '@fastgpt/global/core/workflow/runtime/utils';
 import { getHandleId } from '@fastgpt/global/core/workflow/utils';
-import { AppChatConfigType } from '@fastgpt/global/core/app/type';
+import { type AppChatConfigType } from '@fastgpt/global/core/app/type';
 import { AppContext } from '@/pageComponents/app/detail/context';
 import ChatTest from '../Flow/ChatTest';
 import { useDisclosure } from '@chakra-ui/react';
@@ -30,11 +50,13 @@ import { uiWorkflow2StoreWorkflow } from '../utils';
 import { useTranslation } from 'next-i18next';
 import { formatTime2YMDHMS, formatTime2YMDHMW } from '@fastgpt/global/common/string/time';
 import { cloneDeep } from 'lodash';
-import { AppVersionSchemaType } from '@fastgpt/global/core/app/version';
+import { type AppVersionSchemaType } from '@fastgpt/global/core/app/version';
 import WorkflowInitContextProvider, { WorkflowNodeEdgeContext } from './workflowInitContext';
 import WorkflowEventContextProvider from './workflowEventContext';
 import { getAppConfigByDiff } from '@/web/core/app/diff';
 import WorkflowStatusContextProvider from './workflowStatusContext';
+import { type ChatItemType, type UserChatItemValueItemType } from '@fastgpt/global/core/chat/type';
+import { type WorkflowInteractiveResponseType } from '@fastgpt/global/core/workflow/template/system/interactive/type';
 
 /* 
   Context
@@ -77,6 +99,52 @@ export type WorkflowSnapshotsType = WorkflowStateType & {
   diff?: any;
 };
 
+type FlowNodeChangeProps = { nodeId: string } & (
+  | {
+      type: 'attr'; // key: attr, value: new value
+      key: string;
+      value: any;
+    }
+  | {
+      type: 'updateInput'; // key: update input key, value: new input value
+      key: string;
+      value: FlowNodeInputItemType;
+    }
+  | {
+      type: 'replaceInput'; // key: old input key, value: new input value
+      key: string;
+      value: FlowNodeInputItemType;
+    }
+  | {
+      type: 'addInput'; // key: null, value: new input value
+      value: FlowNodeInputItemType;
+      index?: number;
+    }
+  | {
+      type: 'delInput'; // key: delete input key, value: null
+      key: string;
+    }
+  | {
+      type: 'updateOutput'; // key: update output key, value: new output value
+      key: string;
+      value: FlowNodeOutputItemType;
+    }
+  | {
+      type: 'replaceOutput'; // key: old output key, value: new output value
+      key: string;
+      value: FlowNodeOutputItemType;
+    }
+  | {
+      type: 'addOutput'; // key: null, value: new output value
+      value: FlowNodeOutputItemType;
+      index?: number;
+    }
+  | {
+      type: 'delOutput'; // key: delete output key, value: null
+      key: string;
+    }
+);
+
 type WorkflowContextType = {
   appId?: string;
   basicNodeTemplates: FlowNodeTemplateType[];
@@ -84,7 +152,6 @@ type WorkflowContextType = {
 
   // nodes
   nodeList: FlowNodeItemType[];
-  hasToolNode: boolean;
 
   onUpdateNodeError: (node: string, isError: Boolean) => void;
   onResetNode: (e: { id: string; node: FlowNodeTemplateType }) => void;
@@ -156,24 +223,22 @@ type WorkflowContextType = {
     | undefined;
 
   // debug
-  workflowDebugData:
-    | {
-        runtimeNodes: RuntimeNodeItemType[];
-        runtimeEdges: RuntimeEdgeItemType[];
-        nextRunNodes: RuntimeNodeItemType[];
-      }
-    | undefined;
-  onNextNodeDebug: () => Promise<void>;
+  workflowDebugData?: DebugDataType;
+  onNextNodeDebug: (params: DebugDataType) => Promise<void>;
   onStartNodeDebug: ({
     entryNodeId,
     runtimeNodes,
     runtimeEdges,
-    variables
+    variables,
+    query,
+    history
   }: {
     entryNodeId: string;
     runtimeNodes: RuntimeNodeItemType[];
     runtimeEdges: RuntimeEdgeItemType[];
     variables: Record<string, any>;
+    query?: UserChatItemValueItemType[];
+    history?: ChatItemType[];
   }) => Promise<void>;
   onStopNodeDebug: () => void;
 
@@ -189,11 +254,14 @@ type WorkflowContextType = {
   >;
 };
 
-type DebugDataType = {
+export type DebugDataType = {
   runtimeNodes: RuntimeNodeItemType[];
   runtimeEdges: RuntimeEdgeItemType[];
   nextRunNodes: RuntimeNodeItemType[];
   variables: Record<string, any>;
+  history?: ChatItemType[];
+  query?: UserChatItemValueItemType[];
+  workflowInteractiveResponse?: WorkflowInteractiveResponseType;
 };
 
 export const WorkflowContext = createContext<WorkflowContextType>({
@@ -204,7 +272,6 @@ export const WorkflowContext = createContext<WorkflowContextType>({
   },
   basicNodeTemplates: [],
   nodeList: [],
-  hasToolNode: false,
   onUpdateNodeError: function (node: string, isError: Boolean): void {
     throw new Error('Function not implemented.');
   },
@@ -236,17 +303,25 @@ export const WorkflowContext = createContext<WorkflowContextType>({
     throw new Error('Function not implemented.');
   },
   workflowDebugData: undefined,
-  onNextNodeDebug: function (): Promise<void> {
+  onNextNodeDebug: function (params?: {
+    history?: ChatItemType[];
+    query?: UserChatItemValueItemType[];
+    debugData?: DebugDataType;
+  }): Promise<void> {
     throw new Error('Function not implemented.');
   },
   onStartNodeDebug: function ({
     entryNodeId,
     runtimeNodes,
-    runtimeEdges
+    runtimeEdges,
+    query,
+    history
   }: {
     entryNodeId: string;
     runtimeNodes: RuntimeNodeItemType[];
     runtimeEdges: RuntimeEdgeItemType[];
+    query?: UserChatItemValueItemType[];
+    history?: ChatItemType[];
   }): Promise<void> {
     throw new Error('Function not implemented.');
   },
@@ -368,10 +443,6 @@ const WorkflowContextProvider = ({
     () => JSON.parse(nodeListString) as FlowNodeItemType[],
     [nodeListString]
   );
-
-  const hasToolNode = useMemo(() => {
-    return !!nodeList.find((node) => node.flowNodeType === FlowNodeTypeEnum.tools);
-  }, [nodeList]);
 
   const onUpdateNodeError = useMemoizedFn((nodeId: string, isError: Boolean) => {
     setNodes((state) => {
@@ -551,8 +622,7 @@ const WorkflowContextProvider = ({
   /* debug */
   const [workflowDebugData, setWorkflowDebugData] = useState<DebugDataType>();
   const onNextNodeDebug = useCallback(
-    async (debugData = workflowDebugData) => {
-      if (!debugData) return;
+    async (debugData: DebugDataType) => {
       // 1. Cancel node selected status and debugResult.showStatus
       setNodes((state) =>
         state.map((node) => ({
@@ -612,26 +682,35 @@ const WorkflowContextProvider = ({
 
       try {
         // 4. Run one step
-        const { finishedEdges, finishedNodes, nextStepRunNodes, flowResponses, newVariables } =
-          await postWorkflowDebug({
-            nodes: runtimeNodes,
-            edges: debugData.runtimeEdges,
-            variables: {
-              appId,
-              cTime: formatTime2YMDHMW(),
-              ...debugData.variables
-            },
-            appId
-          });
+        const {
+          finishedEdges,
+          finishedNodes,
+          nextStepRunNodes,
+          flowResponses,
+          newVariables,
+          workflowInteractiveResponse
+        } = await postWorkflowDebug({
+          nodes: runtimeNodes,
+          edges: debugData.runtimeEdges,
+          variables: {
+            appId,
+            cTime: formatTime2YMDHMW(),
+            ...debugData.variables
+          },
+          query: debugData.query, // 添加 query 参数
+          history: debugData.history,
+          appId
+        });
+
         // 5. Store debug result
-        const newStoreDebugData = {
+        setWorkflowDebugData({
           runtimeNodes: finishedNodes,
           // edges need to save status
           runtimeEdges: finishedEdges,
           nextRunNodes: nextStepRunNodes,
-          variables: newVariables
-        };
-        setWorkflowDebugData(newStoreDebugData);
+          variables: newVariables,
+          workflowInteractiveResponse: workflowInteractiveResponse
+        });
 
         // 6. selected entry node and Update entry node debug result
         setNodes((state) =>
@@ -665,16 +744,21 @@ const WorkflowContextProvider = ({
                   status: 'success',
                   response: result,
                   showResult: true,
-                  isExpired: false
+                  isExpired: false,
+                  workflowInteractiveResponse: workflowInteractiveResponse
                 }
               }
             };
           })
         );
 
-        // Check for an empty response
-        if (flowResponses.length === 0 && nextStepRunNodes.length > 0) {
-          onNextNodeDebug(newStoreDebugData);
+        // Check for an empty response(Skip node)
+        if (
+          !workflowInteractiveResponse &&
+          flowResponses.length === 0 &&
+          nextStepRunNodes.length > 0
+        ) {
+          onNextNodeDebug(debugData);
         }
       } catch (error) {
         entryNodes.forEach((node) => {
@@ -692,7 +776,7 @@ const WorkflowContextProvider = ({
         console.log(error);
       }
     },
-    [appId, onChangeNode, setNodes, workflowDebugData]
+    [appId, onChangeNode, setNodes]
   );
   const onStopNodeDebug = useMemoizedFn(() => {
     setWorkflowDebugData(undefined);
@@ -712,18 +796,24 @@ const WorkflowContextProvider = ({
       entryNodeId,
       runtimeNodes,
       runtimeEdges,
-      variables
+      variables,
+      query,
+      history
     }: {
       entryNodeId: string;
       runtimeNodes: RuntimeNodeItemType[];
       runtimeEdges: RuntimeEdgeItemType[];
       variables: Record<string, any>;
+      query?: UserChatItemValueItemType[];
+      history?: ChatItemType[];
     }) => {
-      const data = {
+      const data: DebugDataType = {
         runtimeNodes,
         runtimeEdges,
         nextRunNodes: runtimeNodes.filter((node) => node.nodeId === entryNodeId),
-        variables
+        variables,
+        query,
+        history
       };
       onStopNodeDebug();
       setWorkflowDebugData(data);
@@ -812,7 +902,7 @@ const WorkflowContextProvider = ({
   });
   const onSwitchCloudVersion = useMemoizedFn((appVersion: AppVersionSchemaType) => {
     const nodes = appVersion.nodes.map((item) => storeNode2FlowNode({ item, t }));
-    const edges = appVersion.edges.map((item) => storeEdgesRenderEdge({ edge: item }));
+    const edges = appVersion.edges.map((item) => storeEdge2RenderEdge({ edge: item }));
     const chatConfig = appVersion.chatConfig;
 
     resetSnapshot({
@@ -863,7 +953,7 @@ const WorkflowContextProvider = ({
       isInit?: boolean
     ) => {
       const nodes = e.nodes?.map((item) => storeNode2FlowNode({ item, t })) || [];
-      const edges = e.edges?.map((item) => storeEdgesRenderEdge({ edge: item })) || [];
+      const edges = e.edges?.map((item) => storeEdge2RenderEdge({ edge: item })) || [];
 
       // Get storage snapshot，兼容旧版正在编辑的用户，刷新后会把 local 数据存到内存并删除
       const pastSnapshot = (() => {
@@ -962,7 +1052,6 @@ const WorkflowContextProvider = ({
 
       // node
       nodeList,
-      hasToolNode,
       onUpdateNodeError,
       onResetNode,
       onChangeNode,
@@ -1008,7 +1097,6 @@ const WorkflowContextProvider = ({
       flowData2StoreDataAndCheck,
       future,
       getNodeDynamicInputs,
-      hasToolNode,
       initData,
       nodeList,
       onChangeNode,

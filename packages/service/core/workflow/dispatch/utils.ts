@@ -1,20 +1,20 @@
 import { getErrText } from '@fastgpt/global/common/error/utils';
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
 import type { ChatItemType } from '@fastgpt/global/core/chat/type.d';
+import { NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import {
-  WorkflowIOValueTypeEnum,
-  NodeOutputKeyEnum
-} from '@fastgpt/global/core/workflow/constants';
-import {
-  RuntimeEdgeItemType,
-  SystemVariablesType
+  type RuntimeEdgeItemType,
+  type RuntimeNodeItemType,
+  type SystemVariablesType
 } from '@fastgpt/global/core/workflow/runtime/type';
 import { responseWrite } from '../../../common/response';
-import { NextApiResponse } from 'next';
+import { type NextApiResponse } from 'next';
 import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
-import { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
-import json5 from 'json5';
+import { type SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
+import { getMCPToolRuntimeNode } from '@fastgpt/global/core/app/mcpTools/utils';
+import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
+import type { McpToolSetDataType } from '@fastgpt/global/core/app/mcpTools/type';
 
 export const getWorkflowResponseWrite = ({
   res,
@@ -32,30 +32,22 @@ export const getWorkflowResponseWrite = ({
   return ({
     write,
     event,
-    data,
-    stream
+    data
   }: {
     write?: (text: string) => void;
     event: SseResponseEventEnum;
     data: Record<string, any>;
-    stream?: boolean; // Focus set stream response
   }) => {
-    const useStreamResponse = stream ?? streamResponse;
+    const useStreamResponse = streamResponse;
 
     if (!res || res.closed || !useStreamResponse) return;
 
     // Forbid show detail
-    const detailEvent: Record<string, 1> = {
-      [SseResponseEventEnum.error]: 1,
-      [SseResponseEventEnum.flowNodeStatus]: 1,
-      [SseResponseEventEnum.flowResponses]: 1,
-      [SseResponseEventEnum.interactive]: 1,
-      [SseResponseEventEnum.toolCall]: 1,
-      [SseResponseEventEnum.toolParams]: 1,
-      [SseResponseEventEnum.toolResponse]: 1,
-      [SseResponseEventEnum.updateVariables]: 1
+    const notDetailEvent: Record<string, 1> = {
+      [SseResponseEventEnum.answer]: 1,
+      [SseResponseEventEnum.fastAnswer]: 1
     };
-    if (!detail && detailEvent[event]) return;
+    if (!detail && !notDetailEvent[event]) return;
 
     // Forbid show running status
     const statusEvent: Record<string, 1> = {
@@ -91,50 +83,16 @@ export const filterToolNodeIdByEdges = ({
 
 export const getHistories = (history?: ChatItemType[] | number, histories: ChatItemType[] = []) => {
   if (!history) return [];
+  // Select reference history
+  if (Array.isArray(history)) return history;
 
-  const systemHistories = histories.filter((item) => item.obj === ChatRoleEnum.System);
-
-  const filterHistories = (() => {
-    if (typeof history === 'number') return histories.slice(-(history * 2));
-    if (Array.isArray(history)) return history;
-    return [];
-  })();
+  // history is number
+  const systemHistoryIndex = histories.findIndex((item) => item.obj !== ChatRoleEnum.System);
+  const systemHistories = histories.slice(0, systemHistoryIndex);
+  const chatHistories = histories.slice(systemHistoryIndex);
+  const filterHistories = chatHistories.slice(-(history * 2));
 
   return [...systemHistories, ...filterHistories];
-};
-
-/* value type format */
-export const valueTypeFormat = (value: any, type?: WorkflowIOValueTypeEnum) => {
-  if (value === undefined) return;
-
-  if (type === 'string') {
-    if (typeof value !== 'object') return String(value);
-    return JSON.stringify(value);
-  }
-  if (type === 'number') return Number(value);
-  if (type === 'boolean') {
-    if (typeof value === 'string') return value === 'true';
-    return Boolean(value);
-  }
-  try {
-    if (
-      type &&
-      [
-        WorkflowIOValueTypeEnum.object,
-        WorkflowIOValueTypeEnum.chatHistory,
-        WorkflowIOValueTypeEnum.datasetQuote,
-        WorkflowIOValueTypeEnum.selectApp,
-        WorkflowIOValueTypeEnum.selectDataset
-      ].includes(type) &&
-      typeof value !== 'object'
-    ) {
-      return json5.parse(value);
-    }
-  } catch (error) {
-    return value;
-  }
-
-  return value;
 };
 
 export const checkQuoteQAValue = (quoteQA?: SearchDataResponseItemType[]) => {
@@ -188,4 +146,63 @@ export const formatHttpError = (error: any) => {
     code: error?.code,
     status: error?.status
   };
+};
+
+export const rewriteRuntimeWorkFlow = (
+  nodes: RuntimeNodeItemType[],
+  edges: RuntimeEdgeItemType[]
+) => {
+  const toolSetNodes = nodes.filter((node) => node.flowNodeType === FlowNodeTypeEnum.toolSet);
+
+  if (toolSetNodes.length === 0) {
+    return;
+  }
+
+  const nodeIdsToRemove = new Set<string>();
+
+  for (const toolSetNode of toolSetNodes) {
+    nodeIdsToRemove.add(toolSetNode.nodeId);
+    const toolSetValue = toolSetNode.inputs[0]?.value as McpToolSetDataType | undefined;
+
+    if (!toolSetValue) continue;
+
+    const toolList = toolSetValue.toolList;
+    const url = toolSetValue.url;
+    const headerSecret = toolSetValue.headerSecret;
+
+    const incomingEdges = edges.filter((edge) => edge.target === toolSetNode.nodeId);
+
+    for (const tool of toolList) {
+      const newToolNode = getMCPToolRuntimeNode({
+        avatar: toolSetNode.avatar,
+        tool,
+        url,
+        headerSecret
+      });
+
+      nodes.push({ ...newToolNode, name: `${toolSetNode.name} / ${tool.name}` });
+
+      for (const inEdge of incomingEdges) {
+        edges.push({
+          source: inEdge.source,
+          target: newToolNode.nodeId,
+          sourceHandle: inEdge.sourceHandle,
+          targetHandle: 'selectedTools',
+          status: inEdge.status
+        });
+      }
+    }
+  }
+
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    if (nodeIdsToRemove.has(nodes[i].nodeId)) {
+      nodes.splice(i, 1);
+    }
+  }
+
+  for (let i = edges.length - 1; i >= 0; i--) {
+    if (nodeIdsToRemove.has(edges[i].target)) {
+      edges.splice(i, 1);
+    }
+  }
 };

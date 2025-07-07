@@ -14,14 +14,15 @@ import { AppFolderTypeList, AppTypeEnum } from '@fastgpt/global/core/app/constan
 import { useSystem } from '@fastgpt/web/hooks/useSystem';
 import LightRowTabs from '@fastgpt/web/components/common/Tabs/LightRowTabs';
 import { useRouter } from 'next/router';
-import { AppListItemType } from '@fastgpt/global/core/app/type';
+import { type AppListItemType } from '@fastgpt/global/core/app/type';
 import {
-  GetResourceFolderListProps,
-  GetResourceListItemResponse
+  type GetResourceFolderListProps,
+  type GetResourceListItemResponse
 } from '@fastgpt/global/common/parentFolder/type';
 import { getMyApps } from '@/web/core/app/api';
 import SelectOneResource from '@/components/common/folder/SelectOneResource';
 import { ChatItemContext } from '@/web/core/chat/context/chatItemContext';
+import VariablePopover from '@/components/core/chat/ChatContainer/ChatBox/components/VariablePopover';
 
 const ChatHeader = ({
   history,
@@ -38,7 +39,10 @@ const ChatHeader = ({
   const { isPc } = useSystem();
 
   const chatData = useContextSelector(ChatItemContext, (v) => v.chatBoxData);
+  const isVariableVisible = useContextSelector(ChatItemContext, (v) => v.isVariableVisible);
   const isPlugin = chatData.app.type === AppTypeEnum.plugin;
+  const router = useRouter();
+  const isChat = router.pathname === '/chat';
 
   return isPc && isPlugin ? null : (
     <Flex
@@ -68,8 +72,12 @@ const ChatHeader = ({
         />
       )}
 
-      {/* control */}
-      {!isPlugin && <ToolMenu history={history} />}
+      <Flex gap={2} alignItems={'center'}>
+        {!isVariableVisible && <VariablePopover showExternalVariables={isChat} />}
+
+        {/* control */}
+        {!isPlugin && <ToolMenu history={history} />}
+      </Flex>
     </Flex>
   );
 };

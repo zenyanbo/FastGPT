@@ -13,12 +13,12 @@ import {
   NodeOutputKeyEnum
 } from './constants';
 import {
-  FlowNodeInputItemType,
-  FlowNodeOutputItemType,
-  ReferenceArrayValueType,
-  ReferenceItemValueType
+  type FlowNodeInputItemType,
+  type FlowNodeOutputItemType,
+  type ReferenceArrayValueType,
+  type ReferenceItemValueType
 } from './type/io.d';
-import { StoreNodeItemType } from './type/node';
+import { type StoreNodeItemType } from './type/node';
 import type {
   VariableItemType,
   AppTTSConfigType,
@@ -29,7 +29,7 @@ import type {
   AppAutoExecuteConfigType,
   AppQGConfigType
 } from '../app/type';
-import { EditorVariablePickerType } from '../../../web/components/common/Textarea/PromptEditor/type';
+import { type EditorVariablePickerType } from '../../../web/components/common/Textarea/PromptEditor/type';
 import {
   defaultAutoExecuteConfig,
   defaultChatInputGuideConfig,
@@ -38,7 +38,7 @@ import {
   defaultWhisperConfig
 } from '../app/constants';
 import { IfElseResultEnum } from './template/system/ifElse/constant';
-import { RuntimeNodeItemType } from './runtime/type';
+import { type RuntimeNodeItemType } from './runtime/type';
 import {
   Input_Template_File_Link,
   Input_Template_History,
@@ -46,7 +46,7 @@ import {
   Input_Template_UserChatInput
 } from './template/input';
 import { i18nT } from '../../../web/i18n/utils';
-import { RuntimeUserPromptType, UserChatItemType } from '../../core/chat/type';
+import { type RuntimeUserPromptType, type UserChatItemType } from '../../core/chat/type';
 import { getNanoid } from '../../common/string/tools';
 import { ChatRoleEnum } from '../../core/chat/constants';
 import { runtimePrompt2ChatsValue } from '../../core/chat/adapt';
@@ -274,9 +274,6 @@ export const appData2FlowNodeIO = ({
         };
       });
 
-  // const showFileLink =
-  //   chatConfig?.fileSelectConfig?.canSelectFile || chatConfig?.fileSelectConfig?.canSelectImg;
-
   return {
     inputs: [
       Input_Template_Stream_MODE,
@@ -311,6 +308,38 @@ export const appData2FlowNodeIO = ({
   };
 };
 
+export const toolData2FlowNodeIO = ({
+  nodes
+}: {
+  nodes: StoreNodeItemType[];
+}): {
+  inputs: FlowNodeInputItemType[];
+  outputs: FlowNodeOutputItemType[];
+} => {
+  const toolNode = nodes.find((node) => node.flowNodeType === FlowNodeTypeEnum.tool);
+
+  return {
+    inputs: toolNode?.inputs || [],
+    outputs: toolNode?.outputs || []
+  };
+};
+
+export const toolSetData2FlowNodeIO = ({
+  nodes
+}: {
+  nodes: StoreNodeItemType[];
+}): {
+  inputs: FlowNodeInputItemType[];
+  outputs: FlowNodeOutputItemType[];
+} => {
+  const toolSetNode = nodes.find((node) => node.flowNodeType === FlowNodeTypeEnum.toolSet);
+
+  return {
+    inputs: toolSetNode?.inputs || [],
+    outputs: toolSetNode?.outputs || []
+  };
+};
+
 export const formatEditorVariablePickerIcon = (
   variables: { key: string; label: string; type?: `${VariableInputEnum}`; required?: boolean }[]
 ): EditorVariablePickerType[] => {
@@ -324,7 +353,7 @@ export const formatEditorVariablePickerIcon = (
 export const isValidReferenceValueFormat = (value: any): value is ReferenceItemValueType => {
   return Array.isArray(value) && value.length === 2 && typeof value[0] === 'string';
 };
-/* 
+/*
   Check whether the value([variableId, outputId]) value is a valid reference value:
   1. The value must be an array of length 2
   2. The first item of the array must be one of VARIABLE_NODE_ID or nodeIds
@@ -338,7 +367,7 @@ export const isValidReferenceValue = (
   const validIdSet = new Set([VARIABLE_NODE_ID, ...nodeIds]);
   return validIdSet.has(value[0]);
 };
-/* 
+/*
   Check whether the value([variableId, outputId][]) value is a valid reference value array:
   1. The value must be an array
   2. The array must contain at least one element

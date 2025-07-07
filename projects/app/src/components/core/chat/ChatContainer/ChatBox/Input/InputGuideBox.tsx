@@ -1,7 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
-import { useI18n } from '@/web/context/I18n';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 import { queryChatInputGuideList } from '@/web/core/chat/inputGuide/api';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
@@ -22,7 +21,6 @@ export default function InputGuideBox({
   onSend: (text: string) => void;
 }) {
   const { t } = useTranslation();
-  const { chatT } = useI18n();
   const chatInputGuide = useContextSelector(ChatBoxContext, (v) => v.chatInputGuide);
   const outLinkAuthData = useContextSelector(ChatBoxContext, (v) => v.outLinkAuthData);
 
@@ -65,9 +63,9 @@ export default function InputGuideBox({
     >
       <Flex alignItems={'center'} fontSize={'sm'} color={'myGray.600'} gap={2} mb={2} px={2}>
         <MyIcon name={'union'} />
-        <Box>{chatT('input_guide')}</Box>
+        <Box>{t('chat:input_guide')}</Box>
       </Flex>
-      {data.map((item, index) => (
+      {data.map((item) => (
         <Flex
           alignItems={'center'}
           as={'li'}

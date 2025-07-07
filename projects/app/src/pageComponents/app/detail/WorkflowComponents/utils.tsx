@@ -1,11 +1,14 @@
 import { computedNodeInputReference } from '@/web/core/workflow/utils';
-import { AppDetailType } from '@fastgpt/global/core/app/type';
+import { type AppDetailType } from '@fastgpt/global/core/app/type';
 import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
-import { FlowNodeItemType, StoreNodeItemType } from '@fastgpt/global/core/workflow/type/node.d';
-import { TFunction } from 'i18next';
-import { type Node, type Edge } from 'reactflow';
+import type { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import {
+  type FlowNodeItemType,
+  type StoreNodeItemType
+} from '@fastgpt/global/core/workflow/type/node.d';
+import { type TFunction } from 'i18next';
+import { type Edge, type Node } from 'reactflow';
 
 export const uiWorkflow2StoreWorkflow = ({
   nodes,
@@ -26,8 +29,9 @@ export const uiWorkflow2StoreWorkflow = ({
     version: item.data.version,
     inputs: item.data.inputs,
     outputs: item.data.outputs,
+    isFolded: item.data.isFolded,
     pluginId: item.data.pluginId,
-    isFolded: item.data.isFolded
+    toolConfig: item.data.toolConfig
   }));
 
   // get all handle

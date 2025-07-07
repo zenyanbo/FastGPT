@@ -1,22 +1,20 @@
-import type { NextApiRequest } from 'next';
 import type { ApiDatasetCreateDatasetCollectionParams } from '@fastgpt/global/core/dataset/api.d';
 import { authDataset } from '@fastgpt/service/support/permission/dataset/auth';
 import { createCollectionAndInsertData } from '@fastgpt/service/core/dataset/collection/controller';
-import {
-  TrainingModeEnum,
-  DatasetCollectionTypeEnum,
-  DatasetCollectionDataProcessModeEnum
-} from '@fastgpt/global/core/dataset/constants';
+import { DatasetCollectionTypeEnum } from '@fastgpt/global/core/dataset/constants';
 
 import { NextAPI } from '@/service/middleware/entry';
 import { WritePermissionVal } from '@fastgpt/global/support/permission/constant';
-import { CreateCollectionResponse } from '@/global/core/dataset/api';
-import { readApiServerFileContent } from '@fastgpt/service/core/dataset/read';
+import { type CreateCollectionResponse } from '@/global/core/dataset/api';
 import { MongoDatasetCollection } from '@fastgpt/service/core/dataset/collection/schema';
 import { DatasetErrEnum } from '@fastgpt/global/common/error/code/dataset';
+import type { ApiRequestProps } from '@fastgpt/service/type/next';
+import { getApiDatasetRequest } from '@fastgpt/service/core/dataset/apiDataset';
 
-async function handler(req: NextApiRequest): CreateCollectionResponse {
-  const { name, apiFileId, ...body } = req.body as ApiDatasetCreateDatasetCollectionParams;
+async function handler(
+  req: ApiRequestProps<ApiDatasetCreateDatasetCollectionParams>
+): CreateCollectionResponse {
+  const { name, apiFileId, customPdfParse, ...body } = req.body;
 
   const { teamId, tmbId, dataset } = await authDataset({
     req,
@@ -25,10 +23,6 @@ async function handler(req: NextApiRequest): CreateCollectionResponse {
     datasetId: body.datasetId,
     per: WritePermissionVal
   });
-
-  const apiServer = dataset.apiServer;
-  const feishuServer = dataset.feishuServer;
-  const yuqueServer = dataset.yuqueServer;
 
   // Auth same apiFileId
   const storeCol = await MongoDatasetCollection.findOne(
@@ -44,29 +38,25 @@ async function handler(req: NextApiRequest): CreateCollectionResponse {
     return Promise.reject(DatasetErrEnum.sameApiCollection);
   }
 
-  const content = await readApiServerFileContent({
-    apiServer,
-    feishuServer,
-    yuqueServer,
-    apiFileId,
-    teamId,
-    tmbId
+  const fileDetail = await (
+    await getApiDatasetRequest(dataset.apiDatasetServer)
+  ).getFileDetail({
+    apiFileId
   });
 
   const { collectionId, insertResults } = await createCollectionAndInsertData({
     dataset,
-    rawText: content,
-    relatedId: apiFileId,
     createCollectionParams: {
       ...body,
       teamId,
       tmbId,
       type: DatasetCollectionTypeEnum.apiFile,
-      name: name,
+      name: fileDetail.name || name,
       apiFileId,
       metadata: {
         relatedImgId: apiFileId
-      }
+      },
+      customPdfParse
     }
   });
 

@@ -3,12 +3,12 @@ import { FlowNodeTypeEnum } from '../workflow/node/constant';
 import { NodeInputKeyEnum, FlowNodeTemplateTypeEnum } from '../workflow/constants';
 import type { FlowNodeInputItemType } from '../workflow/type/io.d';
 import { getAppChatConfig } from '../workflow/utils';
-import { StoreNodeItemType } from '../workflow/type/node';
+import { type StoreNodeItemType } from '../workflow/type/node';
 import { DatasetSearchModeEnum } from '../dataset/constants';
-import { WorkflowTemplateBasicType } from '../workflow/type';
+import { type WorkflowTemplateBasicType } from '../workflow/type';
 import { AppTypeEnum } from './constants';
-import { AppErrEnum } from '../../common/error/code/app';
-import { PluginErrEnum } from '../../common/error/code/plugin';
+import appErrList from '../../common/error/code/app';
+import pluginErrList from '../../common/error/code/plugin';
 
 export const getDefaultAppForm = (): AppSimpleEditFormType => {
   return {
@@ -24,9 +24,11 @@ export const getDefaultAppForm = (): AppSimpleEditFormType => {
     dataset: {
       datasets: [],
       similarity: 0.4,
-      limit: 1500,
+      limit: 3000,
       searchMode: DatasetSearchModeEnum.embedding,
-      usingReRank: false,
+      usingReRank: true,
+      rerankModel: '',
+      rerankWeight: 0.5,
       datasetSearchUsingExtensionQuery: true,
       datasetSearchExtensionBg: ''
     },
@@ -51,7 +53,7 @@ export const appWorkflow2Form = ({
   nodes.forEach((node) => {
     if (
       node.flowNodeType === FlowNodeTypeEnum.chatNode ||
-      node.flowNodeType === FlowNodeTypeEnum.tools
+      node.flowNodeType === FlowNodeTypeEnum.agent
     ) {
       defaultAppForm.aiSettings.model = findInputValueByKey(node.inputs, NodeInputKeyEnum.aiModel);
       defaultAppForm.aiSettings.systemPrompt = findInputValueByKey(
@@ -106,10 +108,24 @@ export const appWorkflow2Form = ({
       defaultAppForm.dataset.searchMode =
         findInputValueByKey(node.inputs, NodeInputKeyEnum.datasetSearchMode) ||
         DatasetSearchModeEnum.embedding;
+      defaultAppForm.dataset.embeddingWeight = findInputValueByKey(
+        node.inputs,
+        NodeInputKeyEnum.datasetSearchEmbeddingWeight
+      );
+      // Rerank
       defaultAppForm.dataset.usingReRank = !!findInputValueByKey(
         node.inputs,
         NodeInputKeyEnum.datasetSearchUsingReRank
       );
+      defaultAppForm.dataset.rerankModel = findInputValueByKey(
+        node.inputs,
+        NodeInputKeyEnum.datasetSearchRerankModel
+      );
+      defaultAppForm.dataset.rerankWeight = findInputValueByKey(
+        node.inputs,
+        NodeInputKeyEnum.datasetSearchRerankWeight
+      );
+      // Query extension
       defaultAppForm.dataset.datasetSearchUsingExtensionQuery = findInputValueByKey(
         node.inputs,
         NodeInputKeyEnum.datasetSearchUsingExtensionQuery
@@ -124,7 +140,9 @@ export const appWorkflow2Form = ({
       );
     } else if (
       node.flowNodeType === FlowNodeTypeEnum.pluginModule ||
-      node.flowNodeType === FlowNodeTypeEnum.appModule
+      node.flowNodeType === FlowNodeTypeEnum.appModule ||
+      node.flowNodeType === FlowNodeTypeEnum.tool ||
+      node.flowNodeType === FlowNodeTypeEnum.toolSet
     ) {
       if (!node.pluginId) return;
 
@@ -171,17 +189,10 @@ export const getAppType = (config?: WorkflowTemplateBasicType | AppSimpleEditFor
   return '';
 };
 
-export const checkAppUnExistError = (error?: string) => {
-  const unExistError: Array<string> = [
-    AppErrEnum.unAuthApp,
-    AppErrEnum.unExist,
-    PluginErrEnum.unAuth,
-    PluginErrEnum.unExist
-  ];
+export const formatToolError = (error?: any) => {
+  if (!error || typeof error !== 'string') return;
 
-  if (!!error && unExistError.includes(error)) {
-    return error;
-  } else {
-    return undefined;
-  }
+  const errorText = appErrList[error]?.message || pluginErrList[error]?.message;
+
+  return errorText || error;
 };

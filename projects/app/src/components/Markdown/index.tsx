@@ -12,6 +12,8 @@ import dynamic from 'next/dynamic';
 
 import { Box } from '@chakra-ui/react';
 import { CodeClassNameEnum, mdTextFormat } from './utils';
+import { useCreation } from 'ahooks';
+import type { AProps } from './A';
 
 const CodeLight = dynamic(() => import('./codeBlock/CodeLight'), { ssr: false });
 const MermaidCodeBlock = dynamic(() => import('./img/MermaidCodeBlock'), { ssr: false });
@@ -31,7 +33,7 @@ type Props = {
   showAnimation?: boolean;
   isDisabled?: boolean;
   forbidZhFormat?: boolean;
-};
+} & AProps;
 const Markdown = (props: Props) => {
   const source = props.source || '';
 
@@ -41,16 +43,30 @@ const Markdown = (props: Props) => {
 
   return <Box whiteSpace={'pre-wrap'}>{source}</Box>;
 };
-const MarkdownRender = ({ source = '', showAnimation, isDisabled, forbidZhFormat }: Props) => {
-  const components = useMemo<any>(
-    () => ({
+const MarkdownRender = ({
+  source = '',
+  showAnimation,
+  isDisabled,
+  forbidZhFormat,
+
+  chatAuthData,
+  onOpenCiteModal
+}: Props) => {
+  const components = useCreation(() => {
+    return {
       img: Image,
       pre: RewritePre,
       code: Code,
-      a: A
-    }),
-    []
-  );
+      a: (props: any) => (
+        <A
+          {...props}
+          showAnimation={showAnimation}
+          chatAuthData={chatAuthData}
+          onOpenCiteModal={onOpenCiteModal}
+        />
+      )
+    };
+  }, [chatAuthData, onOpenCiteModal, showAnimation]);
 
   const formatSource = useMemo(() => {
     if (showAnimation || forbidZhFormat) return source;
@@ -85,7 +101,7 @@ export default React.memo(Markdown);
 function Code(e: any) {
   const { className, codeBlock, children } = e;
   const match = /language-(\w+)/.exec(className || '');
-  const codeType = match?.[1];
+  const codeType = match?.[1]?.toLowerCase();
 
   const strChildren = String(children);
 
@@ -96,7 +112,7 @@ function Code(e: any) {
     if (codeType === CodeClassNameEnum.guide) {
       return <ChatGuide text={strChildren} />;
     }
-    if (codeType === CodeClassNameEnum.questionGuide) {
+    if (codeType === CodeClassNameEnum.questionguide) {
       return <QuestionGuide text={strChildren} />;
     }
     if (codeType === CodeClassNameEnum.echarts) {
@@ -105,7 +121,7 @@ function Code(e: any) {
     if (codeType === CodeClassNameEnum.iframe) {
       return <IframeCodeBlock code={strChildren} />;
     }
-    if (codeType && codeType.toLowerCase() === CodeClassNameEnum.html) {
+    if (codeType === CodeClassNameEnum.html || codeType === CodeClassNameEnum.svg) {
       return (
         <IframeHtmlCodeBlock className={className} codeBlock={codeBlock} match={match}>
           {children}

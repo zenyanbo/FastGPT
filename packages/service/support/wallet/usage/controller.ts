@@ -1,67 +1,26 @@
 import { UsageSourceEnum } from '@fastgpt/global/support/wallet/usage/constants';
 import { MongoUsage } from './schema';
-import { ClientSession, Types } from '../../../common/mongo';
+import { type ClientSession } from '../../../common/mongo';
 import { addLog } from '../../../common/system/log';
-import { ChatNodeUsageType } from '@fastgpt/global/support/wallet/bill/type';
-import { ConcatUsageProps, CreateUsageProps } from '@fastgpt/global/support/wallet/usage/api';
+import { type ChatNodeUsageType } from '@fastgpt/global/support/wallet/bill/type';
+import {
+  type ConcatUsageProps,
+  type CreateUsageProps
+} from '@fastgpt/global/support/wallet/usage/api';
 import { i18nT } from '../../../../web/i18n/utils';
-import { pushConcatBillTask, pushReduceTeamAiPointsTask } from './utils';
-
-import { POST } from '../../../common/api/plusRequest';
-import { isFastGPTMainService } from '../../../common/system/constants';
+import { formatModelChars2Points } from './utils';
+import { ModelTypeEnum } from '@fastgpt/global/core/ai/model';
 
 export async function createUsage(data: CreateUsageProps) {
   try {
-    // In FastGPT server
-    if (isFastGPTMainService) {
-      await POST('/support/wallet/usage/createUsage', data);
-    } else if (global.reduceAiPointsQueue) {
-      // In FastGPT pro server
-      await MongoUsage.create(data);
-      pushReduceTeamAiPointsTask({ teamId: data.teamId, totalPoints: data.totalPoints });
-
-      if (data.totalPoints === 0) {
-        addLog.info('0 totalPoints', data);
-      }
-    }
+    await global.createUsageHandler(data);
   } catch (error) {
     addLog.error('createUsage error', error);
   }
 }
 export async function concatUsage(data: ConcatUsageProps) {
   try {
-    // In FastGPT server
-    if (isFastGPTMainService) {
-      await POST('/support/wallet/usage/concatUsage', data);
-    } else if (global.reduceAiPointsQueue) {
-      const {
-        teamId,
-        billId,
-        totalPoints = 0,
-        listIndex,
-        inputTokens = 0,
-        outputTokens = 0
-      } = data;
-
-      // billId is required and valid
-      if (!billId || !Types.ObjectId.isValid(billId)) return;
-
-      // In FastGPT pro server
-      pushConcatBillTask([
-        {
-          billId,
-          listIndex,
-          inputTokens,
-          outputTokens,
-          totalPoints
-        }
-      ]);
-      pushReduceTeamAiPointsTask({ teamId, totalPoints });
-
-      if (data.totalPoints === 0) {
-        addLog.info('0 totalPoints', data);
-      }
-    }
+    await global.concatUsageHandler(data);
   } catch (error) {
     addLog.error('concatUsage error', error);
   }
@@ -110,6 +69,14 @@ export const createChatUsage = ({
   return { totalPoints };
 };
 
+export type DatasetTrainingMode = 'paragraph' | 'qa' | 'autoIndex' | 'imageIndex' | 'imageParse';
+export const datasetTrainingUsageIndexMap: Record<DatasetTrainingMode, number> = {
+  paragraph: 1,
+  qa: 2,
+  autoIndex: 3,
+  imageIndex: 4,
+  imageParse: 5
+};
 export const createTrainingUsage = async ({
   teamId,
   tmbId,
@@ -152,6 +119,13 @@ export const createTrainingUsage = async ({
           ...(agentModel
             ? [
                 {
+                  moduleName: i18nT('account_usage:llm_paragraph'),
+                  model: agentModel,
+                  amount: 0,
+                  inputTokens: 0,
+                  outputTokens: 0
+                },
+                {
                   moduleName: i18nT('account_usage:qa'),
                   model: agentModel,
                   amount: 0,
@@ -169,6 +143,13 @@ export const createTrainingUsage = async ({
             : []),
           ...(vllmModel
             ? [
+                {
+                  moduleName: i18nT('account_usage:image_index'),
+                  model: vllmModel,
+                  amount: 0,
+                  inputTokens: 0,
+                  outputTokens: 0
+                },
                 {
                   moduleName: i18nT('account_usage:image_parse'),
                   model: vllmModel,
@@ -213,4 +194,44 @@ export const createPdfParseUsage = async ({
       }
     ]
   });
+};
+
+export const pushLLMTrainingUsage = async ({
+  teamId,
+  tmbId,
+  model,
+  inputTokens,
+  outputTokens,
+  billId,
+  mode
+}: {
+  teamId: string;
+  tmbId: string;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  billId: string;
+  mode: DatasetTrainingMode;
+}) => {
+  const index = datasetTrainingUsageIndexMap[mode];
+
+  // Compute points
+  const { totalPoints } = formatModelChars2Points({
+    model,
+    modelType: ModelTypeEnum.llm,
+    inputTokens,
+    outputTokens
+  });
+
+  concatUsage({
+    billId,
+    teamId,
+    tmbId,
+    totalPoints,
+    inputTokens,
+    outputTokens,
+    listIndex: index
+  });
+
+  return { totalPoints };
 };

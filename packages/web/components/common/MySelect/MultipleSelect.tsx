@@ -1,12 +1,13 @@
 import {
   Box,
-  ButtonProps,
+  Button,
+  type ButtonProps,
   Checkbox,
   Flex,
   Menu,
   MenuButton,
   MenuItem,
-  MenuItemProps,
+  type MenuItemProps,
   MenuList,
   useDisclosure
 } from '@chakra-ui/react';
@@ -15,7 +16,7 @@ import MyTag from '../Tag/index';
 import MyIcon from '../Icon';
 import MyAvatar from '../Avatar';
 import { useTranslation } from 'next-i18next';
-import { useScrollPagination } from '../../../hooks/useScrollPagination';
+import type { useScrollPagination } from '../../../hooks/useScrollPagination';
 import MyDivider from '../MyDivider';
 
 export type SelectProps<T = any> = {
@@ -26,13 +27,14 @@ export type SelectProps<T = any> = {
   }[];
   value: T[];
   isSelectAll: boolean;
-  setIsSelectAll: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSelectAll?: React.Dispatch<React.SetStateAction<boolean>>;
 
   placeholder?: string;
   maxH?: number;
   itemWrap?: boolean;
   onSelect: (val: T[]) => void;
   closeable?: boolean;
+  isDisabled?: boolean;
   ScrollData?: ReturnType<typeof useScrollPagination>['ScrollData'];
 } & Omit<ButtonProps, 'onSelect'>;
 
@@ -47,6 +49,7 @@ const MultipleSelect = <T = any,>({
   ScrollData,
   isSelectAll,
   setIsSelectAll,
+  isDisabled = false,
   ...props
 }: SelectProps<T>) => {
   const ref = useRef<HTMLButtonElement>(null);
@@ -70,7 +73,7 @@ const MultipleSelect = <T = any,>({
       // 全选状态下，value 实际上上空。
       if (isSelectAll) {
         onSelect(list.map((item) => item.value).filter((i) => i !== val));
-        setIsSelectAll(false);
+        setIsSelectAll?.(false);
         return;
       }
 
@@ -87,7 +90,7 @@ const MultipleSelect = <T = any,>({
     const hasSelected = isSelectAll || value.length > 0;
     onSelect(hasSelected ? [] : list.map((item) => item.value));
 
-    setIsSelectAll((state) => !state);
+    setIsSelectAll?.((state) => !state);
   }, [value, list, setIsSelectAll, onSelect]);
 
   const ListRender = useMemo(() => {
@@ -126,11 +129,11 @@ const MultipleSelect = <T = any,>({
   }, [value, list, isSelectAll]);
 
   return (
-    <Box>
+    <Box h={'100%'} w={'100%'}>
       <Menu
         autoSelect={false}
-        isOpen={isOpen}
-        onOpen={onOpen}
+        isOpen={isOpen && !isDisabled}
+        onOpen={isDisabled ? undefined : onOpen}
         onClose={onClose}
         strategy={'fixed'}
         matchWidth
@@ -138,21 +141,23 @@ const MultipleSelect = <T = any,>({
       >
         <MenuButton
           as={Flex}
+          h={'100%'}
           alignItems={'center'}
           ref={ref}
           px={3}
           borderRadius={'md'}
           border={'base'}
           userSelect={'none'}
-          cursor={'pointer'}
+          cursor={isDisabled ? 'not-allowed' : 'pointer'}
           _active={{
             transform: 'none'
           }}
           _hover={{
-            borderColor: 'primary.300'
+            borderColor: isDisabled ? 'myGray.200' : 'primary.300'
           }}
+          opacity={isDisabled ? 0.6 : 1}
           {...props}
-          {...(isOpen
+          {...(isOpen && !isDisabled
             ? {
                 boxShadow: '0px 0px 4px #A8DBFF',
                 borderColor: 'primary.500',
@@ -175,7 +180,7 @@ const MultipleSelect = <T = any,>({
               >
                 {isSelectAll ? (
                   <Box fontSize={'mini'} color={'myGray.900'}>
-                    {t('common:common.All')}
+                    {t('common:All')}
                   </Box>
                 ) : (
                   list
@@ -244,7 +249,7 @@ const MultipleSelect = <T = any,>({
             {...menuItemStyles}
           >
             <Checkbox isChecked={isSelectAll} />
-            <Box flex={'1 0 0'}>{t('common:common.All')}</Box>
+            <Box flex={'1 0 0'}>{t('common:All')}</Box>
           </MenuItem>
 
           <MyDivider my={1} />

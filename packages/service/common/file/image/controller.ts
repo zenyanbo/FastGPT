@@ -1,7 +1,7 @@
-import { UploadImgProps } from '@fastgpt/global/common/file/api';
+import { type UploadImgProps } from '@fastgpt/global/common/file/api';
 import { imageBaseUrl } from '@fastgpt/global/common/file/image/constants';
 import { MongoImage } from './schema';
-import { ClientSession, Types } from '../../../common/mongo';
+import { type ClientSession, Types } from '../../../common/mongo';
 import { guessBase64ImageType } from '../utils';
 import { readFromSecondary } from '../../mongo/utils';
 import { addHours } from 'date-fns';
@@ -76,7 +76,7 @@ export const refreshSourceAvatar = async (
   const newId = getIdFromPath(path);
   const oldId = getIdFromPath(oldPath);
 
-  if (!newId) return;
+  if (!newId || newId === oldId) return;
 
   await MongoImage.updateOne({ _id: newId }, { $unset: { expiredTime: 1 } }, { session });
 

@@ -3,9 +3,9 @@ import { NextAPI } from '@/service/middleware/entry';
 import { MongoAppVersion } from '@fastgpt/service/core/app/version/schema';
 import { authApp } from '@fastgpt/service/support/permission/app/auth';
 import { WritePermissionVal } from '@fastgpt/global/support/permission/constant';
-import { AppVersionSchemaType } from '@fastgpt/global/core/app/version';
+import { type AppVersionSchemaType } from '@fastgpt/global/core/app/version';
 import { formatTime2YMDHM } from '@fastgpt/global/common/string/time';
-import { checkNode } from '@/service/core/app/utils';
+import { rewriteAppWorkflowToDetail } from '@fastgpt/service/core/app/utils';
 
 type Props = {
   versionId: string;
@@ -18,18 +18,27 @@ async function handler(
 ): Promise<AppVersionSchemaType> {
   const { versionId, appId } = req.query as Props;
 
-  const { app } = await authApp({ req, authToken: true, appId, per: WritePermissionVal });
+  const { app, teamId, isRoot } = await authApp({
+    req,
+    authToken: true,
+    appId,
+    per: WritePermissionVal
+  });
   const result = await MongoAppVersion.findById(versionId).lean();
 
   if (!result) {
     return Promise.reject('version not found');
   }
 
+  await rewriteAppWorkflowToDetail({
+    nodes: result.nodes,
+    teamId,
+    ownerTmbId: app.tmbId,
+    isRoot
+  });
+
   return {
     ...result,
-    nodes: await Promise.all(
-      result.nodes.map((n) => checkNode({ node: n, ownerTmbId: app.tmbId }))
-    ),
     versionName: result?.versionName || formatTime2YMDHM(result?.time)
   };
 }

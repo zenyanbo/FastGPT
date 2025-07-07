@@ -1,6 +1,7 @@
 import { PermissionValueType } from '../../permission/type';
-import { TeamMemberRoleEnum } from './constant';
-import { LafAccountType, TeamMemberSchema, ThirdPartyAccountType } from './type';
+import type { TeamMemberRoleEnum } from './constant';
+import type { TeamMemberSchema, ThirdPartyAccountType } from './type';
+import { LafAccountType } from './type';
 
 export type AuthTeamRoleProps = {
   teamId: string;
@@ -36,11 +37,6 @@ export type InviteMemberProps = {
   usernames: string[];
 };
 export type UpdateInviteProps = {
-  tmbId: string;
-  status: TeamMemberSchema['status'];
-};
-
-export type UpdateStatusProps = {
   tmbId: string;
   status: TeamMemberSchema['status'];
 };

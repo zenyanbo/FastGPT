@@ -1,5 +1,5 @@
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
-import { AppDetailType } from '@fastgpt/global/core/app/type.d';
+import { type AppDetailType } from '@fastgpt/global/core/app/type.d';
 import type {
   DingtalkAppType,
   FeishuAppType,
@@ -28,6 +28,7 @@ export const defaultOutLinkForm: OutLinkEditType = {
   name: '',
   showNodeStatus: true,
   responseDetail: false,
+  // showFullText: false,
   showRawSource: false,
   limit: {
     QPM: 100,

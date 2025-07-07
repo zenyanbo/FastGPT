@@ -1,6 +1,6 @@
 import { connectionMongo, getMongoModel } from '../../common/mongo';
 const { Schema } = connectionMongo;
-import { OutLinkSchema as SchemaType } from '@fastgpt/global/support/outLink/type';
+import { type OutLinkSchema as SchemaType } from '@fastgpt/global/support/outLink/type';
 import {
   TeamCollectionName,
   TeamMemberCollectionName
@@ -51,6 +51,9 @@ const OutLinkSchema = new Schema({
     type: Boolean,
     default: true
   },
+  // showFullText: {
+  //   type: Boolean
+  // },
   showRawSource: {
     type: Boolean
   },

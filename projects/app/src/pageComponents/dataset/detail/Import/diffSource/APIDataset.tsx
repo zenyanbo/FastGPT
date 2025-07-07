@@ -9,11 +9,11 @@ import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 import { getApiDatasetFileList, getApiDatasetFileListExistId } from '@/web/core/dataset/api';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
-import { ParentTreePathItemType } from '@fastgpt/global/common/parentFolder/type';
+import { type ParentTreePathItemType } from '@fastgpt/global/common/parentFolder/type';
 import FolderPath from '@/components/common/folder/Path';
 import { getSourceNameIcon } from '@fastgpt/global/core/dataset/utils';
 import MyBox from '@fastgpt/web/components/common/MyBox';
-import { APIFileItem } from '@fastgpt/global/core/dataset/apiDataset';
+import { type APIFileItem } from '@fastgpt/global/core/dataset/apiDataset/type';
 import SearchInput from '@fastgpt/web/components/common/Input/SearchInput';
 import { useMount } from 'ahooks';
 
@@ -21,6 +21,7 @@ const DataProcess = dynamic(() => import('../commonProgress/DataProcess'), {
   loading: () => <Loading fixed={false} />
 });
 const Upload = dynamic(() => import('../commonProgress/Upload'));
+const PreviewData = dynamic(() => import('../commonProgress/PreviewData'));
 
 const APIDatasetCollection = () => {
   const activeStep = useContextSelector(DatasetImportContext, (v) => v.activeStep);
@@ -29,7 +30,8 @@ const APIDatasetCollection = () => {
     <>
       {activeStep === 0 && <CustomAPIFileInput />}
       {activeStep === 1 && <DataProcess />}
-      {activeStep === 2 && <Upload />}
+      {activeStep === 2 && <PreviewData />}
+      {activeStep === 3 && <Upload />}
     </>
   );
 };
@@ -68,8 +70,10 @@ const CustomAPIFileInput = () => {
     }
   );
 
-  const { data: existIdList = [] } = useRequest2(
-    () => getApiDatasetFileListExistId({ datasetId: datasetDetail._id }),
+  const { data: existIdList = new Set() } = useRequest2(
+    async () => {
+      return new Set<string>(await getApiDatasetFileListExistId({ datasetId: datasetDetail._id }));
+    },
     {
       manual: false
     }
@@ -87,7 +91,12 @@ const CustomAPIFileInput = () => {
         const allFiles: APIFileItem[] = [];
 
         for (const file of files) {
-          if (file.type === 'folder') {
+          if (sources.some((item) => item.apiFileId === file.id)) {
+            allFiles.push(file);
+            continue;
+          }
+
+          if (file.hasChild) {
             const folderFiles = await getApiDatasetFileList({
               datasetId: datasetDetail._id,
               parentId: file?.id
@@ -95,27 +104,28 @@ const CustomAPIFileInput = () => {
 
             const subFiles = await getFilesRecursively(folderFiles);
             allFiles.push(...subFiles);
-          } else {
-            allFiles.push(file);
           }
+          allFiles.push(file);
         }
 
         return allFiles;
       };
 
       const allFiles = await getFilesRecursively(selectFiles);
+      const uniqueFiles = allFiles.filter(
+        (item, index, array) =>
+          !existIdList.has(item.id) && array.findIndex((file) => file.id === item.id) === index
+      );
 
       setSources(
-        allFiles
-          .filter((item) => !existIdList.includes(item.id))
-          .map((item) => ({
-            id: item.id,
-            apiFileId: item.id,
-            apiFile: item,
-            createStatus: 'waiting',
-            sourceName: item.name,
-            icon: getSourceNameIcon({ sourceName: item.name }) as any
-          }))
+        uniqueFiles.map((item) => ({
+          id: item.id,
+          apiFileId: item.id,
+          apiFile: item,
+          createStatus: 'waiting',
+          sourceName: item.name,
+          icon: getSourceNameIcon({ sourceName: item.name }) as any
+        }))
       );
     },
     {
@@ -145,21 +155,31 @@ const CustomAPIFileInput = () => {
     [selectFiles]
   );
 
-  const handleSelectAll = useCallback(() => {
-    const isAllSelected = fileList.length === selectFiles.length;
+  const isAllSelected = useMemo(() => {
+    return fileList.every(
+      (item) => existIdList.has(item.id) || selectFiles.some((file) => file.id === item.id)
+    );
+  }, [fileList, selectFiles, existIdList]);
 
+  const handleSelectAll = useCallback(() => {
     if (isAllSelected) {
-      setSelectFiles([]);
+      setSelectFiles((state) =>
+        state.filter((file) => !fileList.find((item) => item.id === file.id))
+      );
     } else {
-      setSelectFiles(fileList);
+      setSelectFiles((state) => [
+        ...state.filter((file) => !fileList.find((item) => item.id === file.id)),
+        ...fileList.filter((item) => !existIdList.has(item.id))
+      ]);
     }
-  }, [fileList, selectFiles]);
+  }, [isAllSelected, fileList, existIdList]);
 
   return (
     <MyBox isLoading={loading} position="relative" h="full">
       <Flex flexDirection={'column'} h="full">
         <Flex justifyContent={'space-between'}>
           <FolderPath
+            forbidLastClick
             paths={paths}
             onClick={(parentId) => {
               const index = paths.findIndex((item) => item.parentId === parentId);
@@ -190,23 +210,22 @@ const CustomAPIFileInput = () => {
               fontSize={'sm'}
               fontWeight={'medium'}
               color={'myGray.900'}
-              onClick={(e) => {
-                if (!(e.target as HTMLElement).closest('.checkbox')) {
-                  handleSelectAll();
-                }
-              }}
+              // onClick={(e) => {
+              //   if (!(e.target as HTMLElement).closest('.checkbox')) {
+              //     handleSelectAll();
+              //   }
+              // }}
             >
               <Checkbox
                 className="checkbox"
                 mr={2}
-                isChecked={fileList.length === selectFiles.length}
+                isChecked={isAllSelected}
                 onChange={handleSelectAll}
               />
               {t('common:Select_all')}
             </Flex>
             {fileList.map((item) => {
-              const isFolder = item.type === 'folder';
-              const isExists = existIdList.includes(item.id);
+              const isExists = existIdList.has(item.id);
               const isChecked = isExists || selectFiles.some((file) => file.id === item.id);
 
               return (
@@ -240,9 +259,9 @@ const CustomAPIFileInput = () => {
                   />
                   <MyIcon
                     name={
-                      !isFolder
-                        ? (getSourceNameIcon({ sourceName: item.name }) as any)
-                        : 'common/folderFill'
+                      item.type === 'folder'
+                        ? 'common/folderFill'
+                        : (getSourceNameIcon({ sourceName: item.name }) as any)
                     }
                     w={'18px'}
                     mr={1.5}
@@ -274,7 +293,7 @@ const CustomAPIFileInput = () => {
             {selectFiles.length > 0
               ? `${t('dataset:total_num_files', { total: selectFiles.length })} | `
               : ''}
-            {t('common:common.Next Step')}
+            {t('common:next_step')}
           </Button>
         </Box>
       </Flex>

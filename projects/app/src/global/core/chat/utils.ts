@@ -1,10 +1,10 @@
 import { ChatRoleEnum } from '@fastgpt/global/core/chat/constants';
-import { ChatHistoryItemResType, ChatItemType } from '@fastgpt/global/core/chat/type';
-import { SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
+import { type ChatHistoryItemResType, type ChatItemType } from '@fastgpt/global/core/chat/type';
+import { type SearchDataResponseItemType } from '@fastgpt/global/core/dataset/type';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 
-const isLLMNode = (item: ChatHistoryItemResType) =>
-  item.moduleType === FlowNodeTypeEnum.chatNode || item.moduleType === FlowNodeTypeEnum.tools;
+export const isLLMNode = (item: ChatHistoryItemResType) =>
+  item.moduleType === FlowNodeTypeEnum.chatNode || item.moduleType === FlowNodeTypeEnum.agent;
 
 export function transformPreviewHistories(
   histories: ChatItemType[],
@@ -19,23 +19,25 @@ export function transformPreviewHistories(
   });
 }
 
+export const getFlatAppResponses = (res: ChatHistoryItemResType[]): ChatHistoryItemResType[] => {
+  return res
+    .map((item) => {
+      return [
+        item,
+        ...getFlatAppResponses(item.pluginDetail || []),
+        ...getFlatAppResponses(item.toolDetail || []),
+        ...getFlatAppResponses(item.loopDetail || [])
+      ];
+    })
+    .flat();
+};
 export function addStatisticalDataToHistoryItem(historyItem: ChatItemType) {
   if (historyItem.obj !== ChatRoleEnum.AI) return historyItem;
   if (historyItem.totalQuoteList !== undefined) return historyItem;
   if (!historyItem.responseData) return historyItem;
 
   // Flat children
-  const flatResData: ChatHistoryItemResType[] =
-    historyItem.responseData
-      ?.map((item) => {
-        return [
-          item,
-          ...(item.pluginDetail || []),
-          ...(item.toolDetail || []),
-          ...(item.loopDetail || [])
-        ];
-      })
-      .flat() || [];
+  const flatResData = getFlatAppResponses(historyItem.responseData || []);
 
   return {
     ...historyItem,
@@ -45,9 +47,6 @@ export function addStatisticalDataToHistoryItem(historyItem: ChatItemType) {
       .map((item) => item.quoteList)
       .flat()
       .filter(Boolean) as SearchDataResponseItemType[],
-    totalRunningTime: Number(
-      historyItem.responseData?.reduce((sum, item) => sum + (item.runningTime || 0), 0).toFixed(2)
-    ),
     historyPreviewLength: flatResData.find(isLLMNode)?.historyPreview?.length
   };
 }

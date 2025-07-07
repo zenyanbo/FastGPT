@@ -1,20 +1,21 @@
 import React, { useCallback, useMemo } from 'react';
-import { Box, Button, Card, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, Button, Flex, useDisclosure, type FlexProps } from '@chakra-ui/react';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import Avatar from '@fastgpt/web/components/common/Avatar';
 import type { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/node.d';
 import { useTranslation } from 'next-i18next';
 import { useEditTitle } from '@/web/common/hooks/useEditTitle';
 import { useToast } from '@fastgpt/web/hooks/useToast';
-import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
+import {
+  AppNodeFlowNodeTypeMap,
+  FlowNodeTypeEnum
+} from '@fastgpt/global/core/workflow/node/constant';
 import { LOGO_ICON } from '@fastgpt/global/common/system/constants';
 import { ToolSourceHandle, ToolTargetHandle } from './Handle/ToolHandle';
 import { useEditTextarea } from '@fastgpt/web/hooks/useEditTextarea';
 import { ConnectionSourceHandle, ConnectionTargetHandle } from './Handle/ConnectionHandle';
 import { useDebug } from '../../hooks/useDebug';
-import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
-import { getPreviewPluginNode } from '@/web/core/app/api/plugin';
+import { getPreviewPluginNode, getToolVersionList } from '@/web/core/app/api/plugin';
 import { storeNode2FlowNode } from '@/web/core/workflow/utils';
 import { getNanoid } from '@fastgpt/global/common/string/tools';
 import { useContextSelector } from 'use-context-selector';
@@ -23,12 +24,20 @@ import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/cons
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 import { useWorkflowUtils } from '../../hooks/useUtils';
-import { WholeResponseContent } from '@/components/core/chat/components/WholeResponseModal';
 import { WorkflowNodeEdgeContext } from '../../../context/workflowInitContext';
 import { WorkflowEventContext } from '../../../context/workflowEventContext';
 import MyImage from '@fastgpt/web/components/common/Image/MyImage';
 import MyIconButton from '@fastgpt/web/components/common/Icon/button';
 import UseGuideModal from '@/components/common/Modal/UseGuideModal';
+import NodeDebugResponse from './RenderDebug/NodeDebugResponse';
+import { useScrollPagination } from '@fastgpt/web/hooks/useScrollPagination';
+import MyTag from '@fastgpt/web/components/common/Tag/index';
+import MySelect from '@fastgpt/web/components/common/MySelect';
+import { useBoolean, useCreation } from 'ahooks';
+import { formatToolError } from '@fastgpt/global/core/app/utils';
+import HighlightText from '@fastgpt/web/components/common/String/HighlightText';
+import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
+import SecretInputModal from '@/pageComponents/app/plugin/SecretInputModal';
 
 type Props = FlowNodeItemType & {
   children?: React.ReactNode | React.ReactNode[] | string;
@@ -38,6 +47,7 @@ type Props = FlowNodeItemType & {
   w?: string | number;
   h?: string | number;
   selected?: boolean;
+  searchedText?: string;
   menuForbid?: {
     debug?: boolean;
     copy?: boolean;
@@ -63,27 +73,34 @@ const NodeCard = (props: Props) => {
     h = 'full',
     nodeId,
     selected,
+    searchedText,
     menuForbid,
     isTool = false,
     isError = false,
     debugResult,
     isFolded,
-    customStyle
+    customStyle,
+    inputs
   } = props;
   const nodeList = useContextSelector(WorkflowContext, (v) => v.nodeList);
   const onUpdateNodeError = useContextSelector(WorkflowContext, (v) => v.onUpdateNodeError);
   const onChangeNode = useContextSelector(WorkflowContext, (v) => v.onChangeNode);
-  const onResetNode = useContextSelector(WorkflowContext, (v) => v.onResetNode);
   const setHoverNodeId = useContextSelector(WorkflowEventContext, (v) => v.setHoverNodeId);
+
+  const inputConfig = inputs?.find((item) => item.key === NodeInputKeyEnum.systemInputConfig);
+  const [
+    isOpenToolParamConfigModal,
+    { setTrue: onOpenToolParamConfigModal, setFalse: onCloseToolParamConfigModal }
+  ] = useBoolean(false);
 
   // custom title edit
   const { onOpenModal: onOpenCustomTitleModal, EditModal: EditTitleModal } = useEditTitle({
-    title: t('common:common.Custom Title'),
+    title: t('common:custom_title'),
     placeholder: t('app:module.Custom Title Tip') || ''
   });
 
   const showToolHandle = useMemo(
-    () => isTool && !!nodeList.find((item) => item?.flowNodeType === FlowNodeTypeEnum.tools),
+    () => isTool && !!nodeList.find((item) => item?.flowNodeType === FlowNodeTypeEnum.agent),
     [isTool, nodeList]
   );
 
@@ -96,6 +113,15 @@ const NodeCard = (props: Props) => {
 
     return { node, parentNode };
   }, [nodeList, nodeId]);
+  const isAppNode = node && AppNodeFlowNodeTypeMap[node?.flowNodeType];
+  const showVersion = useMemo(() => {
+    // 1. Team app/System commercial plugin
+    if (isAppNode && node?.pluginId && !node?.pluginData?.error) return true;
+    // 2. System tool
+    if (isAppNode && node.toolConfig) return true;
+
+    return false;
+  }, [isAppNode, node]);
 
   const { data: nodeTemplate } = useRequest2(
     async () => {
@@ -103,10 +129,7 @@ const NodeCard = (props: Props) => {
         return undefined;
       }
 
-      if (
-        node?.flowNodeType === FlowNodeTypeEnum.pluginModule ||
-        node?.flowNodeType === FlowNodeTypeEnum.appModule
-      ) {
+      if (isAppNode) {
         return { ...node, ...node.pluginData };
       } else {
         const template = moduleTemplatesFlat.find(
@@ -130,54 +153,10 @@ const NodeCard = (props: Props) => {
     }
   );
 
-  const {
-    openConfirm: onOpenConfirmSync,
-    onClose: onCloseConfirmSync,
-    ConfirmModal: ConfirmSyncModal
-  } = useConfirm({
-    content: t('workflow:Confirm_sync_node')
-  });
-
-  const hasNewVersion = nodeTemplate && nodeTemplate.version !== node?.version;
-
-  const { runAsync: onClickSyncVersion } = useRequest2(
-    async () => {
-      if (!node) return;
-
-      if (node.pluginId) {
-        const template = await getPreviewPluginNode({ appId: node.pluginId });
-
-        if (!!template) {
-          onResetNode({
-            id: nodeId,
-            node: template
-          });
-        }
-      } else {
-        const template = moduleTemplatesFlat.find(
-          (item) => item.flowNodeType === node.flowNodeType
-        );
-        if (!template) {
-          return toast({
-            title: t('app:app.modules.not_found_tips'),
-            status: 'warning'
-          });
-        }
-        onResetNode({
-          id: nodeId,
-          node: template
-        });
-      }
-    },
-    {
-      refreshDeps: [node, nodeId, onResetNode],
-      onFinally() {}
-    }
-  );
-
   /* Node header */
   const Header = useMemo(() => {
     const showHeader = node?.flowNodeType !== FlowNodeTypeEnum.comment;
+    const error = formatToolError(node?.pluginData?.error);
 
     return (
       <Box position={'relative'}>
@@ -222,7 +201,12 @@ const NodeCard = (props: Props) => {
                 h={'24px'}
               />
               <Box ml={2} fontSize={'18px'} fontWeight={'medium'} color={'myGray.900'}>
-                {t(name as any)}
+                <HighlightText
+                  rawText={t(name as any)}
+                  matchText={searchedText ?? ''}
+                  mode={'bg'}
+                  color={'#ffe82d'}
+                />
               </Box>
               <Button
                 display={'none'}
@@ -253,28 +237,9 @@ const NodeCard = (props: Props) => {
               >
                 <MyIcon name={'edit'} w={'14px'} />
               </Button>
-              <Box flex={1} />
-              {hasNewVersion && (
-                <MyTooltip label={t('app:app.modules.click to update')}>
-                  <Button
-                    bg={'yellow.50'}
-                    color={'yellow.600'}
-                    variant={'ghost'}
-                    h={8}
-                    px={2}
-                    rounded={'6px'}
-                    fontSize={'xs'}
-                    fontWeight={'medium'}
-                    cursor={'pointer'}
-                    _hover={{ bg: 'yellow.100' }}
-                    onClick={onOpenConfirmSync(onClickSyncVersion)}
-                  >
-                    <Box>{t('app:app.modules.has new version')}</Box>
-                    <MyIcon name={'help'} w={'14px'} ml={1} />
-                  </Button>
-                </MyTooltip>
-              )}
-              {!!nodeTemplate?.diagram && !hasNewVersion && (
+              <Box flex={1} mr={1} />
+              {showVersion && node && <NodeVersion node={node} />}
+              {!!nodeTemplate?.diagram && (
                 <MyTooltip
                   label={
                     <MyImage
@@ -293,7 +258,7 @@ const NodeCard = (props: Props) => {
               {!!nodeTemplate?.diagram && node?.courseUrl && (
                 <Box bg={'myGray.300'} w={'1px'} h={'12px'} ml={1} mr={0.5} />
               )}
-              {!!(node?.courseUrl || nodeTemplate?.userGuide) && !hasNewVersion && (
+              {!!(node?.courseUrl || nodeTemplate?.userGuide) && (
                 <UseGuideModal
                   title={nodeTemplate?.name}
                   iconSrc={nodeTemplate?.avatar}
@@ -307,21 +272,19 @@ const NodeCard = (props: Props) => {
                   )}
                 </UseGuideModal>
               )}
-              {!!node?.pluginData?.error && (
-                <MyTooltip label={t('app:app.modules.not_found_tips')}>
-                  <Flex
-                    bg={'red.50'}
-                    alignItems={'center'}
-                    h={8}
-                    px={2}
-                    rounded={'6px'}
-                    fontSize={'xs'}
-                    fontWeight={'medium'}
-                  >
-                    <MyIcon name={'common/errorFill'} w={'14px'} mr={1} />
-                    <Box color={'red.600'}>{t('app:app.modules.not_found')}</Box>
-                  </Flex>
-                </MyTooltip>
+              {!!error && (
+                <Flex
+                  bg={'red.50'}
+                  alignItems={'center'}
+                  h={8}
+                  px={2}
+                  rounded={'6px'}
+                  fontSize={'xs'}
+                  fontWeight={'medium'}
+                >
+                  <MyIcon name={'common/errorFill'} w={'14px'} mr={1} />
+                  <Box color={'red.600'}>{t(error as any)}</Box>
+                </Flex>
               )}
             </Flex>
             <NodeIntro nodeId={nodeId} intro={intro} />
@@ -331,18 +294,15 @@ const NodeCard = (props: Props) => {
       </Box>
     );
   }, [
-    node?.flowNodeType,
-    node?.courseUrl,
-    node?.pluginData?.error,
+    node,
     showToolHandle,
     nodeId,
     isFolded,
     avatar,
+    searchedText,
     t,
     name,
-    hasNewVersion,
-    onOpenConfirmSync,
-    onClickSyncVersion,
+    showVersion,
     nodeTemplate?.diagram,
     nodeTemplate?.userGuide,
     nodeTemplate?.name,
@@ -365,8 +325,9 @@ const NodeCard = (props: Props) => {
     );
   }, [nodeId, isFolded]);
   const RenderToolHandle = useMemo(
-    () => (node?.flowNodeType === FlowNodeTypeEnum.tools ? <ToolSourceHandle /> : null),
-    [node?.flowNodeType]
+    () =>
+      node?.flowNodeType === FlowNodeTypeEnum.agent ? <ToolSourceHandle nodeId={nodeId} /> : null,
+    [node?.flowNodeType, nodeId]
   );
 
   return (
@@ -409,16 +370,62 @@ const NodeCard = (props: Props) => {
           })}
       {...customStyle}
     >
-      <NodeDebugResponse nodeId={nodeId} debugResult={debugResult} />
+      {debugResult && <NodeDebugResponse nodeId={nodeId} debugResult={debugResult} />}
       {Header}
-      <Flex flexDirection={'column'} flex={1} my={!isFolded ? 3 : 0} gap={2}>
-        {!isFolded ? children : <Box h={4} />}
+
+      <Flex flexDirection={'column'} flex={1} py={!isFolded ? 3 : 0} gap={2} position={'relative'}>
+        {!isFolded ? (
+          <>
+            {inputConfig && !inputConfig?.value ? (
+              <Flex
+                alignItems={'center'}
+                flexDirection={'column'}
+                justifyContent={'center'}
+                borderRadius={'lg'}
+                h={'200px'}
+                bg={'myGray.25'}
+                border={'base'}
+                mx={4}
+              >
+                <Box>{t('app:tool_not_active')}</Box>
+                <Button w={'83px'} mt={2} size={'lg'} onClick={onOpenToolParamConfigModal}>
+                  {t('app:too_to_active')}
+                </Button>
+              </Flex>
+            ) : (
+              children
+            )}
+          </>
+        ) : (
+          <Box h={4} />
+        )}
       </Flex>
+
       {RenderHandle}
       {RenderToolHandle}
 
-      <ConfirmSyncModal />
-      <EditTitleModal maxLength={50} />
+      <EditTitleModal maxLength={100} />
+      {inputConfig && isOpenToolParamConfigModal && (
+        <SecretInputModal
+          onClose={onCloseToolParamConfigModal}
+          onSubmit={(data) => {
+            onChangeNode({
+              nodeId: nodeId as string,
+              type: 'updateInput',
+              key: inputConfig.key,
+              value: {
+                ...inputConfig,
+                value: data
+              }
+            });
+            onCloseToolParamConfigModal();
+          }}
+          courseUrl={node?.courseUrl}
+          inputConfig={inputConfig}
+          hasSystemSecret={node?.hasSystemSecret}
+          secretCost={node?.currentCost}
+        />
+      )}
     </Flex>
   );
 };
@@ -459,7 +466,9 @@ const MenuRender = React.memo(function MenuRender({
           outputs: node.data.outputs,
           showStatus: node.data.showStatus,
           pluginId: node.data.pluginId,
-          version: node.data.version
+          version: node.data.version,
+          versionLabel: node.data.versionLabel,
+          isLatestVersion: node.data.isLatestVersion
         };
 
         return [
@@ -479,7 +488,9 @@ const MenuRender = React.memo(function MenuRender({
               pluginId: template.pluginId,
               inputs: template.inputs,
               outputs: template.outputs,
-              version: template.version
+              version: template.version,
+              versionLabel: template.versionLabel,
+              isLatestVersion: template.isLatestVersion
             },
             selected: true,
             parentNodeId: undefined,
@@ -531,7 +542,7 @@ const MenuRender = React.memo(function MenuRender({
         : [
             {
               icon: 'copy',
-              label: t('common:common.Copy'),
+              label: t('common:Copy'),
               variant: 'whiteBase',
               onClick: () => onCopyNode(nodeId)
             }
@@ -541,7 +552,7 @@ const MenuRender = React.memo(function MenuRender({
         : [
             {
               icon: 'delete',
-              label: t('common:common.Delete'),
+              label: t('common:Delete'),
               variant: 'whiteDanger',
               onClick: () => onDelNode(nodeId)
             }
@@ -662,167 +673,93 @@ const NodeIntro = React.memo(function NodeIntro({
   return Render;
 });
 
-const NodeDebugResponse = React.memo(function NodeDebugResponse({
-  nodeId,
-  debugResult
-}: {
-  nodeId: string;
-  debugResult: FlowNodeItemType['debugResult'];
-}) {
+const NodeVersion = React.memo(function NodeVersion({ node }: { node: FlowNodeItemType }) {
   const { t } = useTranslation();
 
-  const { onChangeNode, onStopNodeDebug, onNextNodeDebug, workflowDebugData } = useContextSelector(
-    WorkflowContext,
-    (v) => v
-  );
+  const onResetNode = useContextSelector(WorkflowContext, (v) => v.onResetNode);
 
-  const { openConfirm, ConfirmModal } = useConfirm({
-    content: t('common:core.workflow.Confirm stop debug')
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // Load version list
+  const { ScrollData, data: versionList } = useScrollPagination(getToolVersionList, {
+    pageSize: 20,
+    params: {
+      pluginId: node.pluginId
+    },
+    refreshDeps: [node.pluginId, isOpen],
+    disalbed: !isOpen,
+    manual: false
   });
 
-  const RenderStatus = useMemo(() => {
-    const map = {
-      running: {
-        bg: 'primary.50',
-        text: t('common:core.workflow.Running'),
-        icon: 'core/workflow/running'
-      },
-      success: {
-        bg: 'green.50',
-        text: t('common:core.workflow.Success'),
-        icon: 'core/workflow/runSuccess'
-      },
-      failed: {
-        bg: 'red.50',
-        text: t('common:core.workflow.Failed'),
-        icon: 'core/workflow/runError'
-      },
-      skipped: {
-        bg: 'myGray.50',
-        text: t('common:core.workflow.Skipped'),
-        icon: 'core/workflow/runSkip'
+  const { runAsync: onUpdateVersion, loading: isUpdating } = useRequest2(
+    async (versionId: string) => {
+      if (!node) return;
+
+      if (node.pluginId) {
+        const template = await getPreviewPluginNode({ appId: node.pluginId, versionId });
+
+        if (!!template) {
+          onResetNode({
+            id: node.nodeId,
+            node: {
+              ...template,
+              name: node.name,
+              intro: node.intro,
+              avatar: node.avatar
+            }
+          });
+        }
       }
-    };
+    },
+    {
+      refreshDeps: [node, onResetNode]
+    }
+  );
 
-    const statusData = map[debugResult?.status || 'running'];
-
-    const response = debugResult?.response;
-
-    const onStop = () => {
-      openConfirm(onStopNodeDebug)();
-    };
-
-    return !!debugResult && !!statusData ? (
-      <>
-        <Flex px={3} bg={statusData.bg} borderTopRadius={'md'} py={3}>
-          <MyIcon name={statusData.icon as any} w={'16px'} mr={2} />
-          <Box color={'myGray.900'} fontWeight={'bold'} flex={'1 0 0'}>
-            {statusData.text}
-          </Box>
-          {debugResult.status !== 'running' && (
-            <Box
-              color={'primary.700'}
-              cursor={'pointer'}
-              fontSize={'sm'}
-              onClick={() =>
-                onChangeNode({
-                  nodeId,
-                  type: 'attr',
-                  key: 'debugResult',
-                  value: {
-                    ...debugResult,
-                    showResult: !debugResult.showResult
-                  }
-                })
-              }
-            >
-              {debugResult.showResult
-                ? t('common:core.workflow.debug.Hide result')
-                : t('common:core.workflow.debug.Show result')}
-            </Box>
-          )}
-        </Flex>
-        {/* Result card */}
-        {debugResult.showResult && (
-          <Card
-            className="nowheel"
-            position={'absolute'}
-            right={'-430px'}
-            top={0}
-            zIndex={10}
-            w={'420px'}
-            maxH={'max(100%,500px)'}
-            border={'base'}
-          >
-            {/* Status header */}
-            <Flex h={'54x'} px={3} py={3} alignItems={'center'}>
-              <MyIcon mr={1} name={'core/workflow/debugResult'} w={'20px'} color={'primary.600'} />
-              <Box fontWeight={'bold'} flex={'1'}>
-                {t('common:core.workflow.debug.Run result')}
-              </Box>
-              {workflowDebugData?.nextRunNodes.length !== 0 && (
-                <Button
-                  size={'sm'}
-                  leftIcon={<MyIcon name={'core/chat/stopSpeech'} w={'16px'} />}
-                  variant={'whiteDanger'}
-                  onClick={onStop}
-                >
-                  {t('common:core.workflow.Stop debug')}
-                </Button>
-              )}
-              {(debugResult.status === 'success' || debugResult.status === 'skipped') &&
-                !debugResult.isExpired &&
-                workflowDebugData?.nextRunNodes &&
-                workflowDebugData.nextRunNodes.length > 0 && (
-                  <Button
-                    ml={2}
-                    size={'sm'}
-                    leftIcon={<MyIcon name={'core/workflow/debugNext'} w={'16px'} />}
-                    variant={'primary'}
-                    onClick={() => onNextNodeDebug()}
-                  >
-                    {t('common:common.Next Step')}
-                  </Button>
-                )}
-              {workflowDebugData?.nextRunNodes && workflowDebugData?.nextRunNodes.length === 0 && (
-                <Button ml={2} size={'sm'} variant={'primary'} onClick={onStopNodeDebug}>
-                  {t('common:core.workflow.debug.Done')}
-                </Button>
-              )}
-            </Flex>
-            {/* Response list */}
-            {debugResult.status !== 'skipped' && (
-              <Box borderTop={'base'} mt={1} overflowY={'auto'} minH={'250px'}>
-                {!debugResult.message && !response && (
-                  <EmptyTip text={t('common:core.workflow.debug.Not result')} pt={2} pb={5} />
-                )}
-                {debugResult.message && (
-                  <Box color={'red.600'} px={3} py={4}>
-                    {debugResult.message}
-                  </Box>
-                )}
-                {response && <WholeResponseContent activeModule={response} />}
-              </Box>
-            )}
-          </Card>
+  const renderVersionList = useCreation(
+    () => [
+      {
+        label: t('app:keep_the_latest'),
+        value: ''
+      },
+      ...versionList.map((item) => ({
+        label: item.versionName,
+        value: item._id
+      }))
+    ],
+    [node.isLatestVersion, node.version, t, versionList]
+  );
+  const valueLabel = useMemo(() => {
+    return (
+      <Flex alignItems={'center'} gap={0.5}>
+        {node?.version === '' ? t('app:keep_the_latest') : node?.versionLabel}
+        {!node.isLatestVersion && (
+          <MyTag type="fill" colorSchema={'adora'} fontSize={'mini'} borderRadius={'lg'}>
+            {t('app:not_the_newest')}
+          </MyTag>
         )}
-      </>
-    ) : null;
-  }, [
-    debugResult,
-    nodeId,
-    onChangeNode,
-    onNextNodeDebug,
-    onStopNodeDebug,
-    openConfirm,
-    t,
-    workflowDebugData
-  ]);
+      </Flex>
+    );
+  }, [node.isLatestVersion, node?.version, node?.versionLabel, t]);
 
   return (
-    <>
-      {RenderStatus}
-      <ConfirmModal />
-    </>
+    <MySelect
+      className="nowheel"
+      value={node.version}
+      onChange={onUpdateVersion}
+      isLoading={isUpdating}
+      customOnOpen={onOpen}
+      customOnClose={onClose}
+      placeholder={node?.versionLabel}
+      variant={'whitePrimaryOutline'}
+      size={'sm'}
+      list={renderVersionList}
+      ScrollData={(props) => (
+        <ScrollData minH={'100px'} maxH={'40vh'}>
+          {props.children}
+        </ScrollData>
+      )}
+      valueLabel={valueLabel}
+    />
   );
 });

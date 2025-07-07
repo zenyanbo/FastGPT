@@ -21,8 +21,9 @@ weight: 707
 {{% alert icon="🤖" context="success" %}}
 
 - MongoDB：用于存储除了向量外的各类数据
-- PostgreSQL/Milvus：存储向量数据
-- OneAPI: 聚合各类 AI API，支持多模型调用 （任何模型问题，先自行通过 OneAPI 测试校验）
+- MinIO: 用于存储插件的文件数据
+- PostgreSQL/Milvus/Oceanbase：存储向量数据
+- AIProxy: 聚合各类 AI API，支持多模型调用
 
 {{% /alert %}}
 
@@ -33,11 +34,11 @@ weight: 707
 非常轻量，适合知识库索引量在 5000 万以下。
 
 {{< table "table-hover table-striped-columns" >}}
-| 环境 | 最低配置（单节点） | 推荐配置 |
-| ---- | ---- | ---- |
-| 测试（可以把计算进程设置少一些） | 2c4g  | 2c8g |
-| 100w 组向量 | 4c8g 50GB | 4c16g 50GB |
-| 500w 组向量 | 8c32g 200GB | 16c64g 200GB |
+| 环境                             | 最低配置（单节点） | 推荐配置     |
+| -------------------------------- | ------------------ | ------------ |
+| 测试（可以把计算进程设置少一些） | 2c4g               | 2c8g         |
+| 100w 组向量                      | 4c8g 50GB          | 4c16g 50GB   |
+| 500w 组向量                      | 8c32g 200GB        | 16c64g 200GB |
 {{< /table >}}
 
 ### Milvus版本
@@ -47,11 +48,11 @@ weight: 707
 [点击查看 Milvus 官方推荐配置](https://milvus.io/docs/prerequisite-docker.md)
 
 {{< table "table-hover table-striped-columns" >}}
-| 环境 | 最低配置（单节点） | 推荐配置 |
-| ---- | ---- | ---- |
-| 测试 | 2c8g  | 4c16g |
-| 100w 组向量 | 未测试 |  |
-| 500w 组向量 |  |  |
+| 环境        | 最低配置（单节点） | 推荐配置 |
+| ----------- | ------------------ | -------- |
+| 测试        | 2c8g               | 4c16g    |
+| 100w 组向量 | 未测试             |          |
+| 500w 组向量 |                    |          |
 {{< /table >}}
 
 ### zilliz cloud版本
@@ -66,7 +67,14 @@ Zilliz Cloud 由 Milvus 原厂打造，是全托管的 SaaS 向量数据库服�
 
 如果使用`OpenAI`等国外模型接口，请确保可以正常访问，否则会报错：`Connection error` 等。 方案可以参考：[代理方案](/docs/development/proxy/)
 
-### 2. 准备 Docker 环境
+### 2. 开放防火墙端口
+
+1. 3000: fastgpt 主服务端口
+2. 3005: mcp server 端口
+3. 9000: minio 端口
+4. 9001: minio web控制台端口
+
+### 3. 准备 Docker 环境
 
 {{< tabs tabTotal="3" >}}
 {{< tab tabName="Linux" >}}
@@ -135,6 +143,9 @@ curl -O https://raw.githubusercontent.com/labring/FastGPT/main/projects/app/data
 
 # pgvector 版本(测试推荐，简单快捷)
 curl -o docker-compose.yml https://raw.githubusercontent.com/labring/FastGPT/main/deploy/docker/docker-compose-pgvector.yml
+# oceanbase 版本（需要将init.sql和docker-compose.yml放在同一个文件夹，方便挂载）
+# curl -o docker-compose.yml https://raw.githubusercontent.com/labring/FastGPT/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml
+# curl -o init.sql https://raw.githubusercontent.com/labring/FastGPT/main/deploy/docker/docker-compose-oceanbase/init.sql
 # milvus 版本
 # curl -o docker-compose.yml https://raw.githubusercontent.com/labring/FastGPT/main/deploy/docker/docker-compose-milvus.yml
 # zilliz 版本
@@ -145,22 +156,26 @@ curl -o docker-compose.yml https://raw.githubusercontent.com/labring/FastGPT/mai
 
 找到 yml 文件中，fastgpt 容器的环境变量进行下面操作：
 
-{{< tabs tabTotal="3" >}}
-{{< tab tabName="PgVector版本" >}}
+{{< tabs tabTotal="2" >}}
+{{< tab tabName="所有版本通用操作" >}}
 {{< markdownify >}}
 
-无需操作
+修改环境变量: 
+
+```
+# fastgpt 容器
+FE_DOMAIN=前端外部可访问的地址。用于自动补全文件资源路径。例如 https:fastgpt.cn，不能填 localhost。
+DEFAULT_ROOT_PSW=root 用户密码，每次重启root 都会修改成这个密码
+AES256_SECRET_KEY=密钥加密 key，尽量取复杂密钥，一旦使用后，不能随便修改，否则会导致系统加密的数据无法正常解密
+
+# fastgpt-plugin容器
+MINIO_CUSTOM_ENDPOINT=http://minio.xxx.com 用户可访问的地址，用于给系统工具提供文件存储。填写例如 http://minio.xxx.com 或者  http://<ip>:<port>
+```
 
 {{< /markdownify >}}
 {{< /tab >}}
-{{< tab tabName="Milvus版本" >}}
-{{< markdownify >}}
 
-无需操作
-
-{{< /markdownify >}}
-{{< /tab >}}
-{{< tab tabName="Zilliz版本" >}}
+{{< tab tabName="Zilliz版本特有" >}}
 {{< markdownify >}}
 
 打开 [Zilliz Cloud](https://zilliz.com.cn/), 创建实例并获取相关秘钥。
@@ -177,7 +192,11 @@ curl -o docker-compose.yml https://raw.githubusercontent.com/labring/FastGPT/mai
 {{< /tab >}}
 {{< /tabs >}}
 
-### 3. 启动容器
+### 3. 修改 config.json 配置文件
+
+修改`config.json`文件中的`mcpServerProxyEndpoint`值，设置成`mcp server`的公网可访问地址，yml 文件中默认给出了映射到 3005 端口，如通过 IP 访问，则可能是：`ip:3005`。
+
+### 4. 启动容器
 
 在 docker-compose.yml 同级目录下执行。请确保`docker-compose`版本最好在2.17以上，否则可能无法执行自动化命令。
 
@@ -186,7 +205,7 @@ curl -o docker-compose.yml https://raw.githubusercontent.com/labring/FastGPT/mai
 docker-compose up -d
 ```
 
-### 4. 访问 FastGPT
+### 5. 访问 FastGPT
 
 目前可以通过 `ip:3000` 直接访问(注意开放防火墙)。登录用户名为 `root`，密码为`docker-compose.yml`环境变量里设置的 `DEFAULT_ROOT_PSW`。
 
@@ -194,7 +213,7 @@ docker-compose up -d
 
 首次运行，会自动初始化 root 用户，密码为 `1234`（与环境变量中的`DEFAULT_ROOT_PSW`一致），日志可能会提示一次`MongoServerError: Unable to read from a snapshot due to pending collection catalog changes;`可忽略。
 
-### 5. 配置模型
+### 6. 配置模型
 
 - 首次登录FastGPT后，系统会提示未配置`语言模型`和`索引模型`，并自动跳转模型配置页面。系统必须至少有这两类模型才能正常使用。
 - 如果系统未正常跳转，可以在`账号-模型提供商`页面，进行模型配置。[点击查看相关教程](/docs/development/modelconfig/ai-proxy)

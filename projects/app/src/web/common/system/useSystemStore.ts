@@ -1,21 +1,19 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
+import { create, devtools, persist, immer } from '@fastgpt/web/common/zustand';
 import axios from 'axios';
-import { OAuthEnum } from '@fastgpt/global/support/user/constant';
+import type { OAuthEnum } from '@fastgpt/global/support/user/constant';
 import type {
   TTSModelType,
   LLMModelItemType,
-  ReRankModelItemType,
+  RerankModelItemType,
   EmbeddingModelItemType,
   STTModelType
 } from '@fastgpt/global/core/ai/model.d';
-import { InitDateResponse } from '@/global/common/api/systemRes';
-import { FastGPTFeConfigsType } from '@fastgpt/global/common/system/types';
-import { SubPlanType } from '@fastgpt/global/support/wallet/sub/type';
+import { type InitDateResponse } from '@/global/common/api/systemRes';
+import { type FastGPTFeConfigsType } from '@fastgpt/global/common/system/types';
+import { type SubPlanType } from '@fastgpt/global/support/wallet/sub/type';
 import { ModelTypeEnum } from '@fastgpt/global/core/ai/model';
-import { TeamErrEnum } from '@fastgpt/global/common/error/code/team';
-import { SystemDefaultModelType } from '@fastgpt/service/core/ai/type';
+import type { TeamErrEnum } from '@fastgpt/global/common/error/code/team';
+import { type SystemDefaultModelType } from '@fastgpt/service/core/ai/type';
 
 type LoginStoreType = { provider: `${OAuthEnum}`; lastRoute: string; state: string };
 
@@ -56,7 +54,7 @@ type State = {
   getVlmModelList: () => LLMModelItemType[];
   embeddingModelList: EmbeddingModelItemType[];
   ttsModelList: TTSModelType[];
-  reRankModelList: ReRankModelItemType[];
+  reRankModelList: RerankModelItemType[];
   sttModelList: STTModelType[];
   initStaticData: (e: InitDateResponse) => void;
   appType?: string;
@@ -79,7 +77,7 @@ export const useSystemStore = create<State>()(
             state.initd = true;
           });
         },
-        lastRoute: '/app/list',
+        lastRoute: '/dashboard/apps',
         setLastRoute(e) {
           set((state) => {
             state.lastRoute = e;

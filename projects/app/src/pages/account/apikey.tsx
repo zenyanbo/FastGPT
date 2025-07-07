@@ -1,9 +1,10 @@
+'use client';
 import React from 'react';
 import ApiKeyTable from '@/components/support/apikey/Table';
 import { useTranslation } from 'next-i18next';
 import { Box } from '@chakra-ui/react';
 import AccountContainer, { TabEnum } from '@/pageComponents/account/AccountContainer';
-import { serviceSideProps } from '@fastgpt/web/common/system/nextjs';
+import { serviceSideProps } from '@/web/common/i18n/utils';
 
 const ApiKey = () => {
   const { t } = useTranslation();

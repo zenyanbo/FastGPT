@@ -29,7 +29,7 @@ weight: 744
 
 {{% alert icon=" " context="info" %}}
 - [SiliconCloud(硅基流动)](https://cloud.siliconflow.cn/i/TR9Ym0c4): 提供开源模型调用的平台。
-- [Sealos AIProxy](https://cloud.sealos.run/?uid=fnWRt09fZP&openapp=system-aiproxy): 提供国内各家模型代理，无需逐一申请 api。
+- [Sealos AIProxy](https://hzh.sealos.run/?uid=fnWRt09fZP&openapp=system-aiproxy): 提供国内各家模型代理，无需逐一申请 api。
 {{% /alert %}}
 
 在 OneAPI 配置好模型后，你就可以打开 FastGPT 页面，启用对应模型了。
@@ -111,8 +111,6 @@ weight: 744
         "usedInToolCall": true, // 是否用于工具调用（务必保证至少有一个为true）
         "toolChoice": true, // 是否支持工具选择（分类，内容提取，工具调用会用到。）
         "functionCall": false, // 是否支持函数调用（分类，内容提取，工具调用会用到。会优先使用 toolChoice，如果为false，则使用 functionCall，如果仍为 false，则使用提示词模式）
-        "customCQPrompt": "", // 自定义文本分类提示词（不支持工具和函数调用的模型
-        "customExtractPrompt": "", // 自定义内容提取提示词
         "defaultSystemChatPrompt": "", // 对话默认携带的系统提示词
         "defaultConfig": {}, // 请求API时，挟带一些默认配置（比如 GLM4 的 top_p）
         "fieldMap": {} // 字段映射（o1 模型需要把 max_tokens 映射为 max_completion_tokens）
@@ -302,7 +300,7 @@ OneAPI 的语言识别接口，无法正确的识别其他模型（会始终识�
     "vectorMaxProcess": 15, // 向量处理线程数量
     "qaMaxProcess": 15, // 问答拆分线程数量
     "tokenWorkers": 50, // Token 计算线程保持数，会持续占用内存，不能设置太大。
-    "pgHNSWEfSearch": 100 // 向量搜索参数。越大，搜索越精确，但是速度越慢。设置为100，有99%+精度。
+    "hnswEfSearch": 100 // 向量搜索参数，仅对 PG 和 OB 生效。越大，搜索越精确，但是速度越慢。设置为100，有99%+精度。
   },
   "llmModels": [
     {
@@ -322,8 +320,6 @@ OneAPI 的语言识别接口，无法正确的识别其他模型（会始终识�
       "usedInToolCall": true, // 是否用于工具调用（务必保证至少有一个为true）
       "toolChoice": true, // 是否支持工具选择（分类，内容提取，工具调用会用到。）
       "functionCall": false, // 是否支持函数调用（分类，内容提取，工具调用会用到。会优先使用 toolChoice，如果为false，则使用 functionCall，如果仍为 false，则使用提示词模式）
-      "customCQPrompt": "", // 自定义文本分类提示词（不支持工具和函数调用的模型
-      "customExtractPrompt": "", // 自定义内容提取提示词
       "defaultSystemChatPrompt": "", // 对话默认携带的系统提示词
       "defaultConfig": {}, // 请求API时，挟带一些默认配置（比如 GLM4 的 top_p）
       "fieldMap": {} // 字段映射（o1 模型需要把 max_tokens 映射为 max_completion_tokens）
@@ -345,8 +341,6 @@ OneAPI 的语言识别接口，无法正确的识别其他模型（会始终识�
       "usedInToolCall": true,
       "toolChoice": true,
       "functionCall": false,
-      "customCQPrompt": "",
-      "customExtractPrompt": "",
       "defaultSystemChatPrompt": "",
       "defaultConfig": {},
       "fieldMap": {}
@@ -368,8 +362,6 @@ OneAPI 的语言识别接口，无法正确的识别其他模型（会始终识�
       "usedInToolCall": true,
       "toolChoice": false,
       "functionCall": false,
-      "customCQPrompt": "",
-      "customExtractPrompt": "",
       "defaultSystemChatPrompt": "",
       "defaultConfig": {
         "temperature": 1,
@@ -394,8 +386,6 @@ OneAPI 的语言识别接口，无法正确的识别其他模型（会始终识�
       "usedInToolCall": true,
       "toolChoice": false,
       "functionCall": false,
-      "customCQPrompt": "",
-      "customExtractPrompt": "",
       "defaultSystemChatPrompt": "",
       "defaultConfig": {
          "temperature": 1,

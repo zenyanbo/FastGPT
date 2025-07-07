@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import { NodeProps } from 'reactflow';
+import { type NodeProps } from 'reactflow';
 import NodeCard from './render/NodeCard';
-import { FlowNodeItemType } from '@fastgpt/global/core/workflow/type/node.d';
+import { type FlowNodeItemType } from '@fastgpt/global/core/workflow/type/node.d';
 import Container from '../components/Container';
 import RenderInput from './render/RenderInput';
 import { NodeInputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useTranslation } from 'next-i18next';
-import { FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
+import { type FlowNodeInputItemType } from '@fastgpt/global/core/workflow/type/io.d';
 import { useContextSelector } from 'use-context-selector';
 import { WorkflowContext } from '../../context';
 import IOTitle from '../components/IOTitle';
@@ -15,44 +15,92 @@ import RenderOutput from './render/RenderOutput';
 import CodeEditor from '@fastgpt/web/components/common/Textarea/CodeEditor';
 import { Box, Flex } from '@chakra-ui/react';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
-import { JS_TEMPLATE } from '@fastgpt/global/core/workflow/template/system/sandbox/constants';
+import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
+import {
+  JS_TEMPLATE,
+  PY_TEMPLATE,
+  SandboxCodeTypeEnum,
+  SANDBOX_CODE_TEMPLATE
+} from '@fastgpt/global/core/workflow/template/system/sandbox/constants';
+import MySelect from '@fastgpt/web/components/common/MySelect';
+import PopoverConfirm from '@fastgpt/web/components/common/MyPopover/PopoverConfirm';
 
 const NodeCode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
   const { t } = useTranslation();
   const { nodeId, inputs, outputs } = data;
 
+  const codeType = inputs.find(
+    (item) => item.key === NodeInputKeyEnum.codeType
+  ) as FlowNodeInputItemType;
+
   const splitToolInputs = useContextSelector(WorkflowContext, (ctx) => ctx.splitToolInputs);
   const onChangeNode = useContextSelector(WorkflowContext, (ctx) => ctx.onChangeNode);
 
-  const { ConfirmModal, openConfirm } = useConfirm({
-    content: t('workflow:code.Reset template confirm')
+  // 切换语言确认
+  const { ConfirmModal: SwitchLangConfirm, openConfirm: openSwitchLangConfirm } = useConfirm({
+    content: t('workflow:code.Switch language confirm')
   });
 
   const CustomComponent = useMemo(() => {
     return {
       [NodeInputKeyEnum.code]: (item: FlowNodeInputItemType) => {
         return (
-          <Box mt={-3}>
-            <Flex mb={2} alignItems={'flex-end'}>
-              <Box flex={'1'}>{'Javascript ' + t('workflow:Code')}</Box>
-              <Box
-                cursor={'pointer'}
-                color={'primary.500'}
-                fontSize={'xs'}
-                onClick={openConfirm(() => {
+          <Box mt={-4}>
+            <Flex mb={2} alignItems={'center'} className="nodrag">
+              <MySelect<SandboxCodeTypeEnum>
+                fontSize="xs"
+                size="sm"
+                list={[
+                  { label: 'JavaScript', value: SandboxCodeTypeEnum.js },
+                  { label: 'Python 3', value: SandboxCodeTypeEnum.py }
+                ]}
+                value={codeType?.value}
+                onChange={(newLang) => {
+                  console.log(newLang);
+                  openSwitchLangConfirm(() => {
+                    onChangeNode({
+                      nodeId,
+                      type: 'updateInput',
+                      key: NodeInputKeyEnum.codeType,
+                      value: { ...codeType, value: newLang }
+                    });
+
+                    onChangeNode({
+                      nodeId,
+                      type: 'updateInput',
+                      key: item.key,
+                      value: {
+                        ...item,
+                        value: SANDBOX_CODE_TEMPLATE[newLang]
+                      }
+                    });
+                  })();
+                }}
+              />
+              {codeType.value === 'py' && (
+                <QuestionTip ml={2} label={t('workflow:support_code_language')} />
+              )}
+              <PopoverConfirm
+                Trigger={
+                  <Box cursor={'pointer'} color={'primary.500'} fontSize={'xs'} ml="auto" mr={2}>
+                    {t('workflow:code.Reset template')}
+                  </Box>
+                }
+                showCancel
+                content={t('workflow:code.Reset template confirm')}
+                placement={'top-end'}
+                onConfirm={() =>
                   onChangeNode({
                     nodeId,
                     type: 'updateInput',
                     key: item.key,
                     value: {
                       ...item,
-                      value: JS_TEMPLATE
+                      value: codeType.value === 'js' ? JS_TEMPLATE : PY_TEMPLATE
                     }
-                  });
-                })}
-              >
-                {t('workflow:code.Reset template')}
-              </Box>
+                  })
+                }
+              />
             </Flex>
             <CodeEditor
               bg={'white'}
@@ -63,32 +111,28 @@ const NodeCode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
                   nodeId,
                   type: 'updateInput',
                   key: item.key,
-                  value: {
-                    ...item,
-                    value: e
-                  }
+                  value: { ...item, value: e }
                 });
               }}
+              language={codeType.value}
             />
           </Box>
         );
       }
     };
-  }, [nodeId, onChangeNode, openConfirm, t]);
+  }, [codeType, nodeId, onChangeNode, openSwitchLangConfirm, t]);
 
   const { isTool, commonInputs } = splitToolInputs(inputs, nodeId);
 
   return (
     <NodeCard minW={'400px'} selected={selected} {...data}>
       {isTool && (
-        <>
-          <Container>
-            <RenderToolInput nodeId={nodeId} inputs={inputs} />
-          </Container>
-        </>
+        <Container>
+          <RenderToolInput nodeId={nodeId} inputs={inputs} />
+        </Container>
       )}
       <Container>
-        <IOTitle text={t('common:common.Input')} mb={-1} />
+        <IOTitle text={t('common:Input')} mb={-1} />
         <RenderInput
           nodeId={nodeId}
           flowInputList={commonInputs}
@@ -96,10 +140,10 @@ const NodeCode = ({ data, selected }: NodeProps<FlowNodeItemType>) => {
         />
       </Container>
       <Container>
-        <IOTitle text={t('common:common.Output')} />
+        <IOTitle text={t('common:Output')} />
         <RenderOutput nodeId={nodeId} flowOutputList={outputs} />
       </Container>
-      <ConfirmModal />
+      <SwitchLangConfirm />
     </NodeCard>
   );
 };

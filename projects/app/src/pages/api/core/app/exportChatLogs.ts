@@ -5,18 +5,26 @@ import { WritePermissionVal } from '@fastgpt/global/support/permission/constant'
 import { readFromSecondary } from '@fastgpt/service/common/mongo/utils';
 import { addLog } from '@fastgpt/service/common/system/log';
 import dayjs from 'dayjs';
-import { ApiRequestProps } from '@fastgpt/service/type/next';
+import { type ApiRequestProps } from '@fastgpt/service/type/next';
 import { replaceRegChars } from '@fastgpt/global/common/string/tools';
 import { NextAPI } from '@/service/middleware/entry';
 import { useIPFrequencyLimit } from '@fastgpt/service/common/middle/reqFrequencyLimit';
-import { GetAppChatLogsProps } from '@/global/core/api/appReq';
+import { type GetAppChatLogsProps } from '@/global/core/api/appReq';
 import { authApp } from '@fastgpt/service/support/permission/app/auth';
 import { Types } from 'mongoose';
 import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
 import { ChatItemCollectionName } from '@fastgpt/service/core/chat/chatItemSchema';
 import { MongoTeamMember } from '@fastgpt/service/support/user/team/teamMemberSchema';
-import { ChatItemValueTypeEnum, ChatSourceEnum } from '@fastgpt/global/core/chat/constants';
-import { AIChatItemValueItemType } from '@fastgpt/global/core/chat/type';
+import type { ChatSourceEnum } from '@fastgpt/global/core/chat/constants';
+import { ChatItemValueTypeEnum } from '@fastgpt/global/core/chat/constants';
+import { type AIChatItemValueItemType } from '@fastgpt/global/core/chat/type';
+import { sanitizeCsvField } from '@fastgpt/service/common/file/csv';
+
+const formatJsonString = (data: any) => {
+  if (data == null) return '';
+  const jsonStr = JSON.stringify(data).replace(/"/g, '""').replace(/\n/g, '\\n');
+  return sanitizeCsvField(jsonStr);
+};
 
 export type ExportChatLogsBody = GetAppChatLogsProps & {
   title: string;
@@ -40,7 +48,29 @@ async function handler(req: ApiRequestProps<ExportChatLogsBody, {}>, res: NextAp
   }
 
   const { teamId } = await authApp({ req, authToken: true, appId, per: WritePermissionVal });
-  const teamMembers = await MongoTeamMember.find({ teamId });
+
+  const teamMemberWithContact = await MongoTeamMember.aggregate([
+    { $match: { teamId: new Types.ObjectId(teamId) } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    {
+      $project: {
+        memberId: '$_id',
+        teamId: 1,
+        userId: 1,
+        name: 1,
+        role: 1,
+        status: 1,
+        contact: { $ifNull: [{ $arrayElemAt: ['$user.contact', 0] }, '-'] }
+      }
+    }
+  ]);
 
   const where = {
     teamId: new Types.ObjectId(teamId),
@@ -104,45 +134,37 @@ async function handler(req: ApiRequestProps<ExportChatLogsBody, {}>, res: NextAp
       },
       {
         $addFields: {
-          userGoodFeedbackCount: {
-            $size: {
-              $filter: {
-                input: '$chatitems',
-                as: 'item',
-                cond: { $ifNull: ['$$item.userGoodFeedback', false] }
-              }
+          userGoodFeedbackItems: {
+            $filter: {
+              input: '$chatitems',
+              as: 'item',
+              cond: { $ifNull: ['$$item.userGoodFeedback', false] }
             }
           },
-          userBadFeedbackCount: {
-            $size: {
-              $filter: {
-                input: '$chatitems',
-                as: 'item',
-                cond: { $ifNull: ['$$item.userBadFeedback', false] }
-              }
+          userBadFeedbackItems: {
+            $filter: {
+              input: '$chatitems',
+              as: 'item',
+              cond: { $ifNull: ['$$item.userBadFeedback', false] }
             }
           },
-          customFeedbacksCount: {
-            $size: {
-              $filter: {
-                input: '$chatitems',
-                as: 'item',
-                cond: { $gt: [{ $size: { $ifNull: ['$$item.customFeedbacks', []] } }, 0] }
-              }
+          customFeedbackItems: {
+            $filter: {
+              input: '$chatitems',
+              as: 'item',
+              cond: { $gt: [{ $size: { $ifNull: ['$$item.customFeedbacks', []] } }, 0] }
             }
           },
-          markCount: {
-            $size: {
-              $filter: {
-                input: '$chatitems',
-                as: 'item',
-                cond: { $ifNull: ['$$item.adminFeedback', false] }
-              }
+          markItems: {
+            $filter: {
+              input: '$chatitems',
+              as: 'item',
+              cond: { $ifNull: ['$$item.adminFeedback', false] }
             }
           },
           chatDetails: {
             $map: {
-              input: '$chatitems',
+              input: { $slice: ['$chatitems', -1000] },
               as: 'item',
               in: {
                 id: '$$item._id',
@@ -161,10 +183,10 @@ async function handler(req: ApiRequestProps<ExportChatLogsBody, {}>, res: NextAp
           source: 1,
           time: '$updateTime',
           messageCount: { $size: '$chatitems' },
-          userGoodFeedbackCount: 1,
-          userBadFeedbackCount: 1,
-          customFeedbacksCount: 1,
-          markCount: 1,
+          userGoodFeedbackItems: 1,
+          userBadFeedbackItems: 1,
+          customFeedbackItems: 1,
+          markItems: 1,
           outLinkUid: 1,
           tmbId: 1,
           chatDetails: 1
@@ -187,14 +209,18 @@ async function handler(req: ApiRequestProps<ExportChatLogsBody, {}>, res: NextAp
     const time = dayjs(doc.time.toISOString()).format('YYYY-MM-DD HH:mm:ss');
     const source = sourcesMap[doc.source as ChatSourceEnum]?.label || doc.source;
     const title = doc.customTitle || doc.title;
-    const tmb = doc.outLinkUid
+    const tmbName = doc.outLinkUid
       ? doc.outLinkUid
-      : teamMembers.find((member) => String(member._id) === String(doc.tmbId))?.name;
+      : teamMemberWithContact.find((member) => String(member.memberId) === String(doc.tmbId))?.name;
+    const tmbContact = teamMemberWithContact.find(
+      (member) => String(member.memberId) === String(doc.tmbId)
+    )?.contact;
 
     const messageCount = doc.messageCount;
-    const userFeedbackCount = doc.userGoodFeedbackCount || doc.userBadFeedbackCount || '-';
-    const customFeedbacksCount = doc.customFeedbacksCount || '-';
-    const markCount = doc.markCount;
+    const userGoodFeedbackItems = doc.userGoodFeedbackItems || [];
+    const userBadFeedbackItems = doc.userBadFeedbackItems || [];
+    const customFeedbackItems = doc.customFeedbackItems || [];
+    const markItems = doc.markItems || [];
     const chatDetails = doc.chatDetails.map(
       (chat: { id: string; value: AIChatItemValueItemType[] }) => {
         return chat.value.map((item) => {
@@ -228,9 +254,21 @@ async function handler(req: ApiRequestProps<ExportChatLogsBody, {}>, res: NextAp
         });
       }
     );
-    let chatDetailsStr = JSON.stringify(chatDetails).replace(/"/g, '""').replace(/\n/g, '\\n');
 
-    const res = `\n"${time}","${source}","${tmb}","${title}","${messageCount}","${userFeedbackCount}","${customFeedbacksCount}","${markCount}","${chatDetailsStr}"`;
+    const userGoodFeedbackItemsStr = formatJsonString(userGoodFeedbackItems);
+    const userBadFeedbackItemsStr = formatJsonString(userBadFeedbackItems);
+    const customFeedbackItemsStr = formatJsonString(customFeedbackItems);
+    const markItemsStr = formatJsonString(markItems);
+    const chatDetailsStr = formatJsonString(chatDetails);
+
+    const sanitizedTime = sanitizeCsvField(time);
+    const sanitizedSource = sanitizeCsvField(source);
+    const sanitizedTmbName = sanitizeCsvField(tmbName);
+    const sanitizedTmbContact = sanitizeCsvField(tmbContact);
+    const sanitizedTitle = sanitizeCsvField(title);
+    const sanitizedMessageCount = sanitizeCsvField(messageCount);
+
+    const res = `\n${sanitizedTime},${sanitizedSource},${sanitizedTmbName},${sanitizedTmbContact},${sanitizedTitle},${sanitizedMessageCount},${userGoodFeedbackItemsStr},${userBadFeedbackItemsStr},${customFeedbackItemsStr},${markItemsStr},${chatDetailsStr}`;
 
     write(res);
   });

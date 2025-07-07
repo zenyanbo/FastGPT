@@ -1,4 +1,4 @@
-import { ModelTypeEnum } from './model';
+import type { ModelTypeEnum } from './model';
 import type { ModelProviderIdType } from './provider';
 
 type PriceType = {
@@ -51,9 +51,6 @@ export type LLMModelItemType = PriceType &
     functionCall: boolean;
     toolChoice: boolean;
 
-    customCQPrompt: string;
-    customExtractPrompt: string;
-
     defaultSystemChatPrompt?: string;
     defaultConfig?: Record<string, any>;
     fieldMap?: Record<string, string>;
@@ -72,7 +69,7 @@ export type EmbeddingModelItemType = PriceType &
     queryConfig?: Record<string, any>; // Custom parameters for query
   };
 
-export type ReRankModelItemType = PriceType &
+export type RerankModelItemType = PriceType &
   BaseModelItemType & {
     type: ModelTypeEnum.rerank;
   };

@@ -1,6 +1,7 @@
-import { RequireAtLeastOne, RequireOnlyOne } from '../../common/type/utils';
-import { Permission } from './controller';
-import { PermissionValueType } from './type';
+import type { RequireOnlyOne } from '../../common/type/utils';
+import { RequireAtLeastOne } from '../../common/type/utils';
+import type { Permission } from './controller';
+import type { PermissionValueType } from './type';
 
 export type CollaboratorItemType = {
   teamId: string;
@@ -13,12 +14,15 @@ export type CollaboratorItemType = {
   orgId: string;
 }>;
 
-export type UpdateClbPermissionProps = {
+export type UpdateClbPermissionProps<addOnly = false> = {
   members?: string[];
   groups?: string[];
   orgs?: string[];
-  permission: PermissionValueType;
-};
+} & (addOnly extends true
+  ? {}
+  : {
+      permission: PermissionValueType;
+    });
 
 export type DeletePermissionQuery = RequireOnlyOne<{
   tmbId?: string;

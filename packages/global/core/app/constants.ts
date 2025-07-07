@@ -1,10 +1,9 @@
-import { PROMPT_QUESTION_GUIDE } from '../ai/prompt/agent';
 import {
-  AppTTSConfigType,
-  AppFileSelectConfigType,
-  AppWhisperConfigType,
-  AppAutoExecuteConfigType,
-  AppQGConfigType
+  type AppTTSConfigType,
+  type AppFileSelectConfigType,
+  type AppWhisperConfigType,
+  type AppAutoExecuteConfigType,
+  type AppQGConfigType
 } from './type';
 
 export enum AppTypeEnum {
@@ -12,7 +11,9 @@ export enum AppTypeEnum {
   simple = 'simple',
   workflow = 'advanced',
   plugin = 'plugin',
-  httpPlugin = 'httpPlugin'
+  httpPlugin = 'httpPlugin',
+  toolSet = 'toolSet',
+  tool = 'tool'
 }
 
 export const AppFolderTypeList = [AppTypeEnum.folder, AppTypeEnum.httpPlugin];
@@ -54,7 +55,8 @@ export enum AppTemplateTypeEnum {
   imageGeneration = 'image-generation',
   webSearch = 'web-search',
   roleplay = 'roleplay',
-  officeServices = 'office-services'
-}
+  officeServices = 'office-services',
 
-export const defaultDatasetMaxTokens = 16000;
+  // special type
+  contribute = 'contribute'
+}

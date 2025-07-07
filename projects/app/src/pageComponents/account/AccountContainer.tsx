@@ -91,7 +91,7 @@ const AccountContainer = ({
           }
         ]
       : []),
-    ...(userInfo?.team?.permission.hasManagePer
+    ...(userInfo?.team?.permission.hasApikeyCreatePer
       ? [
           {
             icon: 'key',
@@ -112,7 +112,7 @@ const AccountContainer = ({
       : []),
     {
       icon: 'common/settingLight',
-      label: t('common:common.Setting'),
+      label: t('common:Setting'),
       value: TabEnum.setting
     },
     {

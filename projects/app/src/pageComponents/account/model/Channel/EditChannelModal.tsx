@@ -1,12 +1,12 @@
 import { aiproxyIdMap } from '@/global/aiproxy/constants';
-import { ChannelInfoType } from '@/global/aiproxy/type';
+import { type ChannelInfoType } from '@/global/aiproxy/type';
 import {
   Box,
-  BoxProps,
+  type BoxProps,
   Button,
   Flex,
   Input,
-  MenuItemProps,
+  type MenuItemProps,
   ModalBody,
   ModalFooter,
   useDisclosure,
@@ -25,8 +25,8 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AddModelButton } from '../AddModelBox';
 import dynamic from 'next/dynamic';
-import { SystemModelItemType } from '@fastgpt/service/core/ai/type';
-import { ModelTypeEnum } from '@fastgpt/global/core/ai/model';
+import { type SystemModelItemType } from '@fastgpt/service/core/ai/type';
+import type { ModelTypeEnum } from '@fastgpt/global/core/ai/model';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { getSystemModelList } from '@/web/core/ai/config';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
@@ -79,7 +79,7 @@ const EditChannelModal = ({
               order: provider.order,
               defaultBaseUrl: value.defaultBaseUrl,
               keyHelp: value.keyHelp,
-              icon: provider.avatar,
+              icon: mapData?.avatar ?? provider.avatar,
               label: t(mapData.label as any),
               value: Number(key)
             };
@@ -90,6 +90,7 @@ const EditChannelModal = ({
       manual: false
     }
   );
+
   const selectedProvider = useMemo(() => {
     const res = providerList.find((item) => item.value === providerType);
     return res;
@@ -157,7 +158,7 @@ const EditChannelModal = ({
         onSuccess();
         onClose();
       },
-      successToast: isEdit ? t('common:common.Update Success') : t('common:common.Create Success'),
+      successToast: isEdit ? t('common:update_success') : t('common:create_success'),
       manual: true
     }
   );
@@ -193,7 +194,7 @@ const EditChannelModal = ({
                 placeholder={t('account_model:select_provider_placeholder')}
                 value={providerType}
                 isSearch
-                onchange={(val) => {
+                onChange={(val) => {
                   setValue('type', val);
                 }}
               />
@@ -284,10 +285,10 @@ const EditChannelModal = ({
         </ModalBody>
         <ModalFooter>
           <Button variant={'outline'} onClick={onClose} mr={4}>
-            {t('common:common.Cancel')}
+            {t('common:Cancel')}
           </Button>
           <Button variant={'primary'} onClick={handleSubmit(onSubmit)}>
-            {isEdit ? t('common:common.Update') : t('common:new_create')}
+            {isEdit ? t('common:Update') : t('common:new_create')}
           </Button>
         </ModalFooter>
       </MyModal>
@@ -332,6 +333,8 @@ const MultipleSelect = ({ value = [], list = [], onSelect }: SelectProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { copyData } = useCopyData();
 
+  const [search, setSearch] = useState('');
+
   const onclickItem = useCallback(
     (val: string) => {
       if (value.includes(val)) {
@@ -342,11 +345,10 @@ const MultipleSelect = ({ value = [], list = [], onSelect }: SelectProps) => {
           top: BoxRef.current.scrollHeight
         });
       }
+      setSearch('');
     },
     [value, onSelect]
   );
-
-  const [search, setSearch] = useState('');
 
   const filterUnSelected = useMemo(() => {
     return list

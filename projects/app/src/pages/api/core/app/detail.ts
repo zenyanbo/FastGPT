@@ -3,7 +3,7 @@ import { authApp } from '@fastgpt/service/support/permission/app/auth';
 import { NextAPI } from '@/service/middleware/entry';
 import { ReadPermissionVal } from '@fastgpt/global/support/permission/constant';
 import { CommonErrEnum } from '@fastgpt/global/common/error/code/common';
-import { checkNode } from '@/service/core/app/utils';
+import { rewriteAppWorkflowToDetail } from '@fastgpt/service/core/app/utils';
 
 /* 获取应用详情 */
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
@@ -13,7 +13,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     Promise.reject(CommonErrEnum.missingParams);
   }
   // 凭证校验
-  const { app } = await authApp({ req, authToken: true, appId, per: ReadPermissionVal });
+  const { app, teamId, isRoot } = await authApp({
+    req,
+    authToken: true,
+    appId,
+    per: ReadPermissionVal
+  });
+
+  await rewriteAppWorkflowToDetail({
+    nodes: app.modules,
+    teamId,
+    ownerTmbId: app.tmbId,
+    isRoot
+  });
 
   if (!app.permission.hasWritePer) {
     return {
@@ -23,12 +35,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     };
   }
 
-  return {
-    ...app,
-    modules: await Promise.all(
-      app.modules.map((node) => checkNode({ node, ownerTmbId: app.tmbId }))
-    )
-  };
+  return app;
 }
 
 export default NextAPI(handler);

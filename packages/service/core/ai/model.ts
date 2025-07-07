@@ -1,4 +1,5 @@
-import { SystemModelItemType } from './type';
+import { cloneDeep } from 'lodash';
+import { type SystemModelItemType } from './type';
 
 export const getDefaultLLMModel = () => global?.systemDefaultModel.llm!;
 export const getLLMModel = (model?: string) => {
@@ -17,6 +18,10 @@ export const getVlmModel = (model?: string) => {
   return Array.from(global.llmModelMap.values())
     ?.filter((item) => item.vision)
     ?.find((item) => item.model === model || item.name === model);
+};
+
+export const getVlmModelList = () => {
+  return Array.from(global.llmModelMap.values())?.filter((item) => item.vision) || [];
 };
 
 export const getDefaultEmbeddingModel = () => global?.systemDefaultModel.embedding!;
@@ -38,7 +43,7 @@ export function getSTTModel(model?: string) {
 }
 
 export const getDefaultRerankModel = () => global?.systemDefaultModel.rerank!;
-export function getReRankModel(model?: string) {
+export function getRerankModel(model?: string) {
   if (!model) return getDefaultRerankModel();
   return global.reRankModelMap.get(model) || getDefaultRerankModel();
 }
@@ -53,5 +58,5 @@ export const findAIModel = (model: string): SystemModelItemType | undefined => {
   );
 };
 export const findModelFromAlldata = (model: string) => {
-  return global.systemModelList.find((item) => item.model === model);
+  return cloneDeep(global.systemModelList.find((item) => item.model === model));
 };

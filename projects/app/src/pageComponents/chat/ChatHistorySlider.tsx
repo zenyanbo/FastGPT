@@ -7,7 +7,6 @@ import Avatar from '@fastgpt/web/components/common/Avatar';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
-import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import MyMenu from '@fastgpt/web/components/common/MyMenu';
 import { useContextSelector } from 'use-context-selector';
@@ -16,6 +15,7 @@ import MyBox from '@fastgpt/web/components/common/MyBox';
 import { formatTimeToChatTime } from '@fastgpt/global/common/string/time';
 import { ChatItemContext } from '@/web/core/chat/context/chatItemContext';
 import { useChatStore } from '@/web/core/chat/context/useChatStore';
+import PopoverConfirm from '@fastgpt/web/components/common/MyPopover/PopoverConfirm';
 
 type HistoryItemType = {
   id: string;
@@ -46,6 +46,7 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
   const appName = useContextSelector(ChatItemContext, (v) => v.chatBoxData?.app.name);
   const appAvatar = useContextSelector(ChatItemContext, (v) => v.chatBoxData?.app.avatar);
   const showRouteToAppDetail = useContextSelector(ChatItemContext, (v) => v.showRouteToAppDetail);
+  const setCiteModalData = useContextSelector(ChatItemContext, (v) => v.setCiteModalData);
 
   const concatHistory = useMemo(() => {
     const formatHistories: HistoryItemType[] = histories.map((item) => {
@@ -72,9 +73,6 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
     title: t('common:core.chat.Custom History Title'),
     placeholder: t('common:core.chat.Custom History Title Description')
   });
-  const { openConfirm, ConfirmModal } = useConfirm({
-    content: confirmClearText
-  });
 
   const canRouteToDetail = useMemo(
     () => appId && userInfo?.team.permission.hasWritePer && showRouteToAppDetail,
@@ -83,7 +81,6 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
 
   return (
     <MyBox
-      isLoading={isLoading}
       display={'flex'}
       flexDirection={'column'}
       w={'100%'}
@@ -144,25 +141,30 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
           borderRadius={'xl'}
           leftIcon={<MyIcon name={'core/chat/chatLight'} w={'16px'} />}
           overflow={'hidden'}
-          onClick={() => onChangeChatId()}
+          onClick={() => {
+            onChangeChatId();
+            setCiteModalData(undefined);
+          }}
         >
           {t('common:core.chat.New Chat')}
         </Button>
         {/* Clear */}
         {isPc && histories.length > 0 && (
-          <IconButton
-            ml={3}
-            h={'100%'}
-            variant={'whiteDanger'}
-            size={'mdSquare'}
-            aria-label={''}
-            borderRadius={'50%'}
-            icon={<MyIcon name={'common/clearLight'} w={'16px'} />}
-            onClick={() =>
-              openConfirm(() => {
-                onClearHistory();
-              })()
+          <PopoverConfirm
+            Trigger={
+              <Box ml={3} h={'100%'}>
+                <IconButton
+                  variant={'whiteDanger'}
+                  size={'mdSquare'}
+                  aria-label={''}
+                  borderRadius={'50%'}
+                  icon={<MyIcon name={'common/clearLight'} w={'16px'} />}
+                />
+              </Box>
             }
+            type="delete"
+            content={confirmClearText}
+            onConfirm={() => onClearHistory()}
           />
         )}
       </Flex>
@@ -199,6 +201,7 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
                 : {
                     onClick: () => {
                       onChangeChatId(item.id);
+                      setCiteModalData(undefined);
                     }
                   })}
               {...(i !== concatHistory.length - 1 && {
@@ -250,7 +253,7 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
                             },
 
                             {
-                              label: t('common:common.Custom Title'),
+                              label: t('common:custom_title'),
                               icon: 'common/customTitleLight',
                               onClick: () => {
                                 onOpenModal({
@@ -264,12 +267,13 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
                               }
                             },
                             {
-                              label: t('common:common.Delete'),
+                              label: t('common:Delete'),
                               icon: 'delete',
                               onClick: () => {
                                 onDelHistory(item.id);
                                 if (item.id === activeChatId) {
                                   onChangeChatId();
+                                  setCiteModalData(undefined);
                                 }
                               },
                               type: 'danger'
@@ -294,7 +298,7 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
           alignItems={'center'}
           cursor={'pointer'}
           p={3}
-          onClick={() => router.push('/app/list')}
+          onClick={() => router.push('/dashboard/apps')}
         >
           <IconButton
             mr={3}
@@ -309,7 +313,6 @@ const ChatHistorySlider = ({ confirmClearText }: { confirmClearText: string }) =
         </Flex>
       )}
       <EditTitleModal />
-      <ConfirmModal />
     </MyBox>
   );
 };

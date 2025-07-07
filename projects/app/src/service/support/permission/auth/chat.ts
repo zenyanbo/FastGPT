@@ -1,11 +1,14 @@
-import { ChatSchema } from '@fastgpt/global/core/chat/type';
+import { type ChatHistoryItemResType, type ChatSchema } from '@fastgpt/global/core/chat/type';
 import { MongoChat } from '@fastgpt/service/core/chat/chatSchema';
-import { AuthModeType } from '@fastgpt/service/support/permission/type';
+import { type AuthModeType } from '@fastgpt/service/support/permission/type';
 import { authOutLink } from './outLink';
 import { ChatErrEnum } from '@fastgpt/global/common/error/code/chat';
 import { authTeamSpaceToken } from './team';
 import { AuthUserTypeEnum, ReadPermissionVal } from '@fastgpt/global/support/permission/constant';
 import { authApp } from '@fastgpt/service/support/permission/app/auth';
+import { MongoChatItem } from '@fastgpt/service/core/chat/chatItemSchema';
+import { DatasetErrEnum } from '@fastgpt/global/common/error/code/dataset';
+import { getFlatAppResponses } from '@/global/core/chat/utils';
 
 /* 
   检查chat的权限：
@@ -23,6 +26,14 @@ const defaultResponseShow = {
   showNodeStatus: true,
   showRawSource: true
 };
+type AuthChatCommonProps = {
+  appId: string;
+  shareId?: string;
+  outLinkUid?: string;
+  teamId?: string;
+  teamToken?: string;
+};
+
 export async function authChatCrud({
   appId,
   chatId,
@@ -33,14 +44,10 @@ export async function authChatCrud({
   teamId: spaceTeamId,
   teamToken,
   ...props
-}: AuthModeType & {
-  appId: string;
-  chatId?: string;
-  shareId?: string;
-  outLinkUid?: string;
-  teamId?: string;
-  teamToken?: string;
-}): Promise<{
+}: AuthModeType &
+  AuthChatCommonProps & {
+    chatId?: string;
+  }): Promise<{
   teamId: string;
   tmbId: string;
   uid: string;
@@ -184,3 +191,48 @@ export async function authChatCrud({
 
   return Promise.reject(ChatErrEnum.unAuthChat);
 }
+
+export const authCollectionInChat = async ({
+  collectionIds,
+  appId,
+  chatId,
+  chatItemDataId
+}: {
+  collectionIds: string[];
+  appId: string;
+  chatId: string;
+  chatItemDataId: string;
+}): Promise<{
+  chatItem: { time: Date; responseData?: ChatHistoryItemResType[] };
+}> => {
+  try {
+    const chatItem = (await MongoChatItem.findOne(
+      {
+        appId,
+        chatId,
+        dataId: chatItemDataId
+      },
+      'responseData time'
+    ).lean()) as { time: Date; responseData?: ChatHistoryItemResType[] };
+
+    if (!chatItem) return Promise.reject(DatasetErrEnum.unAuthDatasetCollection);
+
+    // 找 responseData 里，是否有该文档 id
+    const flatResData = getFlatAppResponses(chatItem.responseData || []);
+
+    const quoteListSet = new Set(
+      flatResData
+        .map((item) => item.quoteList?.map((quote) => String(quote.collectionId)) || [])
+        .flat()
+    );
+
+    if (collectionIds.every((id) => quoteListSet.has(String(id)))) {
+      return {
+        chatItem
+      };
+    }
+  } catch (error) {}
+  return Promise.reject(DatasetErrEnum.unAuthDatasetFile);
+};
+
+export { defaultResponseShow };

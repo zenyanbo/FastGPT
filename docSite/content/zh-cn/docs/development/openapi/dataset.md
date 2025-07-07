@@ -11,8 +11,6 @@ weight: 853
 | --------------------- | --------------------- |
 | ![](/imgs/getDatasetId.jpg) | ![](/imgs/getfile_id.webp) |
 
-
-
 ## 创建训练订单
 
 {{< tabs tabTotal="2" >}}
@@ -289,7 +287,7 @@ curl --location --request DELETE 'http://localhost:3000/api/core/dataset/delete?
 
 ## 集合
 
-### 通用创建参数说明
+### 通用创建参数说明（必看）
 
 **入参**
 
@@ -297,11 +295,18 @@ curl --location --request DELETE 'http://localhost:3000/api/core/dataset/delete?
 | --- | --- | --- |
 | datasetId | 知识库ID | ✅ |
 | parentId： | 父级ID，不填则默认为根目录 |  |
+| customPdfParse | PDF增强解析。true: 开启PDF增强解析;不填则默认为false |  |
 | trainingType | 数据处理方式。chunk: 按文本长度进行分割;qa: 问答对提取 | ✅ |
+| chunkTriggerType | 分块条件逻辑。minSize（默认）: 大于 n 时分块;maxSize: 小于文件处理模型最大上下文时分块;forceChunk: 强制分块 | |
+| chunkTriggerMinSize | chunkTriggerType=minSize 时候填写，原文长度大于该值时候分块（默认 1000） | |
 | autoIndexes | 是否自动生成索引(仅商业版支持) |  |
 | imageIndex | 是否自动生成图片索引(仅商业版支持) |  |
-| chunkSize | 预估块大小 |  |
-| chunkSplitter | 自定义最高优先分割符号 |  |
+| chunkSettingMode | 分块参数模式。auto: 系统默认参数; custom: 手动指定参数 |  |
+| chunkSplitMode | 分块拆分模式。paragraph：段落优先，再按长度分；size: 按长度拆分; char: 按字符拆分。chunkSettingMode=auto时不生效。 |  |
+| paragraphChunkDeep | 最大段落深度（默认 5） | |
+| chunkSize | 分块大小，默认 1500。chunkSettingMode=auto时不生效。 |  |
+| indexSize | 索引大小，默认 512，必须小于索引模型最大token。chunkSettingMode=auto时不生效。 |  |
+| chunkSplitter | 自定义最高优先分割符号，除非超出文件处理最大上下文，否则不会进行进一步拆分。chunkSettingMode=auto时不生效。 |  |
 | qaPrompt | qa拆分提示词 |  |
 | tags |  集合标签（字符串数组） |  |
 | createTime | 文件创建时间（Date / String） |  |
@@ -389,9 +394,8 @@ curl --location --request POST 'http://localhost:3000/api/core/dataset/collectio
     "name":"测试训练",
 
     "trainingType": "qa",
-    "chunkSize":8000,
-    "chunkSplitter":"",
-    "qaPrompt":"11",
+    "chunkSettingMode": "auto",
+    "qaPrompt":"",
 
     "metadata":{}
 }'
@@ -409,10 +413,6 @@ curl --location --request POST 'http://localhost:3000/api/core/dataset/collectio
 - parentId： 父级ID，不填则默认为根目录
 - name: 集合名称（必填）
 - metadata： 元数据（暂时没啥用）
-- trainingType: 训练模式（必填）
-- chunkSize: 每个 chunk 的长度（可选）. chunk模式:100~3000; qa模式: 4000~模型最大token（16k模型通常建议不超过10000）
-- chunkSplitter: 自定义最高优先分割符号（可选）
-- qaPrompt: qa拆分自定义提示词（可选）
 {{% /alert %}}
 
 {{< /markdownify >}}
@@ -431,10 +431,7 @@ data 为集合的 ID。
   "data": {
       "collectionId": "65abcfab9d1448617cba5f0d",
       "results": {
-          "insertLen": 5, // 分割成多少段
-          "overToken": [],
-          "repeat": [],
-          "error": []
+          "insertLen": 5 // 分割成多少段
       }
   }
 }
@@ -462,8 +459,7 @@ curl --location --request POST 'http://localhost:3000/api/core/dataset/collectio
     "parentId": null,
 
     "trainingType": "chunk",
-    "chunkSize":512,
-    "chunkSplitter":"",
+    "chunkSettingMode": "auto",
     "qaPrompt":"",
 
     "metadata":{
@@ -483,10 +479,6 @@ curl --location --request POST 'http://localhost:3000/api/core/dataset/collectio
 - datasetId: 知识库的ID(必填)
 - parentId： 父级ID，不填则默认为根目录
 - metadata.webPageSelector: 网页选择器，用于指定网页中的哪个元素作为文本(可选)
-- trainingType:训练模式（必填）
-- chunkSize: 每个 chunk 的长度（可选）. chunk模式:100~3000; qa模式: 4000~模型最大token（16k模型通常建议不超过10000）
-- chunkSplitter: 自定义最高优先分割符号（可选）
-- qaPrompt: qa拆分自定义提示词（可选）
 {{% /alert %}}
 
 {{< /markdownify >}}
@@ -505,10 +497,7 @@ data 为集合的 ID。
     "data": {
         "collectionId": "65abd0ad9d1448617cba6031",
         "results": {
-            "insertLen": 1,
-            "overToken": [],
-            "repeat": [],
-            "error": []
+            "insertLen": 1
         }
     }
 }
@@ -545,13 +534,7 @@ curl --location --request POST 'http://localhost:3000/api/core/dataset/collectio
 
 {{% alert icon=" " context="success" %}}
 - file: 文件
-- data: 知识库相关信息（json序列化后传入）
-  - datasetId: 知识库的ID(必填)
-  - parentId： 父级ID，不填则默认为根目录
-  - trainingType:训练模式（必填）
-  - chunkSize: 每个 chunk 的长度（可选）. chunk模式:100~3000; qa模式: 4000~模型最大token（16k模型通常建议不超过10000）
-  - chunkSplitter: 自定义最高优先分割符号（可选）
-  - qaPrompt: qa拆分自定义提示词（可选）
+- data: 知识库相关信息（json序列化后传入）,参数说明见上方“通用创建参数说明”
 {{% /alert %}}
 
 {{< /markdownify >}}
@@ -560,7 +543,7 @@ curl --location --request POST 'http://localhost:3000/api/core/dataset/collectio
 {{< tab tabName="响应示例" >}}
 {{< markdownify >}}
 
-data 为集合的 ID。
+由于解析文档是异步操作，此处不会返回插入的数量。
 
 ```json
 {
@@ -570,10 +553,7 @@ data 为集合的 ID。
     "data": {
         "collectionId": "65abc044e4704bac793fbd81",
         "results": {
-            "insertLen": 1,
-            "overToken": [],
-            "repeat": [],
-            "error": []
+            "insertLen": 0
         }
     }
 }
@@ -646,10 +626,7 @@ data 为集合的 ID。
     "data": {
         "collectionId": "65abc044e4704bac793fbd81",
         "results": {
-            "insertLen": 1,
-            "overToken": [],
-            "repeat": [],
-            "error": []
+            "insertLen": 1
         }
     }
 }
@@ -659,7 +636,7 @@ data 为集合的 ID。
 {{< /tab >}}
 {{< /tabs >}}
 
-### 创建一个外部文件库集合（商业版）
+### 创建一个外部文件库集合（弃用）
 
 {{< tabs tabTotal="3" >}}
 {{< tab tabName="请求示例" >}}
@@ -716,10 +693,7 @@ data 为集合的 ID。
   "data": {
     "collectionId": "6646fcedfabd823cdc6de746",
     "results": {
-        "insertLen": 1,
-        "overToken": [],
-        "repeat": [],
-        "error": []
+        "insertLen": 1
     }
   }
 }

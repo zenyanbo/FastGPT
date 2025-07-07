@@ -1,11 +1,14 @@
 import type { ApiRequestProps, ApiResponseType } from '@fastgpt/service/type/next';
 import { NextAPI } from '@/service/middleware/entry';
-import { ParentIdType, ParentTreePathItemType } from '@fastgpt/global/common/parentFolder/type';
-import { getSystemPlugins } from '@/service/core/app/plugin';
+import {
+  type GetPathProps,
+  type ParentTreePathItemType
+} from '@fastgpt/global/common/parentFolder/type';
+import { parseI18nString } from '@fastgpt/global/common/i18n/utils';
+import { getLocale } from '@fastgpt/service/common/middle/i18n';
+import { getSystemPlugins } from '@fastgpt/service/core/app/plugin/controller';
 
-export type pathQuery = {
-  parentId: ParentIdType;
-};
+export type pathQuery = GetPathProps;
 
 export type pathBody = {};
 
@@ -15,19 +18,20 @@ async function handler(
   req: ApiRequestProps<pathBody, pathQuery>,
   res: ApiResponseType<any>
 ): Promise<pathResponse> {
-  const { parentId } = req.query;
+  const { sourceId: pluginId, type } = req.query;
+  const lang = getLocale(req);
 
-  if (!parentId) return [];
+  if (!pluginId) return [];
 
   const plugins = await getSystemPlugins();
-  const plugin = plugins.find((item) => item.id === parentId);
+  const plugin = plugins.find((item) => item.id === pluginId);
 
   if (!plugin) return [];
 
   return [
     {
-      parentId: plugin.id,
-      parentName: plugin.name
+      parentId: type === 'current' ? plugin.id : plugin.parentId,
+      parentName: parseI18nString(plugin.name, lang)
     }
   ];
 }

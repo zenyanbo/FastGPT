@@ -17,7 +17,7 @@ import { useRouter } from 'next/router';
 import { useUserStore } from '@/web/support/user/useUserStore';
 import { useChatStore } from '@/web/core/chat/context/useChatStore';
 import dynamic from 'next/dynamic';
-import { serviceSideProps } from '@fastgpt/web/common/system/nextjs';
+import { serviceSideProps } from '@/web/common/i18n/utils';
 import { clearToken } from '@/web/support/user/auth';
 import Script from 'next/script';
 import Loading from '@fastgpt/web/components/common/MyLoading';
@@ -29,7 +29,7 @@ import { GET } from '@/web/common/api/request';
 import { getDocPath } from '@/web/common/system/doc';
 import { getWebReqUrl } from '@fastgpt/web/common/system/utils';
 import LoginForm from '@/pageComponents/login/LoginForm/LoginForm';
-import { useToast } from '@fastgpt/web/hooks/useToast';
+import { getBdVId } from '@/web/support/marketing/utils';
 
 const RegisterForm = dynamic(() => import('@/pageComponents/login/RegisterForm'));
 const ForgetPasswordForm = dynamic(() => import('@/pageComponents/login/ForgetPasswordForm'));
@@ -48,7 +48,6 @@ const Login = ({ ChineseRedirectUrl }: { ChineseRedirectUrl: string }) => {
   const { setLastChatAppId } = useChatStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isPc } = useSystem();
-  const { toast } = useToast();
 
   const {
     isOpen: isOpenCookiesDrawer,
@@ -64,9 +63,12 @@ const Login = ({ ChineseRedirectUrl }: { ChineseRedirectUrl: string }) => {
       setUserInfo(res.user);
 
       const decodeLastRoute = decodeURIComponent(lastRoute);
-      // 检查是否是当前的 route
+
       const navigateTo =
-        decodeLastRoute && !decodeLastRoute.includes('/login') ? decodeLastRoute : '/app/list';
+        decodeLastRoute && !decodeLastRoute.includes('/login') && decodeLastRoute.startsWith('/')
+          ? lastRoute
+          : '/dashboard/apps';
+
       router.push(navigateTo);
     },
     [setUserInfo, lastRoute, router]
@@ -88,7 +90,7 @@ const Login = ({ ChineseRedirectUrl }: { ChineseRedirectUrl: string }) => {
 
   /* default login type */
   useEffect(() => {
-    const bd_vid = sessionStorage.getItem('bd_vid');
+    const bd_vid = getBdVId();
     if (bd_vid) {
       setPageType(LoginPageTypeEnum.passwordLogin);
       return;
@@ -129,7 +131,7 @@ const Login = ({ ChineseRedirectUrl }: { ChineseRedirectUrl: string }) => {
 
   useMount(() => {
     clearToken();
-    router.prefetch('/app/list');
+    router.prefetch('/dashboard/apps');
 
     ChineseRedirectUrl && showRedirect && checkIpInChina();
     localCookieVersion !== cookieVersion && onOpenCookiesDrawer();

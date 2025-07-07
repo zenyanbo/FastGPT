@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, type BoxProps } from '@chakra-ui/react';
 import MySelect from '@fastgpt/web/components/common/MySelect';
 import React from 'react';
 import type { PermissionValueType } from '@fastgpt/global/support/permission/type';
@@ -49,7 +49,7 @@ const DefaultPermissionList = ({
         <MySelect
           list={defaultPermissionSelectList}
           value={per}
-          onchange={(per) => {
+          onChange={(per) => {
             if (isInheritPermission && hasParent) {
               openConfirm(
                 () => onRequestChange(per),

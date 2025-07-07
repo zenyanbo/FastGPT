@@ -1,17 +1,14 @@
 import { MongoDatasetCollection } from './schema';
-import { ClientSession } from '../../../common/mongo';
+import type { ClientSession } from '../../../common/mongo';
 import { MongoDatasetCollectionTags } from '../tag/schema';
 import { readFromSecondary } from '../../../common/mongo/utils';
-import {
-  CollectionWithDatasetType,
-  DatasetCollectionSchemaType
-} from '@fastgpt/global/core/dataset/type';
+import type { CollectionWithDatasetType } from '@fastgpt/global/core/dataset/type';
+import { DatasetCollectionSchemaType } from '@fastgpt/global/core/dataset/type';
 import {
   DatasetCollectionDataProcessModeEnum,
   DatasetCollectionSyncResultEnum,
   DatasetCollectionTypeEnum,
   DatasetSourceReadTypeEnum,
-  DatasetTypeEnum,
   TrainingModeEnum
 } from '@fastgpt/global/core/dataset/constants';
 import { DatasetErrEnum } from '@fastgpt/global/common/error/code/dataset';
@@ -19,6 +16,7 @@ import { readDatasetSourceRawText } from '../read';
 import { hashStr } from '@fastgpt/global/common/string/tools';
 import { mongoSessionRun } from '../../../common/mongo/sessionRun';
 import { createCollectionAndInsertData, delCollection } from './controller';
+import { collectionCanSync } from '@fastgpt/global/core/dataset/collection/utils';
 
 /**
  * get all collection by top collectionId
@@ -137,10 +135,7 @@ export const collectionTagsToTagLabel = async ({
 export const syncCollection = async (collection: CollectionWithDatasetType) => {
   const dataset = collection.dataset;
 
-  if (
-    collection.type !== DatasetCollectionTypeEnum.link &&
-    dataset.type !== DatasetTypeEnum.apiDataset
-  ) {
+  if (!collectionCanSync(collection.type)) {
     return Promise.reject(DatasetErrEnum.notSupportSync);
   }
 
@@ -155,15 +150,18 @@ export const syncCollection = async (collection: CollectionWithDatasetType) => {
       };
     }
 
-    if (!collection.apiFileId) return Promise.reject('apiFileId is missing');
-    if (!dataset.apiServer) return Promise.reject('apiServer not found');
+    const sourceId = collection.apiFileId;
+
+    if (!sourceId) return Promise.reject('apiFileId is missing');
+
     return {
       type: DatasetSourceReadTypeEnum.apiFile,
-      sourceId: collection.apiFileId,
-      apiServer: dataset.apiServer
+      sourceId,
+      apiDatasetServer: dataset.apiDatasetServer
     };
   })();
-  const rawText = await readDatasetSourceRawText({
+
+  const { title, rawText } = await readDatasetSourceRawText({
     teamId: collection.teamId,
     tmbId: collection.tmbId,
     ...sourceReadType
@@ -194,32 +192,13 @@ export const syncCollection = async (collection: CollectionWithDatasetType) => {
       dataset,
       rawText: rawText,
       createCollectionParams: {
-        teamId: collection.teamId,
-        tmbId: collection.tmbId,
-        name: collection.name,
-        datasetId: collection.datasetId,
-        parentId: collection.parentId,
-        type: collection.type,
-
-        trainingType: collection.trainingType,
-        chunkSize: collection.chunkSize,
-        chunkSplitter: collection.chunkSplitter,
-        qaPrompt: collection.qaPrompt,
-
-        fileId: collection.fileId,
-        rawLink: collection.rawLink,
-        externalFileId: collection.externalFileId,
-        externalFileUrl: collection.externalFileUrl,
-        apiFileId: collection.apiFileId,
-
-        hashRawText,
-        rawTextLength: rawText.length,
-
-        metadata: collection.metadata,
-
-        tags: collection.tags,
-        createTime: collection.createTime,
-        updateTime: new Date()
+        ...collection,
+        name: title || collection.name,
+        updateTime: new Date(),
+        tags: await collectionTagsToTagLabel({
+          datasetId: collection.datasetId,
+          tags: collection.tags
+        })
       }
     });
   });
@@ -231,18 +210,37 @@ export const syncCollection = async (collection: CollectionWithDatasetType) => {
   QA: 独立进程
   Chunk: Image Index -> Auto index -> chunk index
 */
-export const getTrainingModeByCollection = (collection: {
-  trainingType: DatasetCollectionSchemaType['trainingType'];
-  autoIndexes?: DatasetCollectionSchemaType['autoIndexes'];
-  imageIndex?: DatasetCollectionSchemaType['imageIndex'];
+export const getTrainingModeByCollection = ({
+  trainingType,
+  autoIndexes,
+  imageIndex
+}: {
+  trainingType: DatasetCollectionDataProcessModeEnum;
+  autoIndexes?: boolean;
+  imageIndex?: boolean;
 }) => {
-  if (collection.trainingType === DatasetCollectionDataProcessModeEnum.qa) {
+  if (
+    trainingType === DatasetCollectionDataProcessModeEnum.imageParse &&
+    global.feConfigs?.isPlus
+  ) {
+    return TrainingModeEnum.imageParse;
+  }
+
+  if (trainingType === DatasetCollectionDataProcessModeEnum.qa) {
     return TrainingModeEnum.qa;
   }
-  if (collection.imageIndex && global.feConfigs?.isPlus) {
+  if (
+    trainingType === DatasetCollectionDataProcessModeEnum.chunk &&
+    imageIndex &&
+    global.feConfigs?.isPlus
+  ) {
     return TrainingModeEnum.image;
   }
-  if (collection.autoIndexes && global.feConfigs?.isPlus) {
+  if (
+    trainingType === DatasetCollectionDataProcessModeEnum.chunk &&
+    autoIndexes &&
+    global.feConfigs?.isPlus
+  ) {
     return TrainingModeEnum.auto;
   }
   return TrainingModeEnum.chunk;

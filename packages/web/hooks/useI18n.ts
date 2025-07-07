@@ -1,6 +1,6 @@
+import { LangEnum } from '@fastgpt/global/common/i18n/type';
 import Cookies from 'js-cookie';
 import { useTranslation } from 'next-i18next';
-import { LangEnum } from '../../../projects/app/src/web/common/utils/i18n';
 
 const LANG_KEY = 'NEXT_LOCALE';
 const isInIframe = () => {
@@ -44,7 +44,7 @@ export const useI18nLng = () => {
 
     await i18n?.changeLanguage?.(lang);
 
-    if (!i18n.hasResourceBundle(lang, 'common') && prevLang !== lang) {
+    if (!i18n?.hasResourceBundle?.(lang, 'common') && prevLang !== lang) {
       window?.location?.reload?.();
     }
   };

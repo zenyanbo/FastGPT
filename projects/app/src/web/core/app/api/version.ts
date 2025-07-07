@@ -1,7 +1,7 @@
-import { PostPublishAppProps } from '@/global/core/app/api';
+import type { PostPublishAppProps } from '@/global/core/app/api';
 import { GET, POST } from '@/web/common/api/request';
 import type { AppVersionSchemaType } from '@fastgpt/global/core/app/version';
-import { PaginationProps } from '@fastgpt/web/common/fetch/type';
+import type { PaginationProps } from '@fastgpt/web/common/fetch/type';
 import type {
   getLatestVersionQuery,
   getLatestVersionResponse
@@ -15,7 +15,7 @@ export const getAppLatestVersion = (data: getLatestVersionQuery) =>
 export const postPublishApp = (appId: string, data: PostPublishAppProps) =>
   POST(`/core/app/version/publish?appId=${appId}`, data);
 
-export const getWorkflowVersionList = (data: PaginationProps<{ appId: string }>) =>
+export const getAppVersionList = (data: PaginationProps<{ appId: string }>) =>
   POST<versionListResponse>('/core/app/version/list', data);
 
 export const getAppVersionDetail = (versionId: string, appId: string) =>

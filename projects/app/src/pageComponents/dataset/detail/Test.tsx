@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Textarea, Button, Flex, useTheme, useDisclosure } from '@chakra-ui/react';
-import { useSearchTestStore, SearchTestStoreItemType } from '@/web/core/dataset/store/searchTest';
+import {
+  useSearchTestStore,
+  type SearchTestStoreItemType
+} from '@/web/core/dataset/store/searchTest';
 import { postSearchText } from '@/web/core/dataset/api';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useRequest, useRequest2 } from '@fastgpt/web/hooks/useRequest';
@@ -10,7 +13,7 @@ import { useToast } from '@fastgpt/web/hooks/useToast';
 import { customAlphabet } from 'nanoid';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import { useTranslation } from 'next-i18next';
-import { SearchTestResponse } from '@/global/core/dataset/api';
+import { type SearchTestResponse } from '@/global/core/dataset/api';
 import {
   DatasetSearchModeEnum,
   DatasetSearchModeMap
@@ -27,8 +30,7 @@ import { useContextSelector } from 'use-context-selector';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
 import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
-
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 12);
+import { getNanoid } from '@fastgpt/global/common/string/tools';
 
 const DatasetParamsModal = dynamic(() => import('@/components/core/app/DatasetParamsModal'));
 
@@ -36,9 +38,14 @@ type FormType = {
   inputText: string;
   searchParams: {
     searchMode: `${DatasetSearchModeEnum}`;
+    embeddingWeight?: number;
+
+    usingReRank?: boolean;
+    rerankModel?: string;
+    rerankWeight?: number;
+
     similarity?: number;
     limit?: number;
-    usingReRank?: boolean;
     datasetSearchUsingExtensionQuery?: boolean;
     datasetSearchExtensionModel?: string;
     datasetSearchExtensionBg?: string;
@@ -53,7 +60,6 @@ const Test = ({ datasetId }: { datasetId: string }) => {
   const { pushDatasetTestItem } = useSearchTestStore();
   const [inputType, setInputType] = useState<'text' | 'file'>('text');
   const [datasetTestItem, setDatasetTestItem] = useState<SearchTestStoreItemType>();
-  const [refresh, setRefresh] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
   const { File, onOpen } = useSelectFile({
     fileType: '.csv',
@@ -66,7 +72,10 @@ const Test = ({ datasetId }: { datasetId: string }) => {
       inputText: '',
       searchParams: {
         searchMode: DatasetSearchModeEnum.embedding,
-        usingReRank: false,
+        embeddingWeight: 0.5,
+        usingReRank: true,
+        rerankModel: defaultModels?.rerank?.model,
+        rerankWeight: 0.5,
         limit: 5000,
         similarity: 0,
         datasetSearchUsingExtensionQuery: false,
@@ -77,6 +86,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
   });
 
   const searchModeData = DatasetSearchModeMap[getValues(`searchParams.searchMode`)];
+  const searchParams = getValues('searchParams');
 
   const {
     isOpen: isOpenSelectMode,
@@ -97,7 +107,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
         }
 
         const testItem: SearchTestStoreItemType = {
-          id: nanoid(),
+          id: getNanoid(),
           datasetId,
           text: getValues('inputText').trim(),
           time: new Date(),
@@ -111,12 +121,6 @@ const Test = ({ datasetId }: { datasetId: string }) => {
         };
         pushDatasetTestItem(testItem);
         setDatasetTestItem(testItem);
-      },
-      onError(err) {
-        toast({
-          title: getErrText(err),
-          status: 'error'
-        });
       }
     }
   );
@@ -160,7 +164,6 @@ const Test = ({ datasetId }: { datasetId: string }) => {
           <Flex alignItems={'center'} justifyContent={'space-between'}>
             <MySelect<'text' | 'file'>
               size={'sm'}
-              w={'150px'}
               list={[
                 {
                   label: (
@@ -186,7 +189,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
                 // }
               ]}
               value={inputType}
-              onchange={(e) => setInputType(e)}
+              onChange={(e) => setInputType(e)}
             />
 
             <Button
@@ -294,15 +297,14 @@ const Test = ({ datasetId }: { datasetId: string }) => {
 
       {isOpenSelectMode && (
         <DatasetParamsModal
-          {...getValues('searchParams')}
+          {...searchParams}
           maxTokens={20000}
           onClose={onCloseSelectMode}
           onSuccess={(e) => {
             setValue('searchParams', {
-              ...getValues('searchParams'),
+              ...searchParams,
               ...e
             });
-            setRefresh((state) => !state);
           }}
         />
       )}
@@ -447,7 +449,7 @@ const TestResults = React.memo(function TestResults({
           <Box mt={1} gap={4}>
             {datasetTestItem?.results.map((item, index) => (
               <Box key={item.id} p={3} borderRadius={'lg'} bg={'myGray.100'} _notLast={{ mb: 2 }}>
-                <QuoteItem quoteItem={item} canViewSource />
+                <QuoteItem quoteItem={item} canViewSource canEditData />
               </Box>
             ))}
           </Box>

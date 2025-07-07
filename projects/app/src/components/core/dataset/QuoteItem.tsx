@@ -8,14 +8,18 @@ import { useTranslation } from 'next-i18next';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import dynamic from 'next/dynamic';
 import MyBox from '@fastgpt/web/components/common/MyBox';
-import { SearchScoreTypeEnum, SearchScoreTypeMap } from '@fastgpt/global/core/dataset/constants';
+import {
+  DatasetCollectionTypeEnum,
+  SearchScoreTypeEnum,
+  SearchScoreTypeMap
+} from '@fastgpt/global/core/dataset/constants';
 import type { readCollectionSourceBody } from '@/pages/api/core/dataset/collection/read';
 import Markdown from '@/components/Markdown';
 
 const InputDataModal = dynamic(() => import('@/pageComponents/dataset/detail/InputDataModal'));
 
-type ScoreItemType = SearchDataResponseItemType['score'][0];
-const scoreTheme: Record<
+export type ScoreItemType = SearchDataResponseItemType['score'][0];
+export const scoreTheme: Record<
   string,
   {
     color: string;
@@ -44,58 +48,64 @@ const scoreTheme: Record<
   }
 };
 
+export const formatScore = (score: ScoreItemType[]) => {
+  if (!Array.isArray(score)) {
+    return {
+      primaryScore: undefined,
+      secondaryScore: []
+    };
+  }
+
+  // rrf -> rerank -> embedding -> fullText 优先级
+  let rrfScore: ScoreItemType | undefined = undefined;
+  let reRankScore: ScoreItemType | undefined = undefined;
+  let embeddingScore: ScoreItemType | undefined = undefined;
+  let fullTextScore: ScoreItemType | undefined = undefined;
+
+  score.forEach((item) => {
+    if (item.type === SearchScoreTypeEnum.rrf) {
+      rrfScore = item;
+    } else if (item.type === SearchScoreTypeEnum.reRank) {
+      reRankScore = item;
+    } else if (item.type === SearchScoreTypeEnum.embedding) {
+      embeddingScore = item;
+    } else if (item.type === SearchScoreTypeEnum.fullText) {
+      fullTextScore = item;
+    }
+  });
+
+  const primaryScore = (rrfScore ||
+    reRankScore ||
+    embeddingScore ||
+    fullTextScore) as unknown as ScoreItemType;
+  const secondaryScore = [rrfScore, reRankScore, embeddingScore, fullTextScore].filter(
+    // @ts-ignore
+    (item) => item && primaryScore && item.type !== primaryScore.type
+  ) as unknown as ScoreItemType[];
+
+  return {
+    primaryScore,
+    secondaryScore
+  };
+};
+
 const QuoteItem = ({
   quoteItem,
   canViewSource,
+  canEditData,
   canEditDataset,
   ...RawSourceBoxProps
 }: {
   quoteItem: SearchDataResponseItemType;
   canViewSource?: boolean;
+  canEditData?: boolean;
   canEditDataset?: boolean;
 } & Omit<readCollectionSourceBody, 'collectionId'>) => {
   const { t } = useTranslation();
   const [editInputData, setEditInputData] = useState<{ dataId: string; collectionId: string }>();
 
   const score = useMemo(() => {
-    if (!Array.isArray(quoteItem.score)) {
-      return {
-        primaryScore: undefined,
-        secondaryScore: []
-      };
-    }
-
-    // rrf -> rerank -> embedding -> fullText 优先级
-    let rrfScore: ScoreItemType | undefined = undefined;
-    let reRankScore: ScoreItemType | undefined = undefined;
-    let embeddingScore: ScoreItemType | undefined = undefined;
-    let fullTextScore: ScoreItemType | undefined = undefined;
-
-    quoteItem.score.forEach((item) => {
-      if (item.type === SearchScoreTypeEnum.rrf) {
-        rrfScore = item;
-      } else if (item.type === SearchScoreTypeEnum.reRank) {
-        reRankScore = item;
-      } else if (item.type === SearchScoreTypeEnum.embedding) {
-        embeddingScore = item;
-      } else if (item.type === SearchScoreTypeEnum.fullText) {
-        fullTextScore = item;
-      }
-    });
-
-    const primaryScore = (rrfScore ||
-      reRankScore ||
-      embeddingScore ||
-      fullTextScore) as unknown as ScoreItemType;
-    const secondaryScore = [rrfScore, reRankScore, embeddingScore, fullTextScore].filter(
-      // @ts-ignore
-      (item) => item && primaryScore && item.type !== primaryScore.type
-    ) as unknown as ScoreItemType[];
-
-    return {
-      primaryScore,
-      secondaryScore
-    };
+    return formatScore(quoteItem.score);
   }, [quoteItem.score]);
 
   return (
@@ -202,7 +212,7 @@ const QuoteItem = ({
             {...RawSourceBoxProps}
           />
           <Box flex={1} />
-          {quoteItem.id && canEditDataset && (
+          {quoteItem.id && canEditData && (
             <MyTooltip label={t('common:core.dataset.data.Edit')}>
               <Box
                 className="hover-data"
@@ -234,12 +244,13 @@ const QuoteItem = ({
             <Link
               as={NextLink}
               className="hover-data"
-              visibility={'hidden'}
+              display={'flex'}
               alignItems={'center'}
+              visibility={'hidden'}
               color={'primary.500'}
               href={`/dataset/detail?datasetId=${quoteItem.datasetId}&currentTab=dataCard&collectionId=${quoteItem.collectionId}`}
             >
-              {t('common:core.dataset.Go Dataset')}
+              {t('common:to_dataset')}
               <MyIcon name={'common/rightArrowLight'} w={'10px'} />
             </Link>
           )}

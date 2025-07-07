@@ -1,9 +1,10 @@
+'use client';
 import React from 'react';
 import {
   Grid,
   Box,
   Flex,
-  BoxProps,
+  type BoxProps,
   useTheme,
   Button,
   Table,
@@ -26,7 +27,7 @@ import { useLoading } from '@fastgpt/web/hooks/useLoading';
 import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import AccountContainer from '@/pageComponents/account/AccountContainer';
-import { serviceSideProps } from '@fastgpt/web/common/system/nextjs';
+import { serviceSideProps } from '@/web/common/i18n/utils';
 
 const Promotion = () => {
   const { t } = useTranslation();

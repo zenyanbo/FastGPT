@@ -18,9 +18,9 @@ import FillRowTabs from '@fastgpt/web/components/common/Tabs/FillRowTabs';
 import { useRequest2 } from '@fastgpt/web/hooks/useRequest';
 import EmptyTip from '@fastgpt/web/components/common/EmptyTip';
 import {
-  FlowNodeTemplateType,
-  NodeTemplateListItemType,
-  NodeTemplateListType
+  type FlowNodeTemplateType,
+  type NodeTemplateListItemType,
+  type NodeTemplateListType
 } from '@fastgpt/global/core/workflow/type/node.d';
 import MyIcon from '@fastgpt/web/components/common/Icon';
 import {
@@ -31,11 +31,10 @@ import {
 } from '@/web/core/app/api/plugin';
 import MyBox from '@fastgpt/web/components/common/MyBox';
 import { getTeamPlugTemplates } from '@/web/core/app/api/plugin';
-import { ParentIdType } from '@fastgpt/global/common/parentFolder/type';
+import { type ParentIdType } from '@fastgpt/global/common/parentFolder/type';
 import { getAppFolderPath } from '@/web/core/app/api/app';
 import FolderPath from '@/components/common/folder/Path';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
-import CostTooltip from '@/components/core/app/plugin/CostTooltip';
 import { NodeInputKeyEnum, NodeOutputKeyEnum } from '@fastgpt/global/core/workflow/constants';
 import { useContextSelector } from 'use-context-selector';
 import { AppContext } from '../../context';
@@ -43,7 +42,7 @@ import SearchInput from '@fastgpt/web/components/common/Input/SearchInput';
 import { useMemoizedFn } from 'ahooks';
 import MyAvatar from '@fastgpt/web/components/common/Avatar';
 import { FlowNodeInputTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
-import { AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
+import { type AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import type { LLMModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { workflowStartNodeId } from '@/web/core/app/constants';
@@ -112,8 +111,9 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
 
   const { data: paths = [] } = useRequest2(
     () => {
-      if (templateType === TemplateTypeEnum.teamPlugin) return getAppFolderPath(parentId);
-      return getSystemPluginPaths(parentId);
+      if (templateType === TemplateTypeEnum.teamPlugin)
+        return getAppFolderPath({ sourceId: parentId, type: 'current' });
+      return getSystemPluginPaths({ sourceId: parentId, type: 'current' });
     },
     {
       manual: false,
@@ -186,16 +186,18 @@ const ToolSelectModal = ({ onClose, ...props }: Props & { onClose: () => void })
       {/* route components */}
       {!searchKey && parentId && (
         <Flex mt={2} px={[3, 6]}>
-          <FolderPath paths={paths} FirstPathDom={null} onClick={() => onUpdateParentId(null)} />
+          <FolderPath paths={paths} FirstPathDom={null} onClick={onUpdateParentId} />
         </Flex>
       )}
-      <MyBox isLoading={isLoading} mt={2} px={[3, 6]} pb={3} flex={'1 0 0'} overflowY={'auto'}>
-        <RenderList
-          templates={templates}
-          type={templateType}
-          setParentId={onUpdateParentId}
-          {...props}
-        />
+      <MyBox isLoading={isLoading} mt={2} pb={3} flex={'1 0 0'} h={0}>
+        <Box px={[3, 6]} overflow={'overlay'} height={'100%'}>
+          <RenderList
+            templates={templates}
+            type={templateType}
+            setParentId={onUpdateParentId}
+            {...props}
+          />
+        </Box>
       </MyBox>
     </MyModal>
   );
@@ -268,38 +270,27 @@ const RenderList = React.memo(function RenderList({
           if (input.key === NodeInputKeyEnum.forbidStream) {
             return false;
           }
-          if (input.renderTypeList.includes(FlowNodeInputTypeEnum.input)) {
+          if (input.key === NodeInputKeyEnum.systemInputConfig) {
             return true;
           }
-          if (input.renderTypeList.includes(FlowNodeInputTypeEnum.textarea)) {
-            return true;
-          }
-          if (input.renderTypeList.includes(FlowNodeInputTypeEnum.numberInput)) {
-            return true;
-          }
-          if (input.renderTypeList.includes(FlowNodeInputTypeEnum.switch)) {
-            return true;
-          }
-          if (input.renderTypeList.includes(FlowNodeInputTypeEnum.select)) {
-            return true;
-          }
-          if (input.renderTypeList.includes(FlowNodeInputTypeEnum.JSONEditor)) {
-            return true;
-          }
-          return false;
+
+          // Check if input has any of the form render types
+          const formRenderTypes = [
+            FlowNodeInputTypeEnum.input,
+            FlowNodeInputTypeEnum.textarea,
+            FlowNodeInputTypeEnum.numberInput,
+            FlowNodeInputTypeEnum.switch,
+            FlowNodeInputTypeEnum.select,
+            FlowNodeInputTypeEnum.JSONEditor
+          ];
+
+          return formRenderTypes.some((type) => input.renderTypeList.includes(type));
         });
 
       // 构建默认表单数据
       const defaultForm = {
         ...res,
         inputs: res.inputs.map((input) => {
-          // 如果是模型选择类型,使用当前选中的模型
-          // if (input.renderTypeList.includes(FlowNodeInputTypeEnum.selectLLMModel)) {
-          //   return {
-          //     ...input,
-          //     value: selectedModel.model
-          //   };
-          // }
           // 如果是文件上传类型,设置为从工作流开始节点获取用户文件
           if (input.renderTypeList.includes(FlowNodeInputTypeEnum.fileSelect)) {
             return {
@@ -422,12 +413,12 @@ const RenderList = React.memo(function RenderList({
                           <Box mt={2} color={'myGray.500'} maxH={'100px'} overflow={'hidden'}>
                             {t(template.intro as any) || t('common:core.workflow.Not intro')}
                           </Box>
-                          {type === TemplateTypeEnum.systemPlugin && (
+                          {/* {type === TemplateTypeEnum.systemPlugin && (
                             <CostTooltip
                               cost={template.currentCost}
                               hasTokenFee={template.hasTokenFee}
                             />
-                          )}
+                          )} */}
                         </Box>
                       }
                     >
@@ -468,8 +459,33 @@ const RenderList = React.memo(function RenderList({
                             px={2}
                             fontSize={'mini'}
                           >
-                            {t('common:common.Remove')}
+                            {t('common:Remove')}
                           </Button>
+                        ) : template.flowNodeType === 'toolSet' ? (
+                          <Flex gap={2}>
+                            <Button
+                              size={'sm'}
+                              variant={'whiteBase'}
+                              isLoading={isLoading}
+                              leftIcon={<MyIcon name={'common/arrowRight'} w={'16px'} mr={-1.5} />}
+                              onClick={() => setParentId(template.id)}
+                              px={2}
+                              fontSize={'mini'}
+                            >
+                              {t('common:Open')}
+                            </Button>
+                            <Button
+                              size={'sm'}
+                              variant={'primaryOutline'}
+                              leftIcon={<MyIcon name={'common/addLight'} w={'16px'} mr={-1.5} />}
+                              isLoading={isLoading}
+                              onClick={() => onClickAdd(template)}
+                              px={2}
+                              fontSize={'mini'}
+                            >
+                              {t('common:Add')}
+                            </Button>
+                          </Flex>
                         ) : template.isFolder ? (
                           <Button
                             size={'sm'}
@@ -479,7 +495,7 @@ const RenderList = React.memo(function RenderList({
                             px={2}
                             fontSize={'mini'}
                           >
-                            {t('common:common.Open')}
+                            {t('common:Open')}
                           </Button>
                         ) : (
                           <Button
@@ -491,7 +507,7 @@ const RenderList = React.memo(function RenderList({
                             px={2}
                             fontSize={'mini'}
                           >
-                            {t('common:common.Add')}
+                            {t('common:Add')}
                           </Button>
                         )}
                       </Flex>
@@ -509,7 +525,7 @@ const RenderList = React.memo(function RenderList({
   return templates.length === 0 ? (
     <EmptyTip text={t('app:module.No Modules')} />
   ) : (
-    <Box flex={'1 0 0'} overflow={'overlay'}>
+    <>
       <Accordion defaultIndex={[0]} allowMultiple reduceMotion>
         {formatTemplatesArray.length > 1 ? (
           <>
@@ -545,6 +561,6 @@ const RenderList = React.memo(function RenderList({
           onAddTool={onAddTool}
         />
       )}
-    </Box>
+    </>
   );
 });

@@ -1,5 +1,5 @@
 import { AppSchema } from '../../core/app/type';
-import { PublishChannelEnum } from './constant';
+import type { PublishChannelEnum } from './constant';
 import { RequireOnlyOne } from '../../common/type/utils';
 
 // Feishu Config interface
@@ -63,6 +63,8 @@ export type OutLinkSchema<T extends OutlinkAppType = undefined> = {
   responseDetail: boolean;
   // whether to hide the node status
   showNodeStatus?: boolean;
+  // wheter to show the full text reader
+  // showFullText?: boolean;
   // whether to show the complete quote
   showRawSource?: boolean;
 
@@ -89,6 +91,7 @@ export type OutLinkEditType<T = undefined> = {
   name: string;
   responseDetail?: OutLinkSchema<T>['responseDetail'];
   showNodeStatus?: OutLinkSchema<T>['showNodeStatus'];
+  // showFullText?: OutLinkSchema<T>['showFullText'];
   showRawSource?: OutLinkSchema<T>['showRawSource'];
   // response when request
   immediateResponse?: string;

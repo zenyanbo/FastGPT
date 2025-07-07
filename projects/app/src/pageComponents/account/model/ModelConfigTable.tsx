@@ -20,7 +20,7 @@ import { useTranslation } from 'next-i18next';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   ModelProviderList,
-  ModelProviderIdType,
+  type ModelProviderIdType,
   getModelProvider
 } from '@fastgpt/global/core/ai/provider';
 import MySelect from '@fastgpt/web/components/common/MySelect';
@@ -40,8 +40,7 @@ import {
   putUpdateDefaultModels
 } from '@/web/core/ai/config';
 import MyBox from '@fastgpt/web/components/common/MyBox';
-import { SystemModelItemType } from '@fastgpt/service/core/ai/type';
-import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
+import { type SystemModelItemType } from '@fastgpt/service/core/ai/type';
 import MyIconButton from '@fastgpt/web/components/common/Icon/button';
 import JsonEditor from '@fastgpt/web/components/common/Textarea/JsonEditor';
 import { clientInitData } from '@/web/common/system/staticData';
@@ -54,6 +53,7 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import AIModelSelector from '@/components/Select/AIModelSelector';
 import MyDivider from '@fastgpt/web/components/common/MyDivider';
 import { AddModelButton } from './AddModelBox';
+import PopoverConfirm from '@fastgpt/web/components/common/MyPopover/PopoverConfirm';
 
 const MyModal = dynamic(() => import('@fastgpt/web/components/common/MyModal'));
 const ModelEditModal = dynamic(() => import('./AddModelBox').then((mod) => mod.ModelEditModal));
@@ -67,7 +67,7 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
 
   const [provider, setProvider] = useState<ModelProviderIdType | ''>('');
   const providerList = useRef<{ label: any; value: ModelProviderIdType | '' }[]>([
-    { label: t('common:common.All'), value: '' },
+    { label: t('common:All'), value: '' },
     ...ModelProviderList.map((item) => ({
       label: (
         <HStack>
@@ -81,7 +81,7 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
 
   const [modelType, setModelType] = useState<ModelTypeEnum | ''>('');
   const selectModelTypeList = useRef<{ label: string; value: ModelTypeEnum | '' }[]>([
-    { label: t('common:common.All'), value: '' },
+    { label: t('common:All'), value: '' },
     ...modelTypeList.map((item) => ({ label: t(item.label), value: item.value }))
   ]);
 
@@ -110,14 +110,14 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
           typeof item.inputPrice === 'number' ? (
             <Box>
               <Flex>
-                {`${t('common:common.Input')}:`}
+                {`${t('common:Input')}:`}
                 <Box fontWeight={'bold'} color={'myGray.900'} mr={0.5} ml={2}>
                   {item.inputPrice || 0}
                 </Box>
                 {`${t('common:support.wallet.subscription.point')} / 1K Tokens`}
               </Flex>
               <Flex>
-                {`${t('common:common.Output')}:`}
+                {`${t('common:Output')}:`}
                 <Box fontWeight={'bold'} color={'myGray.900'} mr={0.5} ml={2}>
                   {item.outputPrice || 0}
                 </Box>
@@ -141,6 +141,7 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
         typeLabel: t('common:model.type.embedding'),
         priceLabel: (
           <Flex color={'myGray.700'}>
+            {`${t('common:Input')}: `}
             <Box fontWeight={'bold'} color={'myGray.900'} mr={0.5}>
               {item.charsPointsPrice || 0}
             </Box>
@@ -184,7 +185,17 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
       .map((item) => ({
         ...item,
         typeLabel: t('common:model.type.reRank'),
-        priceLabel: <Flex color={'myGray.700'}>- </Flex>,
+        priceLabel: item.charsPointsPrice ? (
+          <Flex color={'myGray.700'}>
+            {`${t('common:Input')}: `}
+            <Box fontWeight={'bold'} color={'myGray.900'} mr={0.5}>
+              {item.charsPointsPrice}
+            </Box>
+            {` ${t('common:support.wallet.subscription.point')} / 1K Tokens`}
+          </Flex>
+        ) : (
+          '-'
+        ),
         tagColor: 'red'
       }));
 
@@ -243,16 +254,12 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
 
   const { runAsync: onTestModel, loading: testingModel } = useRequest2(getTestModel, {
     manual: true,
-    successToast: t('common:common.Success')
+    successToast: t('common:Success')
   });
   const { runAsync: updateModel, loading: updatingModel } = useRequest2(putSystemModel, {
     onSuccess: refreshModels
   });
 
-  const { ConfirmModal, openConfirm } = useConfirm({
-    type: 'delete',
-    content: t('account:model.delete_model_confirm')
-  });
   const { runAsync: deleteModel } = useRequest2(deleteSystemModel, {
     onSuccess: refreshModels
   });
@@ -280,6 +287,10 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
 
       isCustom: true,
       isActive: true,
+
+      isDefault: false,
+      isDefaultDatasetTextModel: false,
+      isDefaultDatasetImageModel: false,
       // @ts-ignore
       type
     });
@@ -326,7 +337,7 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
                 w={'200px'}
                 bg={'myGray.50'}
                 value={provider}
-                onchange={setProvider}
+                onChange={setProvider}
                 list={filterProviderList}
               />
             </HStack>
@@ -338,7 +349,7 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
                 w={'150px'}
                 bg={'myGray.50'}
                 value={modelType}
-                onchange={setModelType}
+                onChange={setModelType}
                 list={selectModelTypeList.current}
               />
             </HStack>
@@ -436,7 +447,7 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
                         <MyIconButton
                           icon={'core/chat/sendLight'}
                           tip={t('account:model.test_model')}
-                          onClick={() => onTestModel(item.model)}
+                          onClick={() => onTestModel({ model: item.model })}
                         />
                         <MyIconButton
                           icon={'common/settingLight'}
@@ -444,10 +455,15 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
                           onClick={() => onEditModel(item.model)}
                         />
                         {item.isCustom && (
-                          <MyIconButton
-                            icon={'delete'}
-                            hoverColor={'red.500'}
-                            onClick={() => openConfirm(() => deleteModel({ model: item.model }))()}
+                          <PopoverConfirm
+                            Trigger={
+                              <Box>
+                                <MyIconButton icon={'delete'} hoverColor={'red.500'} />
+                              </Box>
+                            }
+                            type="delete"
+                            content={t('account:model.delete_model_confirm')}
+                            onConfirm={() => deleteModel({ model: item.model })}
                           />
                         )}
                       </HStack>
@@ -460,7 +476,6 @@ const ModelTable = ({ Tab }: { Tab: React.ReactNode }) => {
         </Flex>
       </MyBox>
 
-      <ConfirmModal />
       {!!editModelData && (
         <ModelEditModal
           modelData={editModelData}
@@ -495,9 +510,6 @@ const JsonConfigModal = ({
     }
   });
 
-  const { openConfirm, ConfirmModal } = useConfirm({
-    content: t('account:model.json_config_confirm')
-  });
   const { runAsync } = useRequest2(putUpdateWithJson, {
     onSuccess: () => {
       onSuccess();
@@ -525,20 +537,16 @@ const JsonConfigModal = ({
       </ModalBody>
       <ModalFooter>
         <Button variant={'whiteBase'} mr={4} onClick={onClose}>
-          {t('common:common.Cancel')}
+          {t('common:Cancel')}
         </Button>
-        <Button
-          onClick={() =>
-            openConfirm(() => {
-              return runAsync({ config: data });
-            })()
-          }
-        >
-          {t('common:common.Confirm')}
-        </Button>
-      </ModalFooter>
 
-      <ConfirmModal />
+        <PopoverConfirm
+          Trigger={<Button>{t('common:Confirm')}</Button>}
+          type="info"
+          content={t('account:model.json_config_confirm')}
+          onConfirm={() => runAsync({ config: data })}
+        />
+      </ModalFooter>
     </MyModal>
   );
 };
@@ -576,7 +584,7 @@ const DefaultModelModal = ({
       onSuccess();
       onClose();
     },
-    successToast: t('common:common.Update Success')
+    successToast: t('common:update_success')
   });
 
   return (
@@ -597,7 +605,7 @@ const DefaultModelModal = ({
                 value: item.model,
                 label: item.name
               }))}
-              onchange={(e) => {
+              onChange={(e) => {
                 setDefaultData((state) => ({
                   ...state,
                   llm: llmModelList.find((item) => item.model === e)
@@ -616,7 +624,7 @@ const DefaultModelModal = ({
                 value: item.model,
                 label: item.name
               }))}
-              onchange={(e) => {
+              onChange={(e) => {
                 setDefaultData((state) => ({
                   ...state,
                   embedding: embeddingModelList.find((item) => item.model === e)
@@ -635,7 +643,7 @@ const DefaultModelModal = ({
                 value: item.model,
                 label: item.name
               }))}
-              onchange={(e) => {
+              onChange={(e) => {
                 setDefaultData((state) => ({
                   ...state,
                   tts: ttsModelList.find((item) => item.model === e)
@@ -654,7 +662,7 @@ const DefaultModelModal = ({
                 value: item.model,
                 label: item.name
               }))}
-              onchange={(e) => {
+              onChange={(e) => {
                 setDefaultData((state) => ({
                   ...state,
                   stt: sttModelList.find((item) => item.model === e)
@@ -673,7 +681,7 @@ const DefaultModelModal = ({
                 value: item.model,
                 label: item.name
               }))}
-              onchange={(e) => {
+              onChange={(e) => {
                 setDefaultData((state) => ({
                   ...state,
                   rerank: reRankModelList.find((item) => item.model === e)
@@ -696,7 +704,7 @@ const DefaultModelModal = ({
                 value: item.model,
                 label: item.name
               }))}
-              onchange={(e) => {
+              onChange={(e) => {
                 setDefaultData((state) => ({
                   ...state,
                   datasetTextLLM: datasetModelList.find((item) => item.model === e)
@@ -718,7 +726,7 @@ const DefaultModelModal = ({
                 value: item.model,
                 label: item.name
               }))}
-              onchange={(e) => {
+              onChange={(e) => {
                 setDefaultData((state) => ({
                   ...state,
                   datasetImageLLM: vlmModelList.find((item) => item.model === e)
@@ -730,7 +738,7 @@ const DefaultModelModal = ({
       </ModalBody>
       <ModalFooter>
         <Button variant={'whiteBase'} mr={4} onClick={onClose}>
-          {t('common:common.Cancel')}
+          {t('common:Cancel')}
         </Button>
         <Button
           isLoading={loading}
@@ -746,7 +754,7 @@ const DefaultModelModal = ({
             })
           }
         >
-          {t('common:common.Confirm')}
+          {t('common:Confirm')}
         </Button>
       </ModalFooter>
     </MyModal>

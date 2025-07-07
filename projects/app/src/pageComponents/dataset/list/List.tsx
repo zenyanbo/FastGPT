@@ -9,7 +9,7 @@ import PermissionIconText from '@/components/support/permission/IconText';
 import Avatar from '@fastgpt/web/components/common/Avatar';
 import { useConfirm } from '@fastgpt/web/hooks/useConfirm';
 import { useRequest, useRequest2 } from '@fastgpt/web/hooks/useRequest';
-import { DatasetItemType } from '@fastgpt/global/core/dataset/type';
+import { type DatasetItemType } from '@fastgpt/global/core/dataset/type';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import { checkTeamExportDatasetLimit } from '@/web/support/user/team/api';
 import { downloadFetch } from '@/web/common/system/utils';
@@ -48,9 +48,10 @@ function List() {
     onDelDataset,
     onUpdateDataset,
     myDatasets,
-    folderDetail
+    folderDetail,
+    setSearchKey
   } = useContextSelector(DatasetsContext, (v) => v);
-  const [editPerDatasetIndex, setEditPerDatasetIndex] = useState<number>();
+  const [editPerDatasetId, setEditPerDatasetId] = useState<string>();
   const router = useRouter();
   const { parentId = null } = router.query as { parentId?: string | null };
   const parentDataset = useMemo(
@@ -81,8 +82,8 @@ function List() {
   });
 
   const editPerDataset = useMemo(
-    () => (editPerDatasetIndex !== undefined ? myDatasets[editPerDatasetIndex] : undefined),
-    [editPerDatasetIndex, myDatasets]
+    () => myDatasets.find((item) => String(item._id) === String(editPerDatasetId)),
+    [editPerDatasetId, myDatasets]
   );
 
   const { mutate: exportDataset } = useRequest({
@@ -160,8 +161,8 @@ function List() {
                   <Flex flexDirection={'column'} alignItems={'center'}>
                     <Box fontSize={'xs'} color={'myGray.500'}>
                       {dataset.type === DatasetTypeEnum.folder
-                        ? t('common:common.folder.Open folder')
-                        : t('common:common.folder.open_dataset')}
+                        ? t('common:open_folder')
+                        : t('common:folder.open_dataset')}
                     </Box>
                   </Flex>
                 }
@@ -201,6 +202,7 @@ function List() {
                   }}
                   onClick={() => {
                     if (dataset.type === DatasetTypeEnum.folder) {
+                      setSearchKey('');
                       router.push({
                         pathname: '/dataset/list',
                         query: {
@@ -239,8 +241,8 @@ function List() {
                   <Box
                     flex={1}
                     className={'textEllipsis3'}
+                    whiteSpace={'pre-wrap'}
                     py={3}
-                    wordBreak={'break-all'}
                     fontSize={'xs'}
                     color={'myGray.500'}
                   >
@@ -344,7 +346,7 @@ function List() {
                                         {
                                           icon: 'key',
                                           label: t('common:permission.Permission'),
-                                          onClick: () => setEditPerDatasetIndex(index)
+                                          onClick: () => setEditPerDatasetId(dataset._id)
                                         }
                                       ]
                                     : [])
@@ -371,7 +373,7 @@ function List() {
                                       children: [
                                         {
                                           icon: 'delete',
-                                          label: t('common:common.Delete'),
+                                          label: t('common:Delete'),
                                           type: 'danger' as 'danger',
                                           onClick: () => onClickDeleteDataset(dataset._id)
                                         }
@@ -447,7 +449,7 @@ function List() {
               }),
             refreshDeps: [editPerDataset._id, editPerDataset.inheritPermission]
           }}
-          onClose={() => setEditPerDatasetIndex(undefined)}
+          onClose={() => setEditPerDatasetId(undefined)}
         />
       )}
       <ConfirmModal />

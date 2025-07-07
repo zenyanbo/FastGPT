@@ -1,6 +1,6 @@
 export enum CodeClassNameEnum {
   guide = 'guide',
-  questionGuide = 'questionGuide',
+  questionguide = 'questionguide',
   mermaid = 'mermaid',
   echarts = 'echarts',
   quote = 'quote',
@@ -8,6 +8,7 @@ export enum CodeClassNameEnum {
   latex = 'latex',
   iframe = 'iframe',
   html = 'html',
+  svg = 'svg',
   video = 'video',
   audio = 'audio'
 }
@@ -45,10 +46,15 @@ export const mdTextFormat = (text: string) => {
     return match;
   });
 
-  // Process quotes and other markdown elements
+  // 处理 [quote:id] 格式引用，将 [quote:675934a198f46329dfc6d05a] 转换为 [675934a198f46329dfc6d05a](CITE)
   text = text
-    .replace(/\[quote:?\s*([a-f0-9]{24})\](?!\()/gi, '[$1](QUOTE)')
-    .replace(/\[([a-f0-9]{24})\](?!\()/g, '[$1](QUOTE)');
+    // 处理 格式引用，将 [675934a198f46329dfc6d05a] 转换为 [675934a198f46329dfc6d05a](CITE)
+    .replace(/\[([a-f0-9]{24})\](?!\()/g, '[$1](CITE)');
+  // 将 "http://localhost:3000[675934a198f46329dfc6d05a](CITE)" -> "http://localhost:3000 [675934a198f46329dfc6d05a](CITE)"
+  text = text.replace(
+    /(https?:\/\/[^\s，。！？；：、\[\]]+?)(?=\[([a-f0-9]{24})\]\(CITE\))/g,
+    '$1 '
+  );
 
   // Handle links followed by Chinese punctuation
   text = text.replace(/(https?:\/\/[^\s，。！？；：、]+)([，。！？；：、])/g, '$1 $2');

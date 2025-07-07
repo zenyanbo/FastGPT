@@ -91,8 +91,8 @@ const LafAccountModal = ({
       initUserInfo();
       onClose();
     },
-    successToast: t('common:common.Update Success'),
-    errorToast: t('common:common.Update Failed')
+    successToast: t('common:update_success'),
+    errorToast: t('common:update_failed')
   });
 
   return (
@@ -101,7 +101,7 @@ const LafAccountModal = ({
         <Box fontSize={'sm'} color={'myGray.500'}>
           <Box>{t('common:support.user.Laf account intro')}</Box>
           <Box textDecoration={'underline'}>
-            <Link href={getDocPath('/docs/guide/workbench/workflow/laf/')} isExternal>
+            <Link href={getDocPath('/docs/guide/dashboard/workflow/laf/')} isExternal>
               {t('common:support.user.Laf account course')}
             </Link>
           </Box>
@@ -164,7 +164,7 @@ const LafAccountModal = ({
               }
               placeholder={t('common:plugin.App')}
               value={watch('appid')}
-              onchange={(e) => {
+              onChange={(e) => {
                 setValue('appid', e);
               }}
               {...(register('appid'), { required: true })}
@@ -180,11 +180,11 @@ const LafAccountModal = ({
             onClose();
           }}
         >
-          {t('common:common.Close')}
+          {t('common:Close')}
         </Button>
         {appid && (
           <Button ml={3} isLoading={isUpdating} onClick={handleSubmit((data) => onSubmit(data))}>
-            {t('common:common.Update')}
+            {t('common:Update')}
           </Button>
         )}
       </ModalFooter>

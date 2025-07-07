@@ -1,20 +1,21 @@
 import type { FlowNodeTemplateType, StoreNodeItemType } from '../workflow/type/node';
-import { AppTypeEnum } from './constants';
+import type { AppTypeEnum } from './constants';
 import { PermissionTypeEnum } from '../../support/permission/constant';
-import {
+import type {
   NodeInputKeyEnum,
   VariableInputEnum,
   WorkflowIOValueTypeEnum
 } from '../workflow/constants';
-import { SelectedDatasetType } from '../workflow/api';
-import { DatasetSearchModeEnum } from '../dataset/constants';
+import type { SelectedDatasetType } from '../workflow/type/io';
+import type { DatasetSearchModeEnum } from '../dataset/constants';
 import { TeamTagSchema as TeamTagsSchemaType } from '@fastgpt/global/support/user/team/type.d';
-import { StoreEdgeItemType } from '../workflow/type/edge';
-import { AppPermission } from '../../support/permission/app/controller';
-import { ParentIdType } from '../../common/parentFolder/type';
+import type { StoreEdgeItemType } from '../workflow/type/edge';
+import type { AppPermission } from '../../support/permission/app/controller';
+import type { ParentIdType } from '../../common/parentFolder/type';
 import { FlowNodeInputTypeEnum } from '../../core/workflow/node/constant';
-import { WorkflowTemplateBasicType } from '@fastgpt/global/core/workflow/type';
-import { SourceMemberType } from '../../support/user/type';
+import type { WorkflowTemplateBasicType } from '@fastgpt/global/core/workflow/type';
+import type { SourceMemberType } from '../../support/user/type';
+import type { JSONSchemaInputType } from './jsonschema';
 
 export type AppSchema = {
   _id: string;
@@ -71,6 +72,20 @@ export type AppDetailType = AppSchema & {
   permission: AppPermission;
 };
 
+export type AppDatasetSearchParamsType = {
+  searchMode: `${DatasetSearchModeEnum}`;
+  limit?: number; // limit max tokens
+  similarity?: number;
+  embeddingWeight?: number; // embedding weight, fullText weight = 1 - embeddingWeight
+
+  usingReRank?: boolean;
+  rerankModel?: string;
+  rerankWeight?: number;
+
+  datasetSearchUsingExtensionQuery?: boolean;
+  datasetSearchExtensionModel?: string;
+  datasetSearchExtensionBg?: string;
+};
 export type AppSimpleEditFormType = {
   // templateId: string;
   aiSettings: {
@@ -88,16 +103,15 @@ export type AppSimpleEditFormType = {
   };
   dataset: {
     datasets: SelectedDatasetType;
-    searchMode: `${DatasetSearchModeEnum}`;
-    similarity?: number;
-    limit?: number;
-    usingReRank?: boolean;
-    datasetSearchUsingExtensionQuery?: boolean;
-    datasetSearchExtensionModel?: string;
-    datasetSearchExtensionBg?: string;
-  };
+  } & AppDatasetSearchParamsType;
   selectedTools: FlowNodeTemplateType[];
   chatConfig: AppChatConfigType;
+};
+
+export type McpToolConfigType = {
+  name: string;
+  description: string;
+  inputSchema: JSONSchemaInputType;
 };
 
 /* app chat config type */

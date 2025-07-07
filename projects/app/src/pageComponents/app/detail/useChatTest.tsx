@@ -5,13 +5,13 @@ import { streamFetch } from '@/web/common/api/fetch';
 import { useMemoizedFn } from 'ahooks';
 import { useContextSelector } from 'use-context-selector';
 import { AppContext } from './context';
-import { StoreNodeItemType } from '@fastgpt/global/core/workflow/type/node';
-import { StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
+import { type StoreNodeItemType } from '@fastgpt/global/core/workflow/type/node';
+import { type StoreEdgeItemType } from '@fastgpt/global/core/workflow/type/edge';
 import { FlowNodeTypeEnum } from '@fastgpt/global/core/workflow/node/constant';
 import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 import dynamic from 'next/dynamic';
 import { Box } from '@chakra-ui/react';
-import { AppChatConfigType } from '@fastgpt/global/core/app/type';
+import { type AppChatConfigType } from '@fastgpt/global/core/app/type';
 import ChatBox from '@/components/core/chat/ChatContainer/ChatBox';
 import { useChatStore } from '@/web/core/chat/context/useChatStore';
 import { ChatItemContext } from '@/web/core/chat/context/chatItemContext';
@@ -48,7 +48,7 @@ export const useChatTest = ({
       const histories = messages.slice(-1);
 
       // 流请求，获取数据
-      const { responseText, responseData } = await streamFetch({
+      const { responseText } = await streamFetch({
         url: '/api/core/chat/chatTest',
         data: {
           // Send histories and user messages
@@ -66,7 +66,7 @@ export const useChatTest = ({
         abortCtrl: controller
       });
 
-      return { responseText, responseData };
+      return { responseText };
     }
   );
 
@@ -126,7 +126,7 @@ export const useChatTest = ({
 
   const CustomChatContainer = useMemoizedFn(() =>
     appDetail.type === AppTypeEnum.plugin ? (
-      <Box p={5}>
+      <Box p={5} pb={16}>
         <PluginRunBox
           appId={appId}
           chatId={chatId}
@@ -140,7 +140,7 @@ export const useChatTest = ({
         appId={appId}
         chatId={chatId}
         showMarkIcon
-        chatType="chat"
+        chatType={'chat'}
         onStartChat={startChat}
       />
     )

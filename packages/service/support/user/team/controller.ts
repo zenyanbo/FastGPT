@@ -1,5 +1,5 @@
-import { TeamSchema, TeamTmbItemType } from '@fastgpt/global/support/user/team/type';
-import { ClientSession, Types } from '../../../common/mongo';
+import { type TeamSchema, type TeamTmbItemType } from '@fastgpt/global/support/user/team/type';
+import { type ClientSession, Types } from '../../../common/mongo';
 import {
   TeamMemberRoleEnum,
   TeamMemberStatusEnum,
@@ -7,7 +7,7 @@ import {
 } from '@fastgpt/global/support/user/team/constant';
 import { MongoTeamMember } from './teamMemberSchema';
 import { MongoTeam } from './teamSchema';
-import { UpdateTeamProps } from '@fastgpt/global/support/user/team/controller';
+import { type UpdateTeamProps } from '@fastgpt/global/support/user/team/controller';
 import { getResourcePermission } from '../../permission/controller';
 import { PerResourceTypeEnum } from '@fastgpt/global/support/permission/constant';
 import { TeamPermission } from '@fastgpt/global/support/permission/user/controller';
@@ -55,6 +55,14 @@ async function getTeamMember(match: Record<string, any>): Promise<TeamTmbItemTyp
   };
 }
 
+export const getTeamOwner = async (teamId: string) => {
+  const tmb = await MongoTeamMember.findOne({
+    teamId,
+    role: TeamMemberRoleEnum.owner
+  }).lean();
+  return tmb;
+};
+
 export async function getTmbInfoByTmbId({ tmbId }: { tmbId: string }) {
   if (!tmbId) {
     return Promise.reject('tmbId or userId is required');
@@ -87,8 +95,7 @@ export async function createDefaultTeam({
 }) {
   // auth default team
   const tmb = await MongoTeamMember.findOne({
-    userId: new Types.ObjectId(userId),
-    defaultTeam: true
+    userId: new Types.ObjectId(userId)
   });
 
   if (!tmb) {
@@ -113,8 +120,7 @@ export async function createDefaultTeam({
           name: 'Owner',
           role: TeamMemberRoleEnum.owner,
           status: TeamMemberStatusEnum.active,
-          createTime: new Date(),
-          defaultTeam: true
+          createTime: new Date()
         }
       ],
       { session }

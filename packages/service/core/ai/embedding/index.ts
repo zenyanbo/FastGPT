@@ -1,4 +1,4 @@
-import { EmbeddingModelItemType } from '@fastgpt/global/core/ai/model.d';
+import { type EmbeddingModelItemType } from '@fastgpt/global/core/ai/model.d';
 import { getAIApi } from '../config';
 import { countPromptTokens } from '../../../common/string/tiktoken/index';
 import { EmbeddingTypeEnm } from '@fastgpt/global/core/ai/constants';
@@ -8,10 +8,11 @@ type GetVectorProps = {
   model: EmbeddingModelItemType;
   input: string;
   type?: `${EmbeddingTypeEnm}`;
+  headers?: Record<string, string>;
 };
 
 // text to vector
-export async function getVectorsByText({ model, input, type }: GetVectorProps) {
+export async function getVectorsByText({ model, input, type, headers }: GetVectorProps) {
   if (!input) {
     return Promise.reject({
       code: 500,
@@ -35,13 +36,12 @@ export async function getVectorsByText({ model, input, type }: GetVectorProps) {
         model.requestUrl
           ? {
               path: model.requestUrl,
-              headers: model.requestAuth
-                ? {
-                    Authorization: `Bearer ${model.requestAuth}`
-                  }
-                : undefined
+              headers: {
+                ...(model.requestAuth ? { Authorization: `Bearer ${model.requestAuth}` } : {}),
+                ...headers
+              }
             }
-          : {}
+          : { headers }
       )
       .then(async (res) => {
         if (!res.data) {

@@ -56,7 +56,7 @@ const EditResourceModal = ({
         <Box>
           <FormLabel mb={1}>{t('common:core.app.Name and avatar')}</FormLabel>
           <HStack spacing={4}>
-            <MyTooltip label={t('common:common.Set Avatar')}>
+            <MyTooltip label={t('common:set_avatar')}>
               <Avatar
                 flex={'0 0 2rem'}
                 src={avatar}
@@ -71,18 +71,18 @@ const EditResourceModal = ({
               {...register('name', { required: true })}
               bg={'myGray.50'}
               autoFocus
-              maxLength={20}
+              maxLength={100}
             />
           </HStack>
         </Box>
         <Box mt={4}>
-          <FormLabel mb={1}>{t('common:common.Intro')}</FormLabel>
+          <FormLabel mb={1}>{t('common:Intro')}</FormLabel>
           <Textarea {...register('intro')} bg={'myGray.50'} maxLength={200} />
         </Box>
       </ModalBody>
       <ModalFooter>
         <Button isLoading={loading} onClick={handleSubmit(onSave)} px={6}>
-          {t('common:common.Confirm')}
+          {t('common:Confirm')}
         </Button>
       </ModalFooter>
 

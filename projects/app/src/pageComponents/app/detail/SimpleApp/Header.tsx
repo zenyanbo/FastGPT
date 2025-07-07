@@ -8,7 +8,7 @@ import { Box, Flex, IconButton } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import RouteTab from '../RouteTab';
 import { useTranslation } from 'next-i18next';
-import { AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
+import { type AppSimpleEditFormType } from '@fastgpt/global/core/app/type';
 import { form2AppWorkflow } from '@/web/core/app/utils';
 import { TabEnum } from '../context';
 import MyIcon from '@fastgpt/web/components/common/Icon';
@@ -17,23 +17,22 @@ import { publishStatusStyle } from '../constants';
 import { useSystem } from '@fastgpt/web/hooks/useSystem';
 import { formatTime2YMDHMS } from '@fastgpt/global/common/string/time';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
-import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import SaveButton from '../Workflow/components/SaveButton';
 import { useBoolean, useDebounceEffect, useLockFn } from 'ahooks';
 import { appWorkflow2Form } from '@fastgpt/global/core/app/utils';
 import {
   compareSimpleAppSnapshot,
-  onSaveSnapshotFnType,
-  SimpleAppSnapshotType
+  type onSaveSnapshotFnType,
+  type SimpleAppSnapshotType
 } from './useSnapshots';
 import PublishHistories from '../PublishHistoriesSlider';
-import { AppVersionSchemaType } from '@fastgpt/global/core/app/version';
+import { type AppVersionSchemaType } from '@fastgpt/global/core/app/version';
 import { useBeforeunload } from '@fastgpt/web/hooks/useBeforeunload';
 import { isProduction } from '@fastgpt/global/common/system/constants';
 import { useToast } from '@fastgpt/web/hooks/useToast';
 import {
   checkWorkflowNodeAndConnection,
-  storeEdgesRenderEdge,
+  storeEdge2RenderEdge,
   storeNode2FlowNode
 } from '@/web/core/workflow/utils';
 
@@ -61,16 +60,18 @@ const Header = ({
   const currentTab = useContextSelector(AppContext, (v) => v.currentTab);
 
   const { lastAppListRouteType } = useSystemStore();
-  const { allDatasets } = useDatasetStore();
 
-  const { data: paths = [] } = useRequest2(() => getAppFolderPath(appId), {
-    manual: false,
-    refreshDeps: [appId]
-  });
+  const { data: paths = [] } = useRequest2(
+    () => getAppFolderPath({ sourceId: appId, type: 'parent' }),
+    {
+      manual: false,
+      refreshDeps: [appId]
+    }
+  );
   const onClickRoute = useCallback(
     (parentId: string) => {
       router.push({
-        pathname: '/app/list',
+        pathname: '/dashboard/apps',
         query: {
           parentId,
           type: lastAppListRouteType
@@ -159,7 +160,7 @@ const Header = ({
       const val = compareSimpleAppSnapshot(savedSnapshot?.appForm, appForm);
       setIsSaved(val);
     },
-    [past, allDatasets],
+    [past],
     { wait: 500 }
   );
 
@@ -180,7 +181,7 @@ const Header = ({
     };
   }, []);
   useBeforeunload({
-    tip: t('common:core.common.tip.leave page'),
+    tip: t('common:core.tip.leave page'),
     callback: onLeaveAutoSave
   });
 
@@ -245,7 +246,7 @@ const Header = ({
                     const { nodes: storeNodes, edges: storeEdges } = form2AppWorkflow(appForm, t);
 
                     const nodes = storeNodes.map((item) => storeNode2FlowNode({ item, t }));
-                    const edges = storeEdges.map((item) => storeEdgesRenderEdge({ edge: item }));
+                    const edges = storeEdges.map((item) => storeEdge2RenderEdge({ edge: item }));
 
                     const checkResults = checkWorkflowNodeAndConnection({ nodes, edges });
 
