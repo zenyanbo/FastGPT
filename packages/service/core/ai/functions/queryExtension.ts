@@ -283,7 +283,9 @@ Your response should always be in **English**, regardless of the language entere
 Mathematical notation MUST use LaTeX inline ($...$) formats or display ($$...$$) formats.`;
 
 const defaultPrompt = `<HISTORY>{{histories}}</HISTORY>
-<QUERY>{{query}}</QUERY>`;
+<QUERY>{{query}}</QUERY>
+Retrieve Items:
+`;
 
 export const queryExtension = async ({
   chatBg,
@@ -368,26 +370,9 @@ assistant: ${chatBg}
       outputTokens: outputTokens
     };
   }
-
-  // Find the "Retrieve Items:" section
-  const marker = "Retrieve Items:";
-  const markerIndex = answer.indexOf(marker);
-
-  if (markerIndex === -1) {
-    addLog.warn('Query extension failed, marker not found', {
-      answer
-    });
-    return {
-      rawQuery: query,
-      extensionQueries: [],
-      model,
-      inputTokens: inputTokens,
-      outputTokens: outputTokens
-    };
-  }
   
-  // Get the text after the marker and split by lines
-  const itemsText = answer.replace(/(\\n|\\)/g, '').replace(/  /g, '').substring(markerIndex + marker.length).trim();
+  // Split by lines
+  const itemsText = answer.replace(/(\\n|\\)/g, '').replace(/  /g, '').trim();
   const items = itemsText.split('***')
     .map((line: string) => line.trim())
     .filter((line: string) => line.length > 0)
