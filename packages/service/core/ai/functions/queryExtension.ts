@@ -532,7 +532,7 @@ assistant: ${chatBg}
       modelData
     )
   });
-  const { text: answer, usage } = await formatLLMResponse(response);
+  let { text: answer, usage } = await formatLLMResponse(response);
   const inputTokens = usage?.prompt_tokens || (await countGptMessagesTokens(messages));
   const outputTokens = usage?.completion_tokens || (await countPromptTokens(answer));
 
