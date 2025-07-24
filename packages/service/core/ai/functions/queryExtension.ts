@@ -547,7 +547,7 @@ assistant: ${chatBg}
   }
 
   const prefixToRemove = 'Retrieve Items:';
-  let answer = answer.trim();
+  answer = answer.trim();
 
   if (answer.startsWith(prefixToRemove)) {
     answer = answer.substring(prefixToRemove.length);
