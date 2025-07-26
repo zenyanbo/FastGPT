@@ -52,7 +52,12 @@ Retrieve Items:
 
 # EXAMPLES
 ----------------
-<HISTORY></HISTORY>
+<HISTORY>
+user: Do you know Wheeler?
+assistant: The “Wheeler” you mentioned is most likely John Archibald Wheeler, a renowned American theoretical physicist who had a profound influence on 20th-century physics. ......
+user: What were Feynman's outstanding contributions to quantum field theory?
+assistant: The main ones include: ......
+</HISTORY>
 <QUERY>GeneralRelativity</QUERY>
 Retrieve Items:
 ***
@@ -86,8 +91,11 @@ The conceptual leap towards General Relativity began with Einstein's profound in
 
 Developing the mathematical framework to describe this dynamic, curved spacetime was an immense challenge. Einstein, initially unfamiliar with the necessary tools, struggled to find the equations that would relate the distribution of mass-energy to the curvature of spacetime. It was his friend and mathematician, Marcel Grossmann, who introduced him to the sophisticated non-Euclidean geometries, particularly Riemannian geometry and tensor calculus, which provided the rigorous language needed to formulate the field equations of General Relativity. This collaboration was pivotal, setting the stage for a revolutionary theory where gravity emerged as a consequence of the geometry of the cosmos.
 ----------------
-<HISTORY>The Kerr spacetime is a stationary, axisymmetric, and asymptotically flat solution to the Einstein field equations, describing the spacetime geometry around a rotating black hole. (... Describes the properties of Kerr spacetime ...)</HISTORY>
-<QUERY>What is the free-fall path in Kerr spacetime?</QUERY>
+<HISTORY>
+user:
+assistant: The Kerr spacetime is a stationary, (...omitted...)
+</HISTORY>
+<QUERY>What is the free-fall path?</QUERY>
 Retrieve Items:
 ***
 What are the fundamental principles governing the free-fall paths of particles and light in the Kerr spacetime, and how do the conserved quantities (energy, angular momentum, and the Carter constant) simplify the description of these geodesics?
@@ -120,13 +128,13 @@ Discuss the astrophysical applications of Kerr geodesics, focusing on phenomena 
 ***
 From a computational standpoint, outline the numerical methods used to solve the geodesic equations in Kerr spacetime. Describe how to implement these methods to trace the trajectories of particles and photons, and discuss techniques for visualizing Kerr geodesics, including orbit plots and embedding diagrams that illustrate the spacetime curvature and the paths of particles. You could also touch upon publicly available software or libraries that can be used for Kerr geodesic calculations.
 ----------------
-<HISTORY></HISTORY>
+<HISTORY>null</HISTORY>
 <QUERY>
 考虑矩阵
 $$
 A = \begin{pmatrix} 2 & 1 \\ -1 & 2 \end{pmatrix}.
 $$
-求矩阵 $A$ 的特征值和特征向量。
+求 $A$ 的特征值和特征向量。
 </QUERY>
 Retrieve Items:
 ***
@@ -135,8 +143,13 @@ $$
 (A - \lambda I)v = 0
 $$ to find the corresponding eigenvector $v$.
 ----------------
-<HISTORY></HISTORY>
-<QUERY>为什么Dirac场是4分量的？</QUERY>
+<HISTORY>
+user: 写下Dirac方程
+assistant: 狄拉克方程是一个相对论性的量子力学波动方程，描述了电子和其他自旋为1/2的粒子的行为。它由英国物理学家保罗·狄拉克于1928年提出，成功地将量子力学与狭义相对论结合起来，并自然地预言了反物质的存在。
+
+其最常见的形式可以写为：...(omitted)...
+</HISTORY>
+<QUERY>为什么Dirac是4分量的？</QUERY>
 Retrieve Items:
 ***
 The four-component structure of the Dirac field is a direct and necessary consequence of unifying special relativity with quantum mechanics to describe spin-1/2 particles like electrons. The explanation can be approached from two primary, interconnected perspectives: the physical requirement for a linear relativistic wave equation and the mathematical structure of the Lorentz group's representations.
@@ -195,8 +208,15 @@ Therefore, the four components can be understood as encoding:
 
 In the non-relativistic limit, two of the components (the "small components") become negligible for particle solutions, while the other two (the "large components") reduce to the 2-component Pauli spinor used in non-relativistic quantum mechanics. Conversely, for antiparticle solutions, the other pair of components becomes large. This demonstrates how the 4-component structure elegantly contains both the non-relativistic spin physics and the new relativistic phenomena of antimatter within a single, covariant framework.
 ----------------
-<HISTORY></HISTORY>
-<QUERY>如何使用GPU求解偏微分方程组？</QUERY>
+<HISTORY>
+user: 什么是GPU？
+assistant: GPU 是 图形处理单元 (Graphics Processing Unit) 的缩写，......
+user: GPU是如何进行并行计算的？
+assistant: GPU 通过其独特的架构和工作方式实现并行计算。以下是其主要原理：......
+user: 写一篇关于GPU的科普文章
+assistant: # 什么是GPU？\n\n图形处理器（GPU），又称显示核心、视觉处理器、显示芯片，是一种......
+</HISTORY>
+<QUERY>如何在其上求解偏微分方程组？</QUERY>
 Retrieve Items:
 ***
 Describe the general principles and methodologies for accelerating the numerical solution of systems of partial differential equations (PDEs) using Graphics Processing Units (GPUs), emphasizing the computational advantages offered by GPU architecture.
@@ -295,7 +315,10 @@ For practitioners, the choice often depends on the problem's complexity. For sim
 ***
 What are the primary challenges and optimization strategies involved in efficiently porting and executing PDE solvers on GPUs, including considerations for memory access patterns, data transfer overhead, kernel launch configurations, and algorithmic choices for improved performance and numerical stability?
 ----------------
-<HISTORY>null</HISTORY>
+<HISTORY>
+user: 请深入介绍如何使用mathematica进行数值积分？
+assistant: \`NIntegrate\` 是 Mathematica 中进行数值积分的主要函数。它的基本语法是：...(omitted)...
+</HISTORY>
 <QUERY>
 \`\`\`
 NIntegrate failed to converge to prescribed accuracy after 9 iterated \
@@ -330,7 +353,7 @@ refinements in Teukolsky\`ConvolveSource\`Private\`qr in the region \
 
 Integral and error estimates are 0 on all integration subregions. Try increasing the value of the MinRecursion option. If value of integral may be 0, specify a finite value for the AccuracyGoal option.
 \`\`\`
-以上两个mathematica的警告，分别表示什么含义？我们应该如何理解这个积分结果和误差评估？
+以上两个警告，分别表示什么含义？
 </QUERY>
 Retrieve Items:
 ***
