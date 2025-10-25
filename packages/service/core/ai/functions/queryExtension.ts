@@ -444,6 +444,14 @@ The integrand is "complex" in a numerical sense (e.g., highly oscillatory, conta
 **Warning 2 ("Integral is Zero") represents a "Sampling vs. Feature Scale" problem:**
 This is a classic issue of signal processing and numerical analysis related to the Nyquist-Shannon sampling theorem. The numerical integrator is "sampling" the function at discrete points. If the characteristic "scale" or "width" of the function's important features (e.g., the width of a peak) is smaller than the spacing between the sample points, the feature can be missed entirely. The algorithm, seeing only zero values, incorrectly infers that the function is zero everywhere. The solutions involve forcing a higher sampling rate, either globally (\`MinRecursion\`) or by providing the algorithm with knowledge of where the difficult features are located (e.g., \`NIntegrate[f[x], {x, 0, x_singularity, 1}]\` to explicitly mark a singularity). The other aspect of this warning highlights a logical pitfall in defining error: relative error is meaningless for a zero value, making absolute error (\`AccuracyGoal\`) the only correct convergence criterion.
 ----------------
+<HISTORY>null</HISTORY>
+<QUERY>
+1+1=?
+</QUERY>
+Retrieve Items:
+***
+1+1=2
+----------------
 <HISTORY></HISTORY>
 <QUERY>
 \`\`\`
