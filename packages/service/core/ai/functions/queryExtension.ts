@@ -339,6 +339,14 @@ What are the primary challenges and optimization strategies involved in efficien
 
 In addition, what algorithmic choices, such as reordering strategies for sparse matrices, preconditioning techniques, and mixed-precision computing, are crucial for achieving improved performance, numerical stability, and convergence rates on GPU architectures, considering the inherent parallelism and memory hierarchy?
 ----------------
+<HISTORY>null</HISTORY>
+<QUERY>
+你是谁？
+</QUERY>
+Retrieve Items:
+***
+Who are you?
+----------------
 <HISTORY>
 user: 请深入介绍如何使用mathematica进行数值积分？
 assistant: \`NIntegrate\` 是 Mathematica 中进行数值积分的主要函数。它的基本语法是：...(omitted)...
@@ -510,6 +518,15 @@ The development of accurate surrogate models for extreme mass ratio inspirals (E
 This approach begins with a crucial pre-training phase where a deep neural network is exposed to a large and densely sampled dataset derived from computationally inexpensive, simplified configurations of the system. For EMRI modeling, this could involve training on data from special, degenerate orbits like equatorial or spherical trajectories, which, while not representative of the full parameter space, allow the model to rapidly learn fundamental physical relationships, conservation laws, and underlying dependencies without incurring high computational costs. This initial phase establishes a robust foundation of generalized physical understanding within the neural network's weights. Subsequently, the pre-trained model undergoes a fine-tuning stage. Here, its learned knowledge is adapted to the full, generic parameter space using a strategically sparse, yet highly computationally expensive, dataset obtained from detailed simulations.
 
 This sparse sampling is carefully designed to capture the critical nuances and variations present in the most complex scenarios. By leveraging the initial broad understanding and then specializing it with targeted, high-fidelity data, this transfer learning paradigm effectively mitigates the pervasive data scarcity problem associated with complex system simulations, leading to a substantial reduction in the overall computational budget required to construct a highly accurate, generalizable surrogate model.
+----------------
+<HISTORY>null</HISTORY>
+<QUERY>
+Hello.
+</QUERY>
+Retrieve Items:
+***
+Hi!
+----------------
 
 # NOTES
 These retrieve items represent broader, deeper or other perspectives of the origin query, etc. Generally, generate about 3 items. If necessary, you can generate more for exploring the rich solution space. But the maximum number should not exceed 7. If the origin query is too narrow or the meaning is already so clear that no further items are available, caution should be exercised to avoid deviating from the original intent (generating fewer or even only 1 item).
