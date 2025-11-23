@@ -58,6 +58,8 @@ type InferCompletionsBody<T> = T extends { stream: true }
 export const llmCompletionsBodyFormat = <T extends CompletionsBodyType>(
   body: T & {
     stop?: string;
+    tools?: any;
+    reasoning_effort?: 'low' | 'medium' | 'high' | string;
   },
   model: string | LLMModelItemType
 ): InferCompletionsBody<T> => {
@@ -100,7 +102,9 @@ export const llmCompletionsBodyFormat = <T extends CompletionsBodyType>(
         : undefined,
     ...modelData?.defaultConfig,
     response_format,
-    stop: stop?.split('|')
+    stop: stop?.split('|'),
+    tools: body.tools,
+    reasoning_effort: body.reasoning_effort
   };
 
   // field map
