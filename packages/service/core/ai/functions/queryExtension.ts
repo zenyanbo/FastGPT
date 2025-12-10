@@ -628,7 +628,7 @@ assistant: ${chatBg}
         model: modelData.model,
         temperature: 0.3,
         tools: [{"googleSearch": {}},{"urlContext": {}}],
-        reasoning_effort: "high",
+        reasoning_effort: "medium",
         messages
       },
       modelData
