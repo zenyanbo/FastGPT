@@ -656,7 +656,7 @@ assistant: ${chatBg}
   }
     
   // Split by lines
-  const itemsText = answer.replace(/(\\n|\\)/g, '').replace(/  /g, '').trim();
+  const itemsText = answer.replace(/  /g, '').trim();
   const items = itemsText.split('***')
     .map((line: string) => line.trim())
     .filter((line: string) => line.length > 0)
