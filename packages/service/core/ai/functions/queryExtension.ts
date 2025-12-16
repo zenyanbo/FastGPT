@@ -508,8 +508,6 @@ assistant: ${chatBg}
         stream: true,
         model: modelData.model,
         temperature: 0.3,
-        tools: [{"googleSearch": {}},{"urlContext": {}}],
-        reasoning_effort: "medium",
         messages
       },
       modelData
